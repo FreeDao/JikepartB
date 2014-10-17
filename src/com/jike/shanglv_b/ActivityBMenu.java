@@ -33,14 +33,15 @@ import com.jike.shanglv_b.Update.UpdateManager;
 public class ActivityBMenu extends Activity {
 
 	public static ActivityBMenu instance = null;
-	private LinearLayout gnjp_ll, gjjp_ll, jdyd_ll, hcp_ll, jdmp_ll, hfcz_ll,
-			hbdt_ll, wpt_ll, sxy_ll, fxgl_ll, khgl_ll, zhgl_ll, ddgl_ll, wd_ll;
+	private LinearLayout ll05, gnjp_ll, gjjp_ll, jdyd_ll, hcp_ll, jdmp_ll,
+			hfcz_ll, hbdt_ll, wpt_ll, sxy_ll, fxgl_ll, khgl_ll, zhgl_ll,
+			ddgl_ll, wd_ll,fuzhu_ll1;
 	private ImageButton imgBtn_gnjp, imgBtn_gjjp, imgBtn_jdyd, imgBtn_hcp,
-		imgBtn_jdmp, imgBtn_hfcz, imgBtn_hbdt, imgBtn_wpt, imgBtn_sxy,
-		imgBtn_fxgl, imgBtn_khgl, imgBtn_zhgl, imgBtn_ddgl, imgBtn_wd;
+			imgBtn_jdmp, imgBtn_hfcz, imgBtn_hbdt, imgBtn_wpt, imgBtn_sxy,
+			imgBtn_fxgl, imgBtn_khgl, imgBtn_zhgl, imgBtn_ddgl, imgBtn_wd;
 	private Context context;
 	private SharedPreferences sp;
-	private String loginReturnJson="";
+	private String loginReturnJson = "";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -78,17 +79,17 @@ public class ActivityBMenu extends Activity {
 		imgBtn_ddgl = (ImageButton) findViewById(R.id.imgBtn_ddgl);
 		imgBtn_wd = (ImageButton) findViewById(R.id.imgBtn_wd);
 		imgBtn_gnjp.setOnClickListener(btnClickListner);
-		imgBtn_gjjp.setOnClickListener(btnClickListner); 
-		imgBtn_jdyd.setOnClickListener(btnClickListner); 
+		imgBtn_gjjp.setOnClickListener(btnClickListner);
+		imgBtn_jdyd.setOnClickListener(btnClickListner);
 		imgBtn_hcp.setOnClickListener(btnClickListner);
 		imgBtn_jdmp.setOnClickListener(btnClickListner);
 		imgBtn_hfcz.setOnClickListener(btnClickListner);
 		imgBtn_hbdt.setOnClickListener(btnClickListner);
-		imgBtn_wpt.setOnClickListener(btnClickListner); 
+		imgBtn_wpt.setOnClickListener(btnClickListner);
 		imgBtn_sxy.setOnClickListener(btnClickListner);
 		imgBtn_fxgl.setOnClickListener(btnClickListner);
 		imgBtn_khgl.setOnClickListener(btnClickListner);
-		imgBtn_zhgl.setOnClickListener(btnClickListner); 
+		imgBtn_zhgl.setOnClickListener(btnClickListner);
 		imgBtn_ddgl.setOnClickListener(btnClickListner);
 		imgBtn_wd.setOnClickListener(btnClickListner);
 		gnjp_ll = (LinearLayout) findViewById(R.id.gnjp_ll);
@@ -105,6 +106,8 @@ public class ActivityBMenu extends Activity {
 		zhgl_ll = (LinearLayout) findViewById(R.id.zhgl_ll);
 		ddgl_ll = (LinearLayout) findViewById(R.id.ddgl_ll);
 		wd_ll = (LinearLayout) findViewById(R.id.wd_ll);
+		ll05 = (LinearLayout) findViewById(R.id.ll05);
+		fuzhu_ll1=(LinearLayout) findViewById(R.id.fuzhu_ll1);
 		gnjp_ll.setOnClickListener(btnClickListner);
 		gjjp_ll.setOnClickListener(btnClickListner);
 		jdyd_ll.setOnClickListener(btnClickListner);
@@ -119,7 +122,42 @@ public class ActivityBMenu extends Activity {
 		zhgl_ll.setOnClickListener(btnClickListner);
 		ddgl_ll.setOnClickListener(btnClickListner);
 		wd_ll.setOnClickListener(btnClickListner);
+		queryUserInfo();
+		showFX_KH();
 	}
+	
+	//根据用户权限显示客户管理、分销管理
+	private void showFX_KH(){
+		if (!sp.getBoolean(SPkeys.loginState.getString(), false)) {
+			ll05.setVisibility(View.GONE);
+		} else {
+			ll05.setVisibility(View.VISIBLE);
+			if (sp.getString(SPkeys.showCustomer.getString(), "0").equals("1")) {
+				khgl_ll.setVisibility(View.VISIBLE);
+			} else {//为了保持一致也
+				khgl_ll.setVisibility(View.GONE);
+				fuzhu_ll1.setVisibility(View.VISIBLE);
+			}
+			if (sp.getString(SPkeys.showDealer.toString(), "0").equals("1")) {
+				fxgl_ll.setVisibility(View.VISIBLE);
+			} else {
+				fxgl_ll.setVisibility(View.GONE);
+				fuzhu_ll1.setVisibility(View.VISIBLE);
+			}
+		}
+	}
+	
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+		super.onRestoreInstanceState(savedInstanceState);
+		showFX_KH();
+	}
+
+//	@Override
+//	protected void onResume() {
+//		// TODO Auto-generated method stub
+//		super.onResume();
+//	}
 
 	@Override
 	protected void onStart() {
@@ -151,9 +189,10 @@ public class ActivityBMenu extends Activity {
 				break;
 			case R.id.imgBtn_wpt:
 			case R.id.wpt_ll:
-				Intent intent=new Intent(context,Activity_Web_Frame.class);
+				Intent intent = new Intent(context, Activity_Web_Frame.class);
 				intent.putExtra(Activity_Web_Frame.TITLE, "微平台");
-				intent.putExtra(Activity_Web_Frame.URL, getResources().getString(R.string.weipingtai_url));
+				intent.putExtra(Activity_Web_Frame.URL, getResources()
+						.getString(R.string.weipingtai_url));
 				startActivity(intent);
 				break;
 			case R.id.imgBtn_hfcz:
@@ -162,11 +201,15 @@ public class ActivityBMenu extends Activity {
 				break;
 			case R.id.imgBtn_jdmp:
 			case R.id.jdmp_ll:
-//				startActivity(new Intent(context, Guojijipiao_Search.class));
+				// startActivity(new Intent(context, Guojijipiao_Search.class));
 				break;
 			case R.id.imgBtn_sxy:
 			case R.id.sxy_ll:
-//				startActivity(new Intent(context, ActivityZhanghuchongzhi.class));
+				Intent intent3 = new Intent(context, Activity_Web_Frame.class);
+				intent3.putExtra(Activity_Web_Frame.TITLE, "商学院");
+				intent3.putExtra(Activity_Web_Frame.URL, getResources()
+						.getString(R.string.shangxueyuan_url));
+				startActivity(intent3);
 				break;
 			case R.id.imgBtn_hcp:
 			case R.id.hcp_ll:
@@ -178,8 +221,10 @@ public class ActivityBMenu extends Activity {
 					startActivity(new Intent(context, Activity_Login.class));
 					break;
 				}
-				Intent intent1=new Intent(context,ActivityClientManage.class);
-				intent1.putExtra(ActivityClientManageSetGrad.DISPLAY_TYPENAME_STRING, ActivityClientManageSetGrad.DEALER_DISPLAYNAME);
+				Intent intent1 = new Intent(context, ActivityClientManage.class);
+				intent1.putExtra(
+						ActivityClientManageSetGrad.DISPLAY_TYPENAME_STRING,
+						ActivityClientManageSetGrad.DEALER_DISPLAYNAME);
 				startActivity(intent1);
 				break;
 			case R.id.imgBtn_khgl:
@@ -188,8 +233,10 @@ public class ActivityBMenu extends Activity {
 					startActivity(new Intent(context, Activity_Login.class));
 					break;
 				}
-				Intent intent2=new Intent(context,ActivityClientManage.class);
-				intent2.putExtra(ActivityClientManageSetGrad.DISPLAY_TYPENAME_STRING, ActivityClientManageSetGrad.CUSTOMER_DISPLAYNAME);
+				Intent intent2 = new Intent(context, ActivityClientManage.class);
+				intent2.putExtra(
+						ActivityClientManageSetGrad.DISPLAY_TYPENAME_STRING,
+						ActivityClientManageSetGrad.CUSTOMER_DISPLAYNAME);
 				startActivity(intent2);
 				break;
 			case R.id.imgBtn_zhgl:
@@ -209,14 +256,15 @@ public class ActivityBMenu extends Activity {
 			}
 		}
 	};
-	
-	private void queryUserInfo(){
+
+	private void queryUserInfo() {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
 				int utype = 0;
 				MyApp ma = new MyApp(context);
-				Platform pf = (Platform) ma.getHm().get(PackageKeys.PLATFORM.getString());
+				Platform pf = (Platform) ma.getHm().get(
+						PackageKeys.PLATFORM.getString());
 				if (pf == Platform.B2B)
 					utype = 1;
 				else if (pf == Platform.B2C)
@@ -227,8 +275,7 @@ public class ActivityBMenu extends Activity {
 						+ sp.getString(SPkeys.lastPassword.getString(), "")
 						+ "\",\"utype\":\"" + utype + "\"}";
 				String param = "action=userlogin&sitekey=&userkey="
-						+ ma.getHm()
-								.get(PackageKeys.USERKEY.getString())
+						+ ma.getHm().get(PackageKeys.USERKEY.getString())
 								.toString()
 						+ "&str="
 						+ str
@@ -237,8 +284,8 @@ public class ActivityBMenu extends Activity {
 								.get(PackageKeys.USERKEY.getString())
 								.toString()
 								+ "userlogin" + str);
-				loginReturnJson = HttpUtils.getJsonContent(
-						ma.getServeUrl(), param);
+				loginReturnJson = HttpUtils.getJsonContent(ma.getServeUrl(),
+						param);
 				Log.v("loginReturnJson", loginReturnJson);
 				Message msg = new Message();
 				msg.what = 1;
@@ -246,8 +293,8 @@ public class ActivityBMenu extends Activity {
 			}
 		}).start();
 	}
-	
-	private Handler handler = new Handler() {//在主界面判断用户名密码是否失效
+
+	private Handler handler = new Handler() {// 在主界面判断用户名密码是否失效
 		@Override
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
@@ -289,10 +336,23 @@ public class ActivityBMenu extends Activity {
 						sp.edit()
 								.putBoolean(SPkeys.loginState.getString(), true)
 								.commit();
-					} else if (state.equals("1003")){
-						sp.edit().putString(SPkeys.userid.getString(),"").commit();
-						sp.edit().putString(SPkeys.username.getString(),"").commit();
-						sp.edit().putBoolean(SPkeys.loginState.getString(), false).commit();
+						sp.edit()
+								.putString(SPkeys.showDealer.getString(),
+										user.getShowDealer()).commit();
+						sp.edit()
+								.putString(SPkeys.showCustomer.getString(),
+										user.getShowCustomer()).commit();
+						
+						showFX_KH();
+						
+					} else if (state.equals("1003")) {
+						sp.edit().putString(SPkeys.userid.getString(), "")
+								.commit();
+						sp.edit().putString(SPkeys.username.getString(), "")
+								.commit();
+						sp.edit()
+								.putBoolean(SPkeys.loginState.getString(),
+										false).commit();
 					}
 				} catch (JSONException e) {
 					e.printStackTrace();
@@ -301,7 +361,6 @@ public class ActivityBMenu extends Activity {
 			}
 		}
 	};
-
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -314,8 +373,9 @@ public class ActivityBMenu extends Activity {
 	public void onDestroy() {
 		super.onDestroy();
 	}
-	
+
 	private long mExitTime;
+
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
@@ -323,10 +383,10 @@ public class ActivityBMenu extends Activity {
 				Toast.makeText(this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
 				mExitTime = System.currentTimeMillis();
 			} else {
-				 ((MyApplication)getApplication()).exit();
-				  android.os.Process.killProcess(android.os.Process.myPid());
-				  finish();
-				  System.exit(0);
+				((MyApplication) getApplication()).exit();
+				android.os.Process.killProcess(android.os.Process.myPid());
+				finish();
+				System.exit(0);
 			}
 			return true;
 		}

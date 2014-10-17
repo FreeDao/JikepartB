@@ -24,7 +24,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="3dp"
-            android:text="2635434632"
             android:textColor="@color/blue_title_color"
             android:textSize="15sp" >
         </TextView>
@@ -36,7 +35,6 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/orderid_ll"
         android:layout_marginTop="3dp"
-        android:text="上海钟祥大酒店"
         android:textColor="@color/black"
         android:textSize="18sp" >
     </TextView>
@@ -53,7 +51,7 @@
             android:id="@+id/bed_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="大床房"
+            android:text=""
             android:textColor="@color/black6"
             android:textSize="15sp" >
         </TextView>
@@ -64,7 +62,6 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/hotel_name_tv"
             android:layout_marginLeft="8dp"
-            android:text="￥5600"
             android:textColor="@color/price_yellow"
             android:textSize="18sp" />
     </LinearLayout>
@@ -90,7 +87,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="3dp"
-            android:text="2014-04-15"
+            android:text=""
             android:textColor="@color/black6"
             android:textSize="15sp" >
         </TextView>
@@ -108,7 +105,6 @@
             android:id="@+id/state_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="新订单"
             android:textColor="@color/green"
             android:textSize="18sp" >
         </TextView>

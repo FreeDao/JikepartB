@@ -11,6 +11,8 @@ public enum SPkeys {
 	useremail("useremail"),
 	amount("amount"),//ĞéÄâÕËºÅ½ğ¶î
 	siteid("siteid"),//ÏµÍ³id
+	showDealer("showDealer"),
+	showCustomer("showCustomer"),
 	
 	UserInfoJson("UserInfoJson"),
 	lastUsername("lastUsername"),

@@ -63,7 +63,7 @@
                 android:id="@+id/flightInfo_bg"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                 android:background="#ffffff"
+                android:background="#ffffff"
                 android:padding="10dp" >
 
                 <LinearLayout
@@ -296,8 +296,8 @@
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="40dp"
-                android:gravity="center_vertical"
                 android:background="#ffffff"
+                android:gravity="center_vertical"
                 android:paddingBottom="10dp"
                 android:paddingLeft="10dp"
                 android:paddingTop="10dp" >
@@ -396,6 +396,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
                     android:text="政策"
                     android:textColor="@color/black"
                     android:textSize="@dimen/booking_item_content_textsize" />
@@ -405,6 +406,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
                     android:text=""
                     android:textColor="#bb1192CB"
                     android:textSize="@dimen/booking_item_content_textsize" />
@@ -467,8 +469,8 @@
             <TextView
                 android:id="@+id/tuiGaiQian_state_tv"
                 android:layout_width="fill_parent"
-                android:background="@color/white"
                 android:layout_height="wrap_content"
+                android:background="@color/white"
                 android:paddingBottom="10dp"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
@@ -728,8 +730,8 @@
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="40dp"
-                android:gravity="center_vertical"
                 android:background="#ffffff"
+                android:gravity="center_vertical"
                 android:paddingBottom="10dp"
                 android:paddingLeft="10dp"
                 android:paddingTop="10dp" >
@@ -828,6 +830,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
                     android:text="政策"
                     android:textColor="@color/black"
                     android:textSize="@dimen/booking_item_content_textsize" />
@@ -837,6 +840,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
                     android:text=""
                     android:textColor="#bb1192CB"
                     android:textSize="@dimen/booking_item_content_textsize" />
@@ -899,8 +903,8 @@
             <TextView
                 android:id="@+id/tuiGaiQian_state_tv3"
                 android:layout_width="fill_parent"
-                android:background="@color/white"
                 android:layout_height="wrap_content"
+                android:background="@color/white"
                 android:paddingBottom="10dp"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
@@ -927,8 +931,8 @@
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="40dp"
-                android:gravity="center_vertical"
                 android:background="#ffffff"
+                android:gravity="center_vertical"
                 android:paddingLeft="10dp"
                 android:paddingTop="10dp" >
 
@@ -967,8 +971,8 @@
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="40dp"
-                android:gravity="center_vertical"
                 android:background="#ffffff"
+                android:gravity="center_vertical"
                 android:padding="10dp" >
 
                 <TextView
@@ -1025,8 +1029,8 @@
             <RelativeLayout
                 android:layout_width="fill_parent"
                 android:layout_height="50dp"
-                android:gravity="center_vertical"
                 android:background="#ffffff"
+                android:gravity="center_vertical"
                 android:padding="10dp" >
 
                 <TextView

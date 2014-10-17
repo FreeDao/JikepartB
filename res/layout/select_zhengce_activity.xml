@@ -87,6 +87,7 @@
             android:gravity="left|center_vertical"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
+            android:paddingTop="10dp"
             android:text="温馨提示:特殊高返政策不保证100%出票，出票时间较长，不能打印行程单，紧急航班慎选。"
             android:textColor="@color/red"
             android:textSize="14sp" />

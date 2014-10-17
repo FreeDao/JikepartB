@@ -7,7 +7,6 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -42,7 +41,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.TextView;
-
 import com.jike.shanglv_b.R;
 import com.jike.shanglv_b.Common.CommonFunc;
 import com.jike.shanglv_b.Common.CustomProgressDialog;
@@ -334,6 +332,14 @@ public class ActivityOrderList extends Activity implements
 						} else if (actionName.equals(PHONE_ORDERLIST)) {
 							adapter = new PhoneListAdapter(context,
 									order_List_phone);
+						}
+						if(order_List_airlineticket.size() == Integer.valueOf(count)||
+							order_List_hotel.size() == Integer.valueOf(count)||
+							order_List_phone.size() == Integer.valueOf(count))
+						{
+							listview.removeFootView();//如果数据就几条一次就加载完了，移除查看更多
+							listview.setOnRefreshListener(null);
+							listview.setOnLoadMoreListener(null);// 禁用刷新功能
 						}
 						listview.setAdapter((ListAdapter) adapter);
 						listview.setOnItemClickListener(new OnItemClickListener() {
@@ -668,7 +674,8 @@ public class ActivityOrderList extends Activity implements
 				ruzhu_date_tv.setText(DateUtil.getDate(str.get(position)
 						.getInDate()));
 			} catch (ParseException e) {
-				e.printStackTrace();
+				ruzhu_date_tv.setText(str.get(position)
+						.getInDate());
 			}
 			hotel_name_tv.setText(str.get(position).getHotelName());
 			bed_tv.setText(str.get(position).getRoomName());

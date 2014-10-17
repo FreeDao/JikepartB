@@ -56,7 +56,6 @@
             <View
                 android:layout_width="fill_parent"
                 android:layout_height="1px"
-              
                 android:layout_marginLeft="10dp"
                 android:background="@color/deep_gray" />
 
@@ -313,6 +312,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
                     android:text="政策"
                     android:textColor="@color/black"
                     android:textSize="@dimen/booking_item_content_textsize" />
@@ -322,6 +322,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
                     android:text=""
                     android:textColor="#bb1192CB"
                     android:textSize="@dimen/booking_item_content_textsize" />
@@ -332,7 +333,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="20dp"
-                    android:text="选择政策"
+                    android:text="请选择政策"
                     android:textColor="@color/red"
                     android:textSize="@dimen/booking_item_content_textsize" />
 
@@ -383,8 +384,8 @@
 
             <TextView
                 android:id="@+id/tuiGaiQian_state_tv"
-                android:layout_height="wrap_content"
                 android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
                 android:background="@color/white"
                 android:paddingBottom="10dp"
                 android:paddingLeft="10dp"

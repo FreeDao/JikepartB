@@ -19,7 +19,24 @@ amname:虚拟账号名称(utype为3\4无效)
  *
  */
 public class UserInfo {
-	private String userid,     username,     mobile,     email,     sdate,     edate,     companyname,     companyname_jc,     smssign,     smsamount,     openvam,     ammount,     amnousemount,     amname,     siteid;
+	private String userid,     username,     mobile,     email,     sdate,     edate,     companyname,     companyname_jc,     smssign,     smsamount,     openvam,     ammount,     amnousemount,     amname,     siteid
+			,showDealer,showCustomer;
+
+	public String getShowDealer() {
+		return showDealer;
+	}
+
+	public void setShowDealer(String showDealer) {
+		this.showDealer = showDealer;
+	}
+
+	public String getShowCustomer() {
+		return showCustomer;
+	}
+
+	public void setShowCustomer(String showCustomer) {
+		this.showCustomer = showCustomer;
+	}
 
 	public String getUserid() {
 		return userid;

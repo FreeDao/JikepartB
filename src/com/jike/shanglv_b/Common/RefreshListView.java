@@ -434,7 +434,7 @@ public class RefreshListView extends ListView implements OnScrollListener, OnCli
 				break;
 			case ILoadMoreViewState.LMVS_OVER:
 				mLoadingView.setVisibility(View.GONE);
-				mLoadMoreTextView.setVisibility(View.VISIBLE);
+				mLoadMoreTextView.setVisibility(View.GONE);
 				mLoadMoreTextView.setText("加载完成，没有更多啦！");
 				break;
 				default:

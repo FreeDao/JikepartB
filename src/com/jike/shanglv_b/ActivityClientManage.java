@@ -292,6 +292,12 @@ public class ActivityClientManage extends Activity implements
 						}
 						customers_List=removeDuplicteCustomerUsers(customers_List );
 						adapter=new ListAdapter(context, customers_List);
+						if(customers_List.size() == Integer.valueOf(recordcount))
+							{
+								listview.removeFootView();//如果数据就几条一次就加载完了，移除查看更多
+								listview.setOnRefreshListener(null);
+								listview.setOnLoadMoreListener(null);// 禁用刷新功能
+							}
 						listview.setAdapter(adapter);
 						if (customers_List.size() == 0){
 							query_status_tv.setText("未查询到客户信息");

@@ -164,10 +164,13 @@ public class ActivityClientManageAddoredit extends Activity {
 					e.printStackTrace();
 				}
 				default_grad_tv.setText(editCustomerUser.getDealerLevel());
+//				username_et.setText(!editCustomerUser.getUserName().equals("null")?editCustomerUser.getUserName():"");
 				username_et.setText(editCustomerUser.getUserName());
 				username_et.setEnabled(false);
+//				contactPerson_et.setText(!editCustomerUser.getRealName().equals("null")?editCustomerUser.getRealName():"");
 				contactPerson_et.setText(editCustomerUser.getRealName());
 				contactPerson_et.setEnabled(false);
+//				contactPhone_et.setText(!editCustomerUser.getPhone().equals("null")?editCustomerUser.getPhone():"");
 				contactPhone_et.setText(editCustomerUser.getPhone());
 				contactPhone_et.setEnabled(false);
 				province_city_tv.setText(editCustomerUser.getCityName() + "-"
@@ -322,7 +325,7 @@ public class ActivityClientManageAddoredit extends Activity {
 				if (provinceCityString.length() > 0
 						&& provinceCityString.contains("-")) {
 					city = provinceCityString.substring(0,
-							provinceCityString.indexOf("-") - 1);
+							provinceCityString.indexOf("-"));
 					province = provinceCityString.substring(provinceCityString
 							.indexOf("-") + 1);
 				}
@@ -473,6 +476,7 @@ public class ActivityClientManageAddoredit extends Activity {
 		@Override
 		public void handleMessage(Message msg) {
 			JSONTokener jsonParser;
+			Boolean isModify=false;
 			switch (msg.what) {
 			case DEALERLEVELMSGCODE:
 				jsonParser = new JSONTokener(dealerlevallistReturnJson);
@@ -504,16 +508,17 @@ public class ActivityClientManageAddoredit extends Activity {
 				} catch (Exception ex) {
 				}
 				break;
-			case ADD_CUSTOMER_MSG_CODE:
 			case MODIFY_CUSTOMER_MSG_CODE:
+				isModify=true;
+			case ADD_CUSTOMER_MSG_CODE:
 				jsonParser = new JSONTokener(addReturnJson);
 				try {
 					progressdialog.dismiss();
 					JSONObject jsonObject = (JSONObject) jsonParser.nextValue();
 					String state = jsonObject.getString("c");
 					String message = "";
-					// if (state.equals("0000")) {
-					message = jsonObject.getJSONObject("d").getString("msg");
+				 if (state.equals("0000")) {
+					message =isModify==true?"修改成功":"添加成功";
 					final CustomerAlertDialog cad = new CustomerAlertDialog(
 							context, true);
 					cad.setTitle(message);
@@ -521,11 +526,21 @@ public class ActivityClientManageAddoredit extends Activity {
 						@Override
 						public void onClick(View arg0) {
 							cad.dismiss();
+							finish();
 						}
 					});
-					// } else {
-					// Toast.makeText(context, "发生未知异常，注册失败！", 0).show();
-					// }
+					} else {
+							message = jsonObject.getJSONObject("d").getString("msg");
+							final CustomerAlertDialog cad = new CustomerAlertDialog(
+									context, true);
+							cad.setTitle(message);
+							cad.setPositiveButton("确定", new OnClickListener() {
+								@Override
+								public void onClick(View arg0) {
+									cad.dismiss();
+								}
+							});
+					 }
 				} catch (JSONException e) {
 					progressdialog.dismiss();
 					e.printStackTrace();

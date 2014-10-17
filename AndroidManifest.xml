@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.jike.shanglv_b"
-    android:versionCode="2"
-    android:versionName="2.1" >
+    android:versionCode="1"
+    android:versionName="2.1.1" >
 
     <uses-sdk
         android:minSdkVersion="8"
@@ -23,7 +23,7 @@
 	<uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />  
 	<uses-permission android:name="android.permission.BROADCAST_STICKY" />  
 	<uses-permission android:name="android.permission.WRITE_SETTINGS" />  
-	  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" /> 
     
@@ -36,10 +36,10 @@
         >
        <!-- E:\android.keystore 
        	SHA1:0D:3C:EC:2E:C2:01:A0:E6:C7:AE:44:B4:05:17:9D:F8:BE:A9:70:9E 	com.jike.shanglv
-       	Z2Uy1ULMdZQviUdWKE0xpbmh       	--> 
+       	Z2Uy1ULMdZQviUdWKE0xpbmh       	-->
        <!-- E:\android_menghang.keystore 
        	SHA1:13:3A:9B:D6:DC:D6:9E:62:8C:66:2D:19:9B:25:08:AC:50:06:ED:CC 	com.jike.shanglv
-       	rcdgewqnqHIKRl4jWEmSSPfb	--> 
+       	rcdgewqnqHIKRl4jWEmSSPfb	-->
        	<!-- debug测试 lvgLGpq6ptCLwjGhWCAZ1rbQ -->
        	<!-- com.jike.shanglv_b		E:\android.keystore
        		EtUImVWGAm6DrsRAGQXKsf10 -->

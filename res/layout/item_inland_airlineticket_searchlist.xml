@@ -162,6 +162,10 @@
             android:id="@+id/CabinName_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:gravity="right"
+            android:singleLine="true"
+			android:ellipsize="end"
+			android:width="60dp"
             android:text="经济舱"
             android:textColor="@color/black6"
             android:textSize="16sp" >
