@@ -25,7 +25,6 @@ import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.jike.shanglv_b.R;
 import com.jike.shanglv_b.Common.CommonFunc;
 import com.jike.shanglv_b.Common.CustomProgressDialog;

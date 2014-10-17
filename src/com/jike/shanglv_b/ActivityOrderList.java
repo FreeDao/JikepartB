@@ -169,9 +169,20 @@ public class ActivityOrderList extends Activity implements
 			switch (v.getId()) {
 			case R.id.singleline_tv:// 一月内
 				//页卡切换时原来的数据清空
-//				order_List_airlineticket.clear();
-//				order_List_hotel.clear();
-//				order_List_phone.clear();
+				if (actionName.equals(FLIGHT_ORDERLIST)
+						|| actionName.equals(DEMAND_ORDERLIST)
+						|| actionName.equals(TRAIN_ORDERLIST)
+						|| actionName.equals(INTFLIGHT_ORDERLIST)) {
+					order_List_airlineticket.clear();
+					if(order_List_airlineticket!=null)((AirlineTicketListAdapter) adapter)
+							.refreshData(order_List_airlineticket);
+				} else if (actionName.equals(HOTEL_ORDERLIST)) {
+					order_List_hotel.clear();
+					if(order_List_hotel!=null)((HotelListAdapter) adapter).refreshData(order_List_hotel);
+				} else if (actionName.equals(PHONE_ORDERLIST)) {
+					order_List_phone.clear();
+					if(order_List_phone!=null)((PhoneListAdapter) adapter).refreshData(order_List_phone);
+				}
 				
 				wayType = SingleOrDouble.singleWay;
 				singleline_tv.setTextColor(context.getResources().getColor(
@@ -189,9 +200,20 @@ public class ActivityOrderList extends Activity implements
 				break;
 			case R.id.doubleline_tv:// 一月前
 				//页卡切换时原来的数据清空
-//				order_List_airlineticket.clear();
-//				order_List_hotel.clear();
-//				order_List_phone.clear();
+				if (actionName.equals(FLIGHT_ORDERLIST)
+						|| actionName.equals(DEMAND_ORDERLIST)
+						|| actionName.equals(TRAIN_ORDERLIST)
+						|| actionName.equals(INTFLIGHT_ORDERLIST)) {
+					order_List_airlineticket.clear();
+					if(order_List_airlineticket!=null)((AirlineTicketListAdapter) adapter)
+							.refreshData(order_List_airlineticket);
+				} else if (actionName.equals(HOTEL_ORDERLIST)) {
+					order_List_hotel.clear();
+					if(order_List_hotel!=null)((HotelListAdapter) adapter).refreshData(order_List_hotel);
+				} else if (actionName.equals(PHONE_ORDERLIST)) {
+					order_List_phone.clear();
+					if(order_List_phone!=null)((PhoneListAdapter) adapter).refreshData(order_List_phone);
+				}
 				
 				wayType = SingleOrDouble.doubleWayGo;
 				singleline_tv.setTextColor(context.getResources().getColor(

@@ -201,7 +201,7 @@ public class ActivityBMenu extends Activity {
 				break;
 			case R.id.imgBtn_jdmp:
 			case R.id.jdmp_ll:
-				// startActivity(new Intent(context, Guojijipiao_Search.class));
+			    startActivity(new Intent(context, Activity_Scenery.class));
 				break;
 			case R.id.imgBtn_sxy:
 			case R.id.sxy_ll:
