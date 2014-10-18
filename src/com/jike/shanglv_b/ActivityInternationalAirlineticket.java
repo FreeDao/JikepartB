@@ -50,7 +50,11 @@ public class ActivityInternationalAirlineticket extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_international_airlineticket);
-		initView();
+		try {
+			initView();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		((MyApplication)getApplication()).addActivity(this);
 	}
 

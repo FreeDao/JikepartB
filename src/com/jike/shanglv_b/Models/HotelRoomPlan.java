@@ -3,7 +3,7 @@ package com.jike.shanglv_b.Models;
 import java.util.ArrayList;
 
 import org.json.JSONArray;
-import org.json.JSONException;
+
 import org.json.JSONObject;
 
 import com.jike.shanglv_b.NetAndJson.JSONHelper;
@@ -42,7 +42,7 @@ public class HotelRoomPlan {
 					 dates.add(hrpd);
 				 }
 			}
-		 } catch (JSONException e) {
+		 } catch (Exception e) {
 				e.printStackTrace();
 		}
 	}

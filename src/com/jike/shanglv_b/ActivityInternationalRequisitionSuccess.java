@@ -43,7 +43,6 @@ public class ActivityInternationalRequisitionSuccess extends Activity {
 			if(bundle.containsKey(RECEIPT_ORDER_ID))
 				orderId =bundle.getString((RECEIPT_ORDER_ID));
 		}
-		
 		order_no_tv.setText("¶©µ¥ºÅ£º\n"+orderId);
 	}
 

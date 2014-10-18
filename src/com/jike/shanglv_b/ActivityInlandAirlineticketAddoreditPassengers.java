@@ -5,7 +5,6 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.json.JSONException;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -34,7 +33,6 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.jike.shanglv_b.R;
 import com.jike.shanglv_b.Common.ClearEditText;
 import com.jike.shanglv_b.Common.CommonFunc;
@@ -129,7 +127,7 @@ public class ActivityInlandAirlineticketAddoreditPassengers extends Activity {
 				passengerList = (ArrayList<Passenger>) JSONHelper
 						.parseCollection(passengerString, List.class,
 								Passenger.class);
-			} catch (JSONException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			editPassenger = passengerList.get(index);

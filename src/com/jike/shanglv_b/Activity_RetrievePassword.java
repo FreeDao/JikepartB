@@ -1,7 +1,7 @@
 //ÕÒ»ØµÇÂ¼ÃÜÂë
 package com.jike.shanglv_b;
 
-import org.json.JSONException;
+
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
@@ -284,7 +284,7 @@ public class Activity_RetrievePassword extends Activity {
 								cad.dismiss();
 							}});
 					}
-				} catch (JSONException e) {
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 				break;
@@ -326,7 +326,7 @@ public class Activity_RetrievePassword extends Activity {
 								cad.dismiss();
 							}});
 					}
-				} catch (JSONException e) {
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 				break;

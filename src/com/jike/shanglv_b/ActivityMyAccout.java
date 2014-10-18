@@ -1,6 +1,6 @@
 package com.jike.shanglv_b;
 
-import org.json.JSONException;
+
 import org.json.JSONObject;
 import org.json.JSONTokener;
 

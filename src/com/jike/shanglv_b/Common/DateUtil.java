@@ -63,6 +63,7 @@ public class DateUtil {
 			date = sdf.parse(dateString);
 		} catch (java.text.ParseException e) {
 			e.printStackTrace();
+			return true;
 		}
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(date);
@@ -95,6 +96,7 @@ public class DateUtil {
 			date = new SimpleDateFormat("yy-MM-dd").parse(specifiedDay);
 		} catch (ParseException e) {
 			e.printStackTrace();
+			return "";
 		}
 		c.setTime(date);
 		int day = c.get(Calendar.DATE);
@@ -120,6 +122,7 @@ public class DateUtil {
 			date = new SimpleDateFormat("yy-MM-dd").parse(specifiedDay);
 		} catch (ParseException e) {
 			e.printStackTrace();
+			return "";
 		}
 		c.setTime(date);
 		int day = c.get(Calendar.DATE);
@@ -142,6 +145,7 @@ public class DateUtil {
 			d = dfs.parse(specifiedDay);
 		} catch (java.text.ParseException e) {
 			e.printStackTrace();
+			return false;
 		}
 		if (d.after(date))
 			return true;

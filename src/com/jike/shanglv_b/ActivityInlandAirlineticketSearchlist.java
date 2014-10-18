@@ -73,9 +73,13 @@ public class ActivityInlandAirlineticketSearchlist extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_inland_airlineticket_searchlist);
-		initView();
-		((MyApplication)getApplication()).addActivity(this);
-		startQuery();
+		try {
+			initView();
+			((MyApplication)getApplication()).addActivity(this);
+			startQuery();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void initView() {

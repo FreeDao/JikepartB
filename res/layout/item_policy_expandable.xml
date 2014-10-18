@@ -13,53 +13,41 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" >
 
-        <LinearLayout
-            android:id="@+id/text_ll"
-            android:layout_width="fill_parent"
+        <TextView
+            android:id="@+id/policy_name_tv"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="30dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal" >
+            android:text="政策1"
+            android:textColor="#589719"
+            android:textSize="@dimen/booking_item_content_textsize" />
 
-            <TextView
-                android:id="@+id/policy_name_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="政策1"
-                android:textColor="#589719"
-                android:textSize="@dimen/booking_item_content_textsize" />
+        <TextView
+            android:id="@+id/fandian_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="60dp"
+            android:text="7.50%"
+            android:textColor="@color/blue_title_color"
+            android:textSize="@dimen/booking_item_content_textsize" />
 
-            <TextView
-                android:id="@+id/fandian_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_weight="1"
-                android:text="7.50%"
-                android:textColor="@color/blue_title_color"
-                android:textSize="@dimen/booking_item_content_textsize" />
+        <TextView
+            android:id="@+id/time_section_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="115dp"
+            android:text="8:00-20:00"
+            android:textColor="@color/black6"
+            android:textSize="@dimen/booking_item_content_textsize" />
 
-            <TextView
-                android:id="@+id/time_section_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_weight="1"
-                android:text="8:00-20:00"
-                android:textColor="@color/black6"
-                android:textSize="@dimen/booking_item_content_textsize" />
-
-            <TextView
-                android:id="@+id/price_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_weight="1"
-                android:text="￥568"
-                android:textColor="@color/price_yellow"
-                android:textSize="@dimen/booking_item_content_textsize" />
-        </LinearLayout>
+        <TextView
+            android:id="@+id/price_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="25dp"
+            android:text="￥568"
+            android:textColor="@color/price_yellow"
+            android:textSize="@dimen/booking_item_content_textsize" />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -84,8 +72,7 @@
         <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-             >
+            android:gravity="center_vertical" >
 
             <Button
                 android:id="@+id/select_btn"

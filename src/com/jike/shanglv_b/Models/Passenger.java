@@ -3,7 +3,7 @@ package com.jike.shanglv_b.Models;
 import java.io.Serializable;
 import java.text.ParseException;
 
-import org.json.JSONException;
+
 import org.json.JSONObject;
 
 import com.jike.shanglv_b.Common.DateUtil;
@@ -154,7 +154,7 @@ public class Passenger  implements Serializable {
 					break;
 				}
 			}
-		} catch (JSONException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

@@ -5,7 +5,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
-import org.json.JSONException;
+
 import org.json.JSONObject;
 import org.json.JSONTokener;
 import android.annotation.SuppressLint;
@@ -78,7 +78,11 @@ public class ActivityInternationalRequisitionForm extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_international_requisition_form);
-		initView();
+		try {
+			initView();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		((MyApplication)getApplication()).addActivity(this);
 	}
 
@@ -272,7 +276,7 @@ public class ActivityInternationalRequisitionForm extends Activity {
 						Toast.makeText(context, "发生未知异常，提交订单失败！", 0).show();
 					}
 					progressdialog.dismiss();
-				} catch (JSONException e) {
+				} catch (Exception e) {
 					progressdialog.dismiss();
 					e.printStackTrace();
 				}
@@ -435,7 +439,7 @@ public class ActivityInternationalRequisitionForm extends Activity {
 						passengerList);
 				passenger_listview.setAdapter(adapter);
 				ActivityInlandAirlineticketBooking.setListViewHeightBasedOnChildren(passenger_listview);
-			} catch (JSONException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 				break;
 			}
@@ -574,7 +578,7 @@ public class ActivityInternationalRequisitionForm extends Activity {
 						context, passengerList);
 				passenger_listview.setAdapter(adapter);
 				ActivityInlandAirlineticketBooking.setListViewHeightBasedOnChildren(passenger_listview);
-			} catch (JSONException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}

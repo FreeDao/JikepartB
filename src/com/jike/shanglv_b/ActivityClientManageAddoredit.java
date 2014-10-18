@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.json.JSONArray;
-import org.json.JSONException;
+
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
@@ -40,6 +40,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -72,9 +73,10 @@ public class ActivityClientManageAddoredit extends Activity {
 	private TextView title_tv, province_city_tv, cancel_tv, finish_tv,
 			startValidDay_tv, endValidDay_tv, default_grad_tv;
 	private LinearLayout dealer_extra_info_ll, password_ll, setgrad_ll;
-	private com.jike.shanglv_b.Common.ClearEditText username_et, password_et,
+	private com.jike.shanglv_b.Common.ClearEditText password_et,
 			comfirmPassword_et, contactPerson_et, contactPhone_et,
 			companyName_et;
+	private EditText username_et;
 	private String addAction = "", modifyAction = "", startValidDay = "",
 			endValidDay = "", addReturnJson = "", displayName = "",
 			dealerlevallistReturnJson = "", levellistActionName = "";
@@ -89,7 +91,11 @@ public class ActivityClientManageAddoredit extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_clientmanage_addoredit_client);
-		initView();
+		try {
+			initView();
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 	}
 
 	private void initView() {
@@ -108,7 +114,7 @@ public class ActivityClientManageAddoredit extends Activity {
 		cancel_tv.setOnClickListener(onClickListener);
 		finish_tv.setOnClickListener(onClickListener);
 		province_city_tv.setOnClickListener(onClickListener);
-		username_et = (ClearEditText) findViewById(R.id.username_et);
+		username_et = (EditText) findViewById(R.id.username_et);
 		password_et = (ClearEditText) findViewById(R.id.password_et);
 		comfirmPassword_et = (ClearEditText) findViewById(R.id.comfirmPassword_et);
 		contactPerson_et = (ClearEditText) findViewById(R.id.contactPerson_et);
@@ -124,7 +130,7 @@ public class ActivityClientManageAddoredit extends Activity {
 		endValidDay_tv.setOnClickListener(onClickListener);
 		title_tv = (TextView) findViewById(R.id.title_tv);
 		default_grad_tv = (TextView) findViewById(R.id.default_grad_tv);
-		startValidDay=DateUtil.GetTodayDate();
+		startValidDay = DateUtil.GetTodayDate();
 		startValidDay_tv.setText(DateUtil.GetTodayDate());
 
 		Bundle bundle = new Bundle();
@@ -160,17 +166,17 @@ public class ActivityClientManageAddoredit extends Activity {
 				try {
 					editCustomerUser = JSONHelper.parseObject(cuString,
 							CustomerUser.class);
-				} catch (JSONException e) {
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 				default_grad_tv.setText(editCustomerUser.getDealerLevel());
-//				username_et.setText(!editCustomerUser.getUserName().equals("null")?editCustomerUser.getUserName():"");
+				// username_et.setText(!editCustomerUser.getUserName().equals("null")?editCustomerUser.getUserName():"");
 				username_et.setText(editCustomerUser.getUserName());
 				username_et.setEnabled(false);
-//				contactPerson_et.setText(!editCustomerUser.getRealName().equals("null")?editCustomerUser.getRealName():"");
+				// contactPerson_et.setText(!editCustomerUser.getRealName().equals("null")?editCustomerUser.getRealName():"");
 				contactPerson_et.setText(editCustomerUser.getRealName());
 				contactPerson_et.setEnabled(false);
-//				contactPhone_et.setText(!editCustomerUser.getPhone().equals("null")?editCustomerUser.getPhone():"");
+				// contactPhone_et.setText(!editCustomerUser.getPhone().equals("null")?editCustomerUser.getPhone():"");
 				contactPhone_et.setText(editCustomerUser.getPhone());
 				contactPhone_et.setEnabled(false);
 				province_city_tv.setText(editCustomerUser.getCityName() + "-"
@@ -201,74 +207,86 @@ public class ActivityClientManageAddoredit extends Activity {
 	View.OnClickListener onClickListener = new OnClickListener() {
 		@Override
 		public void onClick(View arg0) {
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
-			Date date = null;
-			switch (arg0.getId()) {
-			case R.id.setgrad_ll:
-				iniPopupWindow(0, initLevelData());
-				pwMyPopWindow.showAtLocation(setgrad_ll, Gravity.BOTTOM, 0, 0);
-				break;
-			case R.id.province_city_tv:
-				SelectProvinceCityAlertDialog sad = new SelectProvinceCityAlertDialog(
-						ActivityClientManageAddoredit.this);
-				break;
-			case R.id.cancel_tv:
-				finish();
-				break;
-			case R.id.finish_tv:
-				if (add_edit == 0 && validInput())// 新增
-					startAdd();
-				else if (add_edit == 1 && validInput())// 修改
-					startModify();
-				break;
-			case R.id.startValidDay_tv:
-				Calendar c1 = Calendar.getInstance();
-				try {
-					if (!startValidDay.isEmpty()) {
-						date = sdf.parse(startValidDay);
-						c1.setTime(date);
+			try {
+
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+				Date date = null;
+				switch (arg0.getId()) {
+				case R.id.setgrad_ll:
+					iniPopupWindow(0, initLevelData());
+					pwMyPopWindow.showAtLocation(setgrad_ll, Gravity.BOTTOM, 0,
+							0);
+					break;
+				case R.id.province_city_tv:
+					SelectProvinceCityAlertDialog sad = new SelectProvinceCityAlertDialog(
+							ActivityClientManageAddoredit.this);
+					break;
+				case R.id.cancel_tv:
+					finish();
+					break;
+				case R.id.finish_tv:
+					if (add_edit == 0 && validInput())// 新增
+						startAdd();
+					else if (add_edit == 1 && validInput())// 修改
+						startModify();
+					break;
+				case R.id.startValidDay_tv:
+					Calendar c1 = Calendar.getInstance();
+					try {
+						if (!startValidDay.isEmpty()) {
+							date = sdf.parse(startValidDay);
+							c1.setTime(date);
+						}
+					} catch (java.text.ParseException e) {
+						e.printStackTrace();
 					}
-				} catch (java.text.ParseException e) {
-					e.printStackTrace();
-				}
-				new DatePickerDialog(context,
-						new DatePickerDialog.OnDateSetListener() {
-							@Override
-							public void onDateSet(DatePicker view, int year,
-									int monthOfYear, int dayOfMonth) {
-								startValidDay_tv.setText(year + "/"
-										+ (monthOfYear + 1) + "/" + dayOfMonth);
-								startValidDay = year + "/" + (monthOfYear + 1)
-										+ "/" + dayOfMonth;
-							}
-						}, c1.get(Calendar.YEAR), c1.get(Calendar.MONTH), c1
-								.get(Calendar.DAY_OF_MONTH)).show();
-				break;
-			case R.id.endValidDay_tv:
-				Calendar c11 = Calendar.getInstance();
-				try {
-					if (!startValidDay.isEmpty()) {
-						date = sdf.parse(endValidDay);
-						c11.setTime(date);
+					new DatePickerDialog(context,
+							new DatePickerDialog.OnDateSetListener() {
+								@Override
+								public void onDateSet(DatePicker view,
+										int year, int monthOfYear,
+										int dayOfMonth) {
+									startValidDay_tv.setText(year + "/"
+											+ (monthOfYear + 1) + "/"
+											+ dayOfMonth);
+									startValidDay = year + "/"
+											+ (monthOfYear + 1) + "/"
+											+ dayOfMonth;
+								}
+							}, c1.get(Calendar.YEAR), c1.get(Calendar.MONTH),
+							c1.get(Calendar.DAY_OF_MONTH)).show();
+					break;
+				case R.id.endValidDay_tv:
+					Calendar c11 = Calendar.getInstance();
+					try {
+						if (!startValidDay.isEmpty()) {
+							date = sdf.parse(endValidDay);
+							c11.setTime(date);
+						}
+					} catch (java.text.ParseException e) {
+						e.printStackTrace();
 					}
-				} catch (java.text.ParseException e) {
-					e.printStackTrace();
+					new DatePickerDialog(context,
+							new DatePickerDialog.OnDateSetListener() {
+								@Override
+								public void onDateSet(DatePicker view,
+										int year, int monthOfYear,
+										int dayOfMonth) {
+									endValidDay_tv.setText(year + "/"
+											+ (monthOfYear + 1) + "/"
+											+ dayOfMonth);
+									endValidDay = year + "/"
+											+ (monthOfYear + 1) + "/"
+											+ dayOfMonth;
+								}
+							}, c11.get(Calendar.YEAR), c11.get(Calendar.MONTH),
+							c11.get(Calendar.DAY_OF_MONTH)).show();
+					break;
+				default:
+					break;
 				}
-				new DatePickerDialog(context,
-						new DatePickerDialog.OnDateSetListener() {
-							@Override
-							public void onDateSet(DatePicker view, int year,
-									int monthOfYear, int dayOfMonth) {
-								endValidDay_tv.setText(year + "/"
-										+ (monthOfYear + 1) + "/" + dayOfMonth);
-								endValidDay = year + "/" + (monthOfYear + 1)
-										+ "/" + dayOfMonth;
-							}
-						}, c11.get(Calendar.YEAR), c11.get(Calendar.MONTH), c11
-								.get(Calendar.DAY_OF_MONTH)).show();
-				break;
-			default:
-				break;
+			} catch (Exception e) {
+				// TODO: handle exception
 			}
 		}
 	};
@@ -476,7 +494,7 @@ public class ActivityClientManageAddoredit extends Activity {
 		@Override
 		public void handleMessage(Message msg) {
 			JSONTokener jsonParser;
-			Boolean isModify=false;
+			Boolean isModify = false;
 			switch (msg.what) {
 			case DEALERLEVELMSGCODE:
 				jsonParser = new JSONTokener(dealerlevallistReturnJson);
@@ -509,7 +527,7 @@ public class ActivityClientManageAddoredit extends Activity {
 				}
 				break;
 			case MODIFY_CUSTOMER_MSG_CODE:
-				isModify=true;
+				isModify = true;
 			case ADD_CUSTOMER_MSG_CODE:
 				jsonParser = new JSONTokener(addReturnJson);
 				try {
@@ -517,31 +535,32 @@ public class ActivityClientManageAddoredit extends Activity {
 					JSONObject jsonObject = (JSONObject) jsonParser.nextValue();
 					String state = jsonObject.getString("c");
 					String message = "";
-				 if (state.equals("0000")) {
-					message =isModify==true?"修改成功":"添加成功";
-					final CustomerAlertDialog cad = new CustomerAlertDialog(
-							context, true);
-					cad.setTitle(message);
-					cad.setPositiveButton("确定", new OnClickListener() {
-						@Override
-						public void onClick(View arg0) {
-							cad.dismiss();
-							finish();
-						}
-					});
+					if (state.equals("0000")) {
+						message = isModify == true ? "修改成功" : "添加成功";
+						final CustomerAlertDialog cad = new CustomerAlertDialog(
+								context, true);
+						cad.setTitle(message);
+						cad.setPositiveButton("确定", new OnClickListener() {
+							@Override
+							public void onClick(View arg0) {
+								cad.dismiss();
+								finish();
+							}
+						});
 					} else {
-							message = jsonObject.getJSONObject("d").getString("msg");
-							final CustomerAlertDialog cad = new CustomerAlertDialog(
-									context, true);
-							cad.setTitle(message);
-							cad.setPositiveButton("确定", new OnClickListener() {
-								@Override
-								public void onClick(View arg0) {
-									cad.dismiss();
-								}
-							});
-					 }
-				} catch (JSONException e) {
+						message = jsonObject.getJSONObject("d")
+								.getString("msg");
+						final CustomerAlertDialog cad = new CustomerAlertDialog(
+								context, true);
+						cad.setTitle(message);
+						cad.setPositiveButton("确定", new OnClickListener() {
+							@Override
+							public void onClick(View arg0) {
+								cad.dismiss();
+							}
+						});
+					}
+				} catch (Exception e) {
 					progressdialog.dismiss();
 					e.printStackTrace();
 					Toast.makeText(context, "发生未知异常,操作失败", 0).show();

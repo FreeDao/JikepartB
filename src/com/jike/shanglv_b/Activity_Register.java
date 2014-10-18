@@ -1,7 +1,7 @@
 //ÓÃ»§×¢²á
 package com.jike.shanglv_b;
 
-import org.json.JSONException;
+
 import org.json.JSONObject;
 import org.json.JSONTokener;
 import android.app.Activity;
@@ -48,8 +48,11 @@ public class Activity_Register extends Activity {
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_register);
-
-		init();
+		try {
+			init();
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 		((MyApplication)getApplication()).addActivity(this);
 	}
 
@@ -77,7 +80,6 @@ public class Activity_Register extends Activity {
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case 1:
-
 				JSONTokener jsonParser;
 				jsonParser = new JSONTokener(registerReturnJson);
 				try {
@@ -126,7 +128,7 @@ public class Activity_Register extends Activity {
 								cad.dismiss();
 							}});
 					}
-				} catch (JSONException e) {
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 				progressdialog.dismiss();

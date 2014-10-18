@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.json.JSONException;
+
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
@@ -260,7 +260,7 @@ public class ActivityInlandAirlineticketBooking extends Activity {
 			startQueryTuigaiqian(ia.getFlightNo(), jsonObject.getJSONArray("CabList")
 					.getJSONObject(selectCabinListIndex)
 					.getString("Cabin"), startoff_date_tv.getText().toString(), TUIGAIQIAN_MSG_CODE);
-		} catch (JSONException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		jipiaojia_tv.setText("￥" + String.valueOf(jipiaojia));
@@ -385,7 +385,7 @@ public class ActivityInlandAirlineticketBooking extends Activity {
 			startQueryTuigaiqian(ia.getFlightNo(), jsonObject3.getJSONArray("CabList")
 					.getJSONObject(selectCabinListIndex)
 					.getString("Cabin"), startoff_date_tv3.getText().toString(), TUIGAIQIAN_MSG_CODE3);
-		} catch (JSONException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		jipiaojia_tv3.setText("￥" + String.valueOf(jipiaojia3));
@@ -466,7 +466,7 @@ public class ActivityInlandAirlineticketBooking extends Activity {
 					} else {
 						Toast.makeText(context, "网络异常，获取保险价格失败！", 0).show();
 					}
-				} catch (JSONException e) {
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 				break;
@@ -489,7 +489,7 @@ public class ActivityInlandAirlineticketBooking extends Activity {
 						Toast.makeText(context, "发生异常，提交订单失败！", 0).show();
 					}
 					progressdialog.dismiss();
-				} catch (JSONException e) {
+				} catch (Exception e) {
 					progressdialog.dismiss();
 					e.printStackTrace();
 				}
@@ -681,7 +681,7 @@ public class ActivityInlandAirlineticketBooking extends Activity {
 			JSONObject object = flight.getCablist().getJSONObject(
 					selectCabinListIndex);
 			cabin = new CabList(object);
-		} catch (JSONException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
@@ -935,7 +935,7 @@ public class ActivityInlandAirlineticketBooking extends Activity {
 				policyString = b1.getString(SelectZhengceActivity.SELECTEDPOLICY);
 				try {
 					selectedPolicyB=JSONHelper.parseObject(policyString, PolicyList.class);
-				} catch (JSONException e) {
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 				if (requestCode==SELECTPOLICYREQUESTCODE) {
@@ -993,7 +993,7 @@ public class ActivityInlandAirlineticketBooking extends Activity {
 						passengerList);
 				passenger_listview.setAdapter(adapter);
 				setListViewHeightBasedOnChildren(passenger_listview);
-			} catch (JSONException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 				break;
 			}
@@ -1129,7 +1129,7 @@ public class ActivityInlandAirlineticketBooking extends Activity {
 						context, passengerList);
 				passenger_listview.setAdapter(adapter);
 				setListViewHeightBasedOnChildren(passenger_listview);
-			} catch (JSONException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}

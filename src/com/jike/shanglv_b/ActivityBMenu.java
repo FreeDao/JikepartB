@@ -1,6 +1,6 @@
 package com.jike.shanglv_b;
 
-import org.json.JSONException;
+
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
@@ -354,7 +354,7 @@ public class ActivityBMenu extends Activity {
 								.putBoolean(SPkeys.loginState.getString(),
 										false).commit();
 					}
-				} catch (JSONException e) {
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 				break;

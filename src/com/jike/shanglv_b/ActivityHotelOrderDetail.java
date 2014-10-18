@@ -1,6 +1,6 @@
 package com.jike.shanglv_b;
 
-import org.json.JSONException;
+
 import org.json.JSONObject;
 import org.json.JSONTokener;
 import android.annotation.SuppressLint;
@@ -165,7 +165,7 @@ public class ActivityHotelOrderDetail extends Activity {
 					} else {
 						Toast.makeText(context, "网络异常！", 0).show();
 					}
-				} catch (JSONException e) {
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 				break;
@@ -198,7 +198,7 @@ public class ActivityHotelOrderDetail extends Activity {
 				latetime_tv.setText("最晚到店时间     "+orderDetailObject.getString("latetime"));
 				hotel_adress_tv.setText(orderDetailObject.getString("orderDate"));
 				passengers_tv.setText(orderDetailObject.getString("passengers"));
-			} catch (JSONException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}

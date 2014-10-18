@@ -3,7 +3,7 @@ package com.jike.shanglv_b;
 import java.util.ArrayList;
 import java.util.List;
 import org.json.JSONArray;
-import org.json.JSONException;
+
 import org.json.JSONObject;
 import org.json.JSONTokener;
 import android.app.Activity;
@@ -61,7 +61,11 @@ public class ActivityInlandAirlineticketSelectPassengers extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_inland_airlineticket_select_passengers);
-		initView();
+		try {
+			initView();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		isHasBookingPassenger=getBookingPassengerList();
 		if(!isVisitNetwork){//如果没有访问网络，则直接绑定intent中的数据到联系人列表的listview中
 			stopLoadingAni();
@@ -138,7 +142,7 @@ public class ActivityInlandAirlineticketSelectPassengers extends Activity {
 				if (bookingPassengerList!=null&&bookingPassengerList.size()>0) {
 					return true;
 				}
-			} catch (JSONException e) {
+			} catch (Exception e) {
 				if (allPassengersListString.equals("")) {
 					startQueryCommonPassengers();	
 				}
@@ -218,7 +222,7 @@ public class ActivityInlandAirlineticketSelectPassengers extends Activity {
 						history_passenger_listview.setAdapter(adapter);
 					} else {// "查询失败"
 					}
-				} catch (JSONException e) {
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 				break;
@@ -426,7 +430,7 @@ public class ActivityInlandAirlineticketSelectPassengers extends Activity {
 						ActivityInlandAirlineticketSelectPassengers.this,
 						passengerList);
 				history_passenger_listview.setAdapter(adapter);
-			} catch (JSONException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 				break;
 			}

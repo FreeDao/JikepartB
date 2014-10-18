@@ -4,7 +4,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import org.json.JSONArray;
-import org.json.JSONException;
+
 import org.json.JSONObject;
 import org.json.JSONTokener;
 import android.annotation.SuppressLint;
@@ -200,7 +200,7 @@ public class ActivityTrainOrderDetail extends Activity {
 					} else {
 						Toast.makeText(context, "发生异常，获取订单信息失败！", 0).show();
 					}
-				} catch (JSONException e) {
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 				break;
@@ -228,7 +228,7 @@ public class ActivityTrainOrderDetail extends Activity {
 					} else{
 						Toast.makeText(context,"发生异常", 0).show();
 					}
-				} catch (JSONException e) {
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 				break;
@@ -286,7 +286,7 @@ public class ActivityTrainOrderDetail extends Activity {
 				} catch (ParseException e) {
 					e.printStackTrace();
 				}
-			} catch (JSONException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
