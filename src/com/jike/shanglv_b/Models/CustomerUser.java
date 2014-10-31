@@ -3,6 +3,7 @@ package com.jike.shanglv_b.Models;
 public class CustomerUser {
 	String  UserName,// StoneMK, //用户名
 			DealerLevel,// 钻石卡,//用户级别
+			LevelID,
 			RealName,// 李伟,//真实信息
 			Phone,// 18502193643,//电话号码
 			RegDate,// 2014-06-26 10:58,//注册日期
@@ -14,6 +15,14 @@ public class CustomerUser {
 			StartDate,//2014-06-26,//账户有效期起始
     	    EndDate;//2014-07-25//账户有效期结束
 	
+	public String getLevelID() {
+		return LevelID;
+	}
+
+	public void setLevelID(String levelID) {
+		LevelID = levelID;
+	}
+
 	public String getCompanyName() {
 		return CompanyName;
 	}

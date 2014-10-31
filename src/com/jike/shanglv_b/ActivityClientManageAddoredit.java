@@ -170,6 +170,7 @@ public class ActivityClientManageAddoredit extends Activity {
 					e.printStackTrace();
 				}
 				default_grad_tv.setText(editCustomerUser.getDealerLevel());
+				levelId=editCustomerUser.getLevelID();
 				// username_et.setText(!editCustomerUser.getUserName().equals("null")?editCustomerUser.getUserName():"");
 				username_et.setText(editCustomerUser.getUserName());
 				username_et.setEnabled(false);

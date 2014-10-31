@@ -158,25 +158,28 @@ public class DateUtil {
 	 */
 	public static String getTime(String dateString)
 			throws java.text.ParseException {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		Date date = sdf.parse(dateString);
-		Calendar c = Calendar.getInstance();
-		c.setTime(date);
-		// Calendar.HOUR 12小时制 Calendar.HOUR_OF_DAY 24小时制的时间
-		String minute = "";
-		String hour = "";
-		if (c.get(Calendar.MINUTE) < 10) {
-			minute = "0" + Integer.toString(c.get(Calendar.MINUTE));
-		} else
-			minute = Integer.toString(c.get(Calendar.MINUTE));
-		if (c.get(Calendar.HOUR_OF_DAY) < 10) {
-			hour = "0" + Integer.toString(c.get(Calendar.HOUR_OF_DAY));
-		} else
-			hour = Integer.toString(c.get(Calendar.HOUR_OF_DAY));
-
-		String time = hour + ":" + minute;
-		// String
-		// time=dateString.substring(dateString.length()-8,dateString.length()-3);
+		String time = "";
+		try {
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			Date date = sdf.parse(dateString);
+			Calendar c = Calendar.getInstance();
+			c.setTime(date);
+			// Calendar.HOUR 12小时制 Calendar.HOUR_OF_DAY 24小时制的时间
+			String minute = "";
+			String hour = "";
+			if (c.get(Calendar.MINUTE) < 10) {
+				minute = "0" + Integer.toString(c.get(Calendar.MINUTE));
+			} else
+				minute = Integer.toString(c.get(Calendar.MINUTE));
+			if (c.get(Calendar.HOUR_OF_DAY) < 10) {
+				hour = "0" + Integer.toString(c.get(Calendar.HOUR_OF_DAY));
+			} else
+				hour = Integer.toString(c.get(Calendar.HOUR_OF_DAY));
+			time = hour + ":" + minute;
+		} catch (Exception e) {
+			time = dateString.substring(dateString.length() - 8,
+					dateString.length() - 3);
+		}
 		return time;
 	}
 
@@ -185,20 +188,25 @@ public class DateUtil {
 	 */
 	public static String getDate(String dateString)
 			throws java.text.ParseException {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		Date date = sdf.parse(dateString);
-		Calendar c = Calendar.getInstance();
-		c.setTime(date);
-		String month = "";
-		if (c.get(Calendar.MONTH) < 9)
-			month = "0" + (c.get(Calendar.MONTH) + 1);
-		else
-			month = String.valueOf(c.get(Calendar.MONTH) + 1);
-		String time = c.get(Calendar.YEAR) + "-" + month + "-"
-				+ c.get(Calendar.DAY_OF_MONTH);
+		String time = "";
+		try {
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			Date date = sdf.parse(dateString);
+			Calendar c = Calendar.getInstance();
+			c.setTime(date);
+			String month = "";
+			if (c.get(Calendar.MONTH) < 9)
+				month = "0" + (c.get(Calendar.MONTH) + 1);
+			else
+				month = String.valueOf(c.get(Calendar.MONTH) + 1);
+			time = c.get(Calendar.YEAR) + "-" + month + "-"
+					+ c.get(Calendar.DAY_OF_MONTH);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return dateString.substring(0, dateString.indexOf(" "));
+		}
 		return time;
 	}
-
 	/**
 	 * 获得指定日期时间的MM:dd 月-日
 	 */

@@ -744,7 +744,7 @@ public class ActivityOrderList extends Activity implements
 			try {
 				ruzhu_date_tv.setText(DateUtil.getDate(str.get(position)
 						.getInDate()));
-			} catch (ParseException e) {
+			} catch (Exception e) {
 				ruzhu_date_tv.setText(str.get(position).getInDate());
 			}
 			hotel_name_tv.setText(str.get(position).getHotelName());

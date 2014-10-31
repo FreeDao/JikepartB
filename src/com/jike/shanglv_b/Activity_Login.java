@@ -24,7 +24,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.jike.shanglv_b.R;
 import com.jike.shanglv_b.Common.CommonFunc;
 import com.jike.shanglv_b.Common.CustomProgressDialog;
@@ -115,6 +114,10 @@ public class Activity_Login extends Activity {
 		autologin_rl.setOnClickListener(myListener);
 		registernew_tv.setOnClickListener(myListener);
 		forgetpassword_tv.setOnClickListener(myListener);
+		
+		if((new MyApp(context)).getHm().get(PackageKeys.PLATFORM.getString())==Platform.B2B){
+			registernew_tv.setVisibility(View.INVISIBLE);
+		}
 	}
 
 	private Handler handler = new Handler() {
@@ -128,7 +131,6 @@ public class Activity_Login extends Activity {
 				try {
 					JSONObject jsonObject = (JSONObject) jsonParser.nextValue();
 					String state = jsonObject.getString("c");
-
 					if (state.equals("0000")) {
 						String content = jsonObject.getString("d");
 						sp.edit()
@@ -195,10 +197,6 @@ public class Activity_Login extends Activity {
 						} catch (Exception e) {
 							message = jsonObject.getString("msg");
 						}
-						// new AlertDialog.Builder(context).setTitle("登录失败")
-						// .setMessage(message)
-						// .setPositiveButton("确认", null).show();
-
 						final CustomerAlertDialog cad = new CustomerAlertDialog(
 								context, true);
 						cad.setTitle(message);
@@ -258,9 +256,6 @@ public class Activity_Login extends Activity {
 						break;
 					}
 					if (password_input_et.getText().toString().trim().length() == 0) {
-						// new AlertDialog.Builder(context).setTitle("密码不能为空")
-						// .setMessage("请输入密码").setPositiveButton("确定", null)
-						// .show();
 						final CustomerAlertDialog cad = new CustomerAlertDialog(
 								context, true);
 						cad.setTitle("请输入密码");
@@ -325,7 +320,7 @@ public class Activity_Login extends Activity {
 					break;
 				}
 			} catch (Exception e) {
-				// TODO: handle exception
+				
 			}
 		}
 	};
