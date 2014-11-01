@@ -53,16 +53,21 @@ public class Activity_Login extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		setContentView(R.layout.activity_login);
 		try {
-			init();
+			super.onCreate(savedInstanceState);
+			getWindow()
+					.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+			requestWindowFeature(Window.FEATURE_NO_TITLE);
+			setContentView(R.layout.activity_login);
+			try {
+				init();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			((MyApplication) getApplication()).addActivity(this);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		((MyApplication) getApplication()).addActivity(this);
 	}
 
 	private void init() {
@@ -114,8 +119,8 @@ public class Activity_Login extends Activity {
 		autologin_rl.setOnClickListener(myListener);
 		registernew_tv.setOnClickListener(myListener);
 		forgetpassword_tv.setOnClickListener(myListener);
-		
-		if((new MyApp(context)).getHm().get(PackageKeys.PLATFORM.getString())==Platform.B2B){
+
+		if ((new MyApp(context)).getHm().get(PackageKeys.PLATFORM.getString()) == Platform.B2B) {
 			registernew_tv.setVisibility(View.INVISIBLE);
 		}
 	}
@@ -125,7 +130,6 @@ public class Activity_Login extends Activity {
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case 1:// 获取登录返回的数据
-
 				JSONTokener jsonParser;
 				jsonParser = new JSONTokener(loginReturnJson);
 				try {
@@ -320,14 +324,13 @@ public class Activity_Login extends Activity {
 					break;
 				}
 			} catch (Exception e) {
-				
+
 			}
 		}
 	};
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
 			finish();
 		}

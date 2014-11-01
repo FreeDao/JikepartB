@@ -75,50 +75,56 @@ public class ActivityClientManageSetGrad extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_clientmange_set_grad);
+		try {
+			super.onCreate(savedInstanceState);
+			setContentView(R.layout.activity_clientmange_set_grad);
 
-		context = this;
-		sp = getSharedPreferences(SPkeys.SPNAME.getString(), 0);
-		customerlever_List = new ArrayList<DealerLevel>();
-		listview = (com.jike.shanglv_b.Common.QQListView) findViewById(R.id.listview);
-		listview.setDelButtonClickListener(new com.jike.shanglv_b.Common.QQListView.DelButtonClickListener() {
-			@Override
-			public void clickHappend(final int position) {
-				startDeleteGrad(customerlever_List.get(position).getLevalID());
-				// customerlever_List.remove(position);
-				// adapter.refreshData((List<DealerLevel>) customerlever_List);
+			context = this;
+			sp = getSharedPreferences(SPkeys.SPNAME.getString(), 0);
+			customerlever_List = new ArrayList<DealerLevel>();
+			listview = (com.jike.shanglv_b.Common.QQListView) findViewById(R.id.listview);
+			listview.setDelButtonClickListener(new com.jike.shanglv_b.Common.QQListView.DelButtonClickListener() {
+				@Override
+				public void clickHappend(final int position) {
+					startDeleteGrad(customerlever_List.get(position)
+							.getLevalID());
+					// customerlever_List.remove(position);
+					// adapter.refreshData((List<DealerLevel>)
+					// customerlever_List);
+				}
+			});
+
+			loading_ll = (LinearLayout) findViewById(R.id.loading_ll);
+			frame_ani_iv = (ImageView) findViewById(R.id.frame_ani_iv);
+			query_status_tv = (TextView) findViewById(R.id.query_status_tv);
+			set_default_rl = (RelativeLayout) findViewById(R.id.set_default_rl);
+			add_grad_rl = (RelativeLayout) findViewById(R.id.add_grad_rl);
+			default_grad_tv = (TextView) findViewById(R.id.default_grad_tv);
+			title_tv = (TextView) findViewById(R.id.title_tv);
+			((ImageButton) findViewById(R.id.back_imgbtn))
+					.setOnClickListener(clickListener);
+			set_default_rl.setOnClickListener(clickListener);
+			add_grad_rl.setOnClickListener(clickListener);
+			Bundle bundle = new Bundle();
+			bundle = getIntent().getExtras();
+			if (bundle != null) {
+				displayName = bundle.containsKey(DISPLAY_TYPENAME_STRING) ? bundle
+						.getString(DISPLAY_TYPENAME_STRING) : "";
+				title_tv.setText(displayName + "级别设置");
 			}
-		});
-
-		loading_ll = (LinearLayout) findViewById(R.id.loading_ll);
-		frame_ani_iv = (ImageView) findViewById(R.id.frame_ani_iv);
-		query_status_tv = (TextView) findViewById(R.id.query_status_tv);
-		set_default_rl = (RelativeLayout) findViewById(R.id.set_default_rl);
-		add_grad_rl = (RelativeLayout) findViewById(R.id.add_grad_rl);
-		default_grad_tv = (TextView) findViewById(R.id.default_grad_tv);
-		title_tv = (TextView) findViewById(R.id.title_tv);
-		((ImageButton) findViewById(R.id.back_imgbtn))
-				.setOnClickListener(clickListener);
-		set_default_rl.setOnClickListener(clickListener);
-		add_grad_rl.setOnClickListener(clickListener);
-		Bundle bundle = new Bundle();
-		bundle = getIntent().getExtras();
-		if (bundle != null) {
-			displayName = bundle.containsKey(DISPLAY_TYPENAME_STRING) ? bundle
-					.getString(DISPLAY_TYPENAME_STRING) : "";
-			title_tv.setText(displayName + "级别设置");
+			if (displayName.equals(CUSTOMER_DISPLAYNAME)) {
+				levellistActionName = "customerlevallist";
+				addlevelActionName = "addcustomerleval";
+				setdefaultlevalActionName = "setdefaultcustomerlevel";
+			} else if (displayName.equals(DEALER_DISPLAYNAME)) {
+				levellistActionName = "dealerlevallist";
+				addlevelActionName = "adddealerleval";
+				setdefaultlevalActionName = "setdefaultlevel";
+			}
+			startQueryGrad();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		if (displayName.equals(CUSTOMER_DISPLAYNAME)) {
-			levellistActionName = "customerlevallist";
-			addlevelActionName = "addcustomerleval";
-			setdefaultlevalActionName = "setdefaultcustomerlevel";
-		} else if (displayName.equals(DEALER_DISPLAYNAME)) {
-			levellistActionName = "dealerlevallist";
-			addlevelActionName = "adddealerleval";
-			setdefaultlevalActionName = "setdefaultlevel";
-		}
-		startQueryGrad();
 	}
 
 	View.OnClickListener clickListener = new View.OnClickListener() {
@@ -166,12 +172,16 @@ public class ActivityClientManageSetGrad extends Activity {
 
 	@Override
 	public void onWindowFocusChanged(boolean hasFocus) {
-		super.onWindowFocusChanged(hasFocus);
-		frame_ani_iv.setBackgroundResource(R.anim.frame_rotate_ani);
-		AnimationDrawable anim = (AnimationDrawable) frame_ani_iv
-				.getBackground();
-		anim.setOneShot(false);
-		anim.start();
+		try {
+			super.onWindowFocusChanged(hasFocus);
+			frame_ani_iv.setBackgroundResource(R.anim.frame_rotate_ani);
+			AnimationDrawable anim = (AnimationDrawable) frame_ani_iv
+					.getBackground();
+			anim.setOneShot(false);
+			anim.start();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void startQueryGrad() {
@@ -510,50 +520,59 @@ public class ActivityClientManageSetGrad extends Activity {
 		@SuppressLint("ResourceAsColor")
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			if (convertView == null) {
-				convertView = inflater.inflate(R.layout.item_dealerlevel, null);
-			}
-			TextView dealerLevelName_tv = (TextView) convertView
-					.findViewById(R.id.dealerLevelName_tv);
-			TextView modify_tv = (TextView) convertView
-					.findViewById(R.id.modify_tv);
-
-			if (str.get(position).getLevalName() != null
-					&& str.get(position).getLevalName().length() > 0)
-				dealerLevelName_tv.setText(str.get(position).getLevalName());
-			modify_tv.setTag(position + "");
-			modify_tv.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View arg0) {
-					final int index = Integer.valueOf(arg0.getTag().toString());
-					final EditText inputServer = new EditText(context);
-					inputServer.setFocusable(true);
-					inputServer.setText(customerlever_List.get(index)
-							.getLevalName());
-					AlertDialog.Builder builder = new AlertDialog.Builder(
-							context);
-					builder.setTitle("修改" + displayName + "级别")
-							.setView(inputServer).setNegativeButton("取消", null);
-					builder.setPositiveButton("确定",
-							new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog,
-										int which) {
-									String inputName = inputServer.getText()
-											.toString();
-									startModifyGrad(
-											customerlever_List.get(index)
-													.getLevalID(), inputName);
-								}
-							});
-					// builder.setNeutralButton("删除", new
-					// DialogInterface.OnClickListener() {
-					// public void onClick(DialogInterface arg0, int arg1) {
-					// startDeleteGrad(customerlever_List.get(index).getLevalID());
-					// }
-					// });
-					builder.show();
+			try {
+				if (convertView == null) {
+					convertView = inflater.inflate(R.layout.item_dealerlevel,
+							null);
 				}
-			});
+				TextView dealerLevelName_tv = (TextView) convertView
+						.findViewById(R.id.dealerLevelName_tv);
+				TextView modify_tv = (TextView) convertView
+						.findViewById(R.id.modify_tv);
+
+				if (str.get(position).getLevalName() != null
+						&& str.get(position).getLevalName().length() > 0)
+					dealerLevelName_tv
+							.setText(str.get(position).getLevalName());
+				modify_tv.setTag(position + "");
+				modify_tv.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View arg0) {
+						final int index = Integer.valueOf(arg0.getTag()
+								.toString());
+						final EditText inputServer = new EditText(context);
+						inputServer.setFocusable(true);
+						inputServer.setText(customerlever_List.get(index)
+								.getLevalName());
+						AlertDialog.Builder builder = new AlertDialog.Builder(
+								context);
+						builder.setTitle("修改" + displayName + "级别")
+								.setView(inputServer)
+								.setNegativeButton("取消", null);
+						builder.setPositiveButton("确定",
+								new DialogInterface.OnClickListener() {
+									public void onClick(DialogInterface dialog,
+											int which) {
+										String inputName = inputServer
+												.getText().toString();
+										startModifyGrad(
+												customerlever_List.get(index)
+														.getLevalID(),
+												inputName);
+									}
+								});
+						// builder.setNeutralButton("删除", new
+						// DialogInterface.OnClickListener() {
+						// public void onClick(DialogInterface arg0, int arg1) {
+						// startDeleteGrad(customerlever_List.get(index).getLevalID());
+						// }
+						// });
+						builder.show();
+					}
+				});
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			return convertView;
 		}
 	}
@@ -667,27 +686,32 @@ public class ActivityClientManageSetGrad extends Activity {
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			Holder myHolder;
-			if (convertView == null) {
-				myHolder = new Holder();
-				convertView = inflater.inflate(
-						R.layout.item_train_baoxian_list_single, null);
-				myHolder.title = (TextView) convertView
-						.findViewById(R.id.title);
-				myHolder.iv = (ImageView) convertView.findViewById(R.id.img);
-				convertView.setTag(myHolder);
-			} else {
-				myHolder = (Holder) convertView.getTag();
+			try {
+				Holder myHolder;
+				if (convertView == null) {
+					myHolder = new Holder();
+					convertView = inflater.inflate(
+							R.layout.item_train_baoxian_list_single, null);
+					myHolder.title = (TextView) convertView
+							.findViewById(R.id.title);
+					myHolder.iv = (ImageView) convertView
+							.findViewById(R.id.img);
+					convertView.setTag(myHolder);
+				} else {
+					myHolder = (Holder) convertView.getTag();
+				}
+				if (position == this.currentID)
+					myHolder.iv.setBackgroundDrawable(c.getResources()
+							.getDrawable(R.drawable.radio_clk));
+				else
+					myHolder.iv.setBackgroundDrawable(c.getResources()
+							.getDrawable(R.drawable.radio));
+				myHolder.title
+						.setText(list.get(position).get("title") != null ? list
+								.get(position).get("title").toString() : "");
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-			if (position == this.currentID)
-				myHolder.iv.setBackgroundDrawable(c.getResources().getDrawable(
-						R.drawable.radio_clk));
-			else
-				myHolder.iv.setBackgroundDrawable(c.getResources().getDrawable(
-						R.drawable.radio));
-			myHolder.title
-					.setText(list.get(position).get("title") != null ? list
-							.get(position).get("title").toString() : "");
 			return convertView;
 		}
 
@@ -700,5 +724,4 @@ public class ActivityClientManageSetGrad extends Activity {
 			this.currentID = currentID;
 		}
 	}
-
 }

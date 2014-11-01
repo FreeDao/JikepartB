@@ -25,31 +25,35 @@ import com.jike.shanglv_b.Models.HotelComment;
 import com.jike.shanglv_b.NetAndJson.JSONHelper;
 
 public class ActivityHotelComments extends Activity {
-	
-	private ImageButton back_imgbtn,home_imgbtn;
+
+	private ImageButton back_imgbtn, home_imgbtn;
 	private HotelComment hComment;
-	private TextView pingfen_tv,pingfencount_tv;
+	private TextView pingfen_tv, pingfencount_tv;
 	private ListView listview;
 	private RelativeLayout orderNow_rl;
 	private ArrayList<HotelComment> hCommentList;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_hotel_comments);
-		initView();
-		assign();
-		((MyApplication)getApplication()).addActivity(this);
+		try {
+			super.onCreate(savedInstanceState);
+			setContentView(R.layout.activity_hotel_comments);
+			initView();
+			assign();
+			((MyApplication) getApplication()).addActivity(this);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void initView() {
-		hCommentList=new ArrayList<HotelComment>();
-		pingfen_tv=(TextView) findViewById(R.id.pingfen_tv);
-		pingfencount_tv=(TextView) findViewById(R.id.pingfencount_tv);
-		listview=(ListView) findViewById(R.id.listview);
-		orderNow_rl=(RelativeLayout) findViewById(R.id.orderNow_rl);
-		back_imgbtn=(ImageButton) findViewById(R.id.back_imgbtn);
-		home_imgbtn=(ImageButton) findViewById(R.id.home_imgbtn);
+		hCommentList = new ArrayList<HotelComment>();
+		pingfen_tv = (TextView) findViewById(R.id.pingfen_tv);
+		pingfencount_tv = (TextView) findViewById(R.id.pingfencount_tv);
+		listview = (ListView) findViewById(R.id.listview);
+		orderNow_rl = (RelativeLayout) findViewById(R.id.orderNow_rl);
+		back_imgbtn = (ImageButton) findViewById(R.id.back_imgbtn);
+		home_imgbtn = (ImageButton) findViewById(R.id.home_imgbtn);
 		back_imgbtn.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -59,7 +63,8 @@ public class ActivityHotelComments extends Activity {
 		home_imgbtn.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				startActivity(new Intent(ActivityHotelComments.this,MainActivity.class));
+				startActivity(new Intent(ActivityHotelComments.this,
+						MainActivity.class));
 			}
 		});
 		orderNow_rl.setOnClickListener(new OnClickListener() {
@@ -69,33 +74,36 @@ public class ActivityHotelComments extends Activity {
 			}
 		});
 	}
-	
-	private void assign(){
-		hComment=new HotelComment();
+
+	private void assign() {
+		hComment = new HotelComment();
 		Bundle bundle = this.getIntent().getExtras();
 		if (bundle != null) {
 			if (bundle.containsKey("commentObjectString"))
 				try {
-					JSONObject object=new JSONObject(bundle.getString("commentObjectString"));
-					JSONArray jArray=object.getJSONArray("comment");
+					JSONObject object = new JSONObject(
+							bundle.getString("commentObjectString"));
+					JSONArray jArray = object.getJSONArray("comment");
 					for (int i = 0; i < jArray.length(); i++) {
-						HotelComment hComment = JSONHelper.parseObject(jArray.getJSONObject(i), HotelComment.class);
+						HotelComment hComment = JSONHelper.parseObject(
+								jArray.getJSONObject(i), HotelComment.class);
 						hCommentList.add(hComment);
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			if (bundle.containsKey("pingfen")) {
-				pingfen_tv.setText("ÆÀ·Ö "+bundle.getString("pingfen"));
+				pingfen_tv.setText("ÆÀ·Ö " + bundle.getString("pingfen"));
 			}
 			if (bundle.containsKey("pingfencount")) {
-				pingfencount_tv.setText(bundle.getString("pingfencount")); 
+				pingfencount_tv.setText(bundle.getString("pingfencount"));
 			}
 		}
-		ListAdapter adapter=new ListAdapter(ActivityHotelComments.this, hCommentList);
+		ListAdapter adapter = new ListAdapter(ActivityHotelComments.this,
+				hCommentList);
 		listview.setAdapter(adapter);
 	}
-	
+
 	private class ListAdapter extends BaseAdapter {
 		private LayoutInflater inflater;
 		private List<HotelComment> str;
@@ -109,7 +117,7 @@ public class ActivityHotelComments extends Activity {
 		public int getCount() {
 			return str.size();
 		}
-		
+
 		@Override
 		public Object getItem(int position) {
 			return str.get(position);
@@ -119,7 +127,7 @@ public class ActivityHotelComments extends Activity {
 		public long getItemId(int position) {
 			return position;
 		}
-		
+
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			if (convertView == null) {
@@ -134,7 +142,7 @@ public class ActivityHotelComments extends Activity {
 					.findViewById(R.id.haoping_tv);
 			TextView content_tv = (TextView) convertView
 					.findViewById(R.id.content_tv);
-			
+
 			user_tv.setText(str.get(position).getUsername());
 			time_tv.setText(str.get(position).getTime());
 			haoping_tv.setText(str.get(position).getHaoping());
@@ -142,5 +150,5 @@ public class ActivityHotelComments extends Activity {
 			return convertView;
 		}
 	}
-	
+
 }

@@ -59,17 +59,20 @@ public class ActivityHangbandongtaiSearchlist extends Activity implements
 	private String flistReturnJson, count;// 返回的查询列表json
 	private JSONArray flist;// 查询到的航班列表
 	private int index = 0;
-
 	private ListAdapter adapter;
 	private ArrayList<Hangbandongtai> dongtai_List;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_hangbandongtai_searchlist);
-		initView();
-		startQuery();
-		((MyApplication)getApplication()).addActivity(this);
+		try {
+			super.onCreate(savedInstanceState);
+			setContentView(R.layout.activity_hangbandongtai_searchlist);
+			initView();
+			startQuery();
+			((MyApplication) getApplication()).addActivity(this);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void startQuery() {
@@ -139,20 +142,23 @@ public class ActivityHangbandongtaiSearchlist extends Activity implements
 					if (state.equals("0000")) {
 						flist = jsonObject.getJSONArray("d");
 						createList(flist);
-						dongtai_List=removeDuplicteHangbandongtais(dongtai_List);
+						dongtai_List = removeDuplicteHangbandongtais(dongtai_List);
 						adapter = new ListAdapter(context, dongtai_List);
 						listview.setAdapter(adapter);
-						if (dongtai_List.size() == 0){
-//							new AlertDialog.Builder(context)
-//									.setTitle("未查相关的航班信息")
-//									.setPositiveButton("确认", null).show();
-							final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
-						cad.setTitle("未查相关的航班信息");
-						cad.setPositiveButton("知道了", new OnClickListener(){
-							@Override
-							public void onClick(View arg0) {
-								cad.dismiss();
-							}});}
+						if (dongtai_List.size() == 0) {
+							// new AlertDialog.Builder(context)
+							// .setTitle("未查相关的航班信息")
+							// .setPositiveButton("确认", null).show();
+							final CustomerAlertDialog cad = new CustomerAlertDialog(
+									context, true);
+							cad.setTitle("未查相关的航班信息");
+							cad.setPositiveButton("知道了", new OnClickListener() {
+								@Override
+								public void onClick(View arg0) {
+									cad.dismiss();
+								}
+							});
+						}
 						listview.setOnItemClickListener(new OnItemClickListener() {
 							@Override
 							public void onItemClick(AdapterView<?> parent,
@@ -170,16 +176,18 @@ public class ActivityHangbandongtaiSearchlist extends Activity implements
 
 					} else {
 						String message = jsonObject.getString("msg");
-//						new AlertDialog.Builder(context).setTitle("查询失败")
-//								.setMessage(message)
-//								.setPositiveButton("确认", null).show();
-						final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
+						// new AlertDialog.Builder(context).setTitle("查询失败")
+						// .setMessage(message)
+						// .setPositiveButton("确认", null).show();
+						final CustomerAlertDialog cad = new CustomerAlertDialog(
+								context, true);
 						cad.setTitle("查询失败");
-						cad.setPositiveButton("确定", new OnClickListener(){
+						cad.setPositiveButton("确定", new OnClickListener() {
 							@Override
 							public void onClick(View arg0) {
 								cad.dismiss();
-							}});
+							}
+						});
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -218,10 +226,18 @@ public class ActivityHangbandongtaiSearchlist extends Activity implements
 						+ arrivecity_code + "\",\"index\":\"" + index
 						+ "\",\"air\":\"" + "" + "\",\"flightno\":\""
 						+ flightNo + "\",\"type\":\"" + 2 + "\"}";
-				String param = "action=flighttime&str=" + str + "&userkey="
-						+ ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "&sitekey=" + MyApp.sitekey
+				String param = "action=flighttime&str="
+						+ str
+						+ "&userkey="
+						+ ma.getHm().get(PackageKeys.USERKEY.getString())
+								.toString()
+						+ "&sitekey="
+						+ MyApp.sitekey
 						+ "&sign="
-						+ CommonFunc.MD5(ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "flighttime" + str);
+						+ CommonFunc.MD5(ma.getHm()
+								.get(PackageKeys.USERKEY.getString())
+								.toString()
+								+ "flighttime" + str);
 				flistReturnJson = HttpUtils.getJsonContent(ma.getServeUrl(),
 						param);
 				Message msg = new Message();
@@ -250,10 +266,18 @@ public class ActivityHangbandongtaiSearchlist extends Activity implements
 						+ arrivecity_code + "\",\"index\":\"" + index
 						+ "\",\"air\":\"" + "" + "\",\"flightno\":\""
 						+ flightNo + "\",\"type\":\"" + 1 + "\"}";
-				String param = "action=flighttime&str=" + str + "&userkey="
-						+ ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "&sitekey=" + MyApp.sitekey
+				String param = "action=flighttime&str="
+						+ str
+						+ "&userkey="
+						+ ma.getHm().get(PackageKeys.USERKEY.getString())
+								.toString()
+						+ "&sitekey="
+						+ MyApp.sitekey
 						+ "&sign="
-						+ CommonFunc.MD5(ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "flighttime" + str);
+						+ CommonFunc.MD5(ma.getHm()
+								.get(PackageKeys.USERKEY.getString())
+								.toString()
+								+ "flighttime" + str);
 				flistReturnJson = HttpUtils.getJsonContent(ma.getServeUrl(),
 						param);
 				Message msg = new Message();
@@ -340,57 +364,63 @@ public class ActivityHangbandongtaiSearchlist extends Activity implements
 		@SuppressLint("ResourceAsColor")
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			if (convertView == null) {
-				convertView = inflater.inflate(
-						R.layout.item_hangbandongtai_searchlist, null);
-			}
-			TextView flightNo_tv = (TextView) convertView
-					.findViewById(R.id.flightNo_tv);
-			TextView flightName_tv = (TextView) convertView
-					.findViewById(R.id.flightName_tv);
-			TextView startTime_tv = (TextView) convertView
-					.findViewById(R.id.startTime_tv);
-			TextView endTime_tv = (TextView) convertView
-					.findViewById(R.id.endTime_tv);
-			TextView startCity_tv = (TextView) convertView
-					.findViewById(R.id.startCity_tv);
-			TextView endCity_tv = (TextView) convertView
-					.findViewById(R.id.endCity_tv);
-			TextView state_tv = (TextView) convertView
-					.findViewById(R.id.state_tv);
-			ImageView flight_company_logo = (ImageView) convertView
-					.findViewById(R.id.flight_company_logo);
+			try {
+				if (convertView == null) {
+					convertView = inflater.inflate(
+							R.layout.item_hangbandongtai_searchlist, null);
+				}
+				TextView flightNo_tv = (TextView) convertView
+						.findViewById(R.id.flightNo_tv);
+				TextView flightName_tv = (TextView) convertView
+						.findViewById(R.id.flightName_tv);
+				TextView startTime_tv = (TextView) convertView
+						.findViewById(R.id.startTime_tv);
+				TextView endTime_tv = (TextView) convertView
+						.findViewById(R.id.endTime_tv);
+				TextView startCity_tv = (TextView) convertView
+						.findViewById(R.id.startCity_tv);
+				TextView endCity_tv = (TextView) convertView
+						.findViewById(R.id.endCity_tv);
+				TextView state_tv = (TextView) convertView
+						.findViewById(R.id.state_tv);
+				ImageView flight_company_logo = (ImageView) convertView
+						.findViewById(R.id.flight_company_logo);
 
-			String picN = str.get(position).getFlightno().substring(0, 2);
-			MyApp ma = new MyApp(context);
-			String imgUrl = String.format(ma.getFlightCompanyLogo(), picN);
-			imageLoader.DisplayImageWithoutDefault(imgUrl, flight_company_logo);
-			flightNo_tv.setText(str.get(position).getFlightno());
-			flightName_tv.setVisibility(View.GONE);
-			startTime_tv.setText(str.get(position).getRealfly());
-			endTime_tv.setText(str.get(position).getRealreach());
-			startCity_tv.setText(str.get(position).getScity());
-			endCity_tv.setText(str.get(position).getEcity());
-			state_tv.setText(str.get(position).getState());
-			// 如果飞机尚未起飞或者尚未达到，则显示计划起飞到达时间
-			if (str.get(position).getRealfly() == null
-					|| str.get(position).getRealfly().trim().length() == 0) {
-				startTime_tv.setText(str.get(position).getPlanfly());
-			}
-			if (str.get(position).getRealreach() == null
-					|| str.get(position).getRealreach().trim().length() == 0) {
-				endTime_tv.setText(str.get(position).getPlanreach());
-			}
-			String red = "取消 延误", green = "待起飞  起飞 正常", blue = "到达";
-			if (red.contains(str.get(position).getState())) {
-				state_tv.setTextColor(getResources().getColor(R.color.red));
-			}
-			if (green.contains(str.get(position).getState())) {
-				state_tv.setTextColor(getResources().getColor(R.color.green));
-			}
-			if (blue.contains(str.get(position).getState())) {
-				state_tv.setTextColor(getResources().getColor(
-						R.color.state_blue));
+				String picN = str.get(position).getFlightno().substring(0, 2);
+				MyApp ma = new MyApp(context);
+				String imgUrl = String.format(ma.getFlightCompanyLogo(), picN);
+				imageLoader.DisplayImageWithoutDefault(imgUrl,
+						flight_company_logo);
+				flightNo_tv.setText(str.get(position).getFlightno());
+				flightName_tv.setVisibility(View.GONE);
+				startTime_tv.setText(str.get(position).getRealfly());
+				endTime_tv.setText(str.get(position).getRealreach());
+				startCity_tv.setText(str.get(position).getScity());
+				endCity_tv.setText(str.get(position).getEcity());
+				state_tv.setText(str.get(position).getState());
+				// 如果飞机尚未起飞或者尚未达到，则显示计划起飞到达时间
+				if (str.get(position).getRealfly() == null
+						|| str.get(position).getRealfly().trim().length() == 0) {
+					startTime_tv.setText(str.get(position).getPlanfly());
+				}
+				if (str.get(position).getRealreach() == null
+						|| str.get(position).getRealreach().trim().length() == 0) {
+					endTime_tv.setText(str.get(position).getPlanreach());
+				}
+				String red = "取消 延误", green = "待起飞  起飞 正常", blue = "到达";
+				if (red.contains(str.get(position).getState())) {
+					state_tv.setTextColor(getResources().getColor(R.color.red));
+				}
+				if (green.contains(str.get(position).getState())) {
+					state_tv.setTextColor(getResources()
+							.getColor(R.color.green));
+				}
+				if (blue.contains(str.get(position).getState())) {
+					state_tv.setTextColor(getResources().getColor(
+							R.color.state_blue));
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 			return convertView;
 		}

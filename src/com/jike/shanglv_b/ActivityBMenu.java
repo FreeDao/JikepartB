@@ -1,6 +1,5 @@
 package com.jike.shanglv_b;
 
-
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
@@ -35,7 +34,7 @@ public class ActivityBMenu extends Activity {
 	public static ActivityBMenu instance = null;
 	private LinearLayout ll05, gnjp_ll, gjjp_ll, jdyd_ll, hcp_ll, jdmp_ll,
 			hfcz_ll, hbdt_ll, wpt_ll, sxy_ll, fxgl_ll, khgl_ll, zhgl_ll,
-			ddgl_ll, wd_ll,fuzhu_ll1;
+			ddgl_ll, wd_ll, fuzhu_ll1;
 	private ImageButton imgBtn_gnjp, imgBtn_gjjp, imgBtn_jdyd, imgBtn_hcp,
 			imgBtn_jdmp, imgBtn_hfcz, imgBtn_hbdt, imgBtn_wpt, imgBtn_sxy,
 			imgBtn_fxgl, imgBtn_khgl, imgBtn_zhgl, imgBtn_ddgl, imgBtn_wd;
@@ -45,96 +44,100 @@ public class ActivityBMenu extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_b_menu);
-		context = this;
-		sp = getSharedPreferences(SPkeys.SPNAME.getString(), 0);
-		((MyApplication) getApplication()).addActivity(this);
+		try {
+			super.onCreate(savedInstanceState);
+			setContentView(R.layout.activity_b_menu);
+			context = this;
+			sp = getSharedPreferences(SPkeys.SPNAME.getString(), 0);
+			((MyApplication) getApplication()).addActivity(this);
 
-		MyApp mApp = new MyApp(getApplicationContext());
-		((ImageView) findViewById(R.id.menu_logo))
-				.setBackgroundResource((Integer) mApp.getHm().get(
-						PackageKeys.MENU_LOGO_DRAWABLE.getString()));
+			MyApp mApp = new MyApp(getApplicationContext());
+			((ImageView) findViewById(R.id.menu_logo))
+					.setBackgroundResource((Integer) mApp.getHm().get(
+							PackageKeys.MENU_LOGO_DRAWABLE.getString()));
 
-		if (!((MyApplication) getApplication()).getHasCheckedUpdate()) {
-			MyApp ma = new MyApp(context);
-			UpdateManager manager = new UpdateManager(context, ma.getHm()
-					.get(PackageKeys.UPDATE_NOTE.getString()).toString());
-			manager.checkForUpdates(false);
-			((MyApplication) getApplication()).setHasCheckedUpdate(true);
+			if (!((MyApplication) getApplication()).getHasCheckedUpdate()) {
+				MyApp ma = new MyApp(context);
+				UpdateManager manager = new UpdateManager(context, ma.getHm()
+						.get(PackageKeys.UPDATE_NOTE.getString()).toString());
+				manager.checkForUpdates(false);
+				((MyApplication) getApplication()).setHasCheckedUpdate(true);
+			}
+
+			imgBtn_gnjp = (ImageButton) findViewById(R.id.imgBtn_gnjp);
+			imgBtn_gjjp = (ImageButton) findViewById(R.id.imgBtn_gjjp);
+			imgBtn_jdyd = (ImageButton) findViewById(R.id.imgBtn_jdyd);
+			imgBtn_hcp = (ImageButton) findViewById(R.id.imgBtn_hcp);
+			imgBtn_jdmp = (ImageButton) findViewById(R.id.imgBtn_jdmp);
+			imgBtn_hfcz = (ImageButton) findViewById(R.id.imgBtn_hfcz);
+			imgBtn_hbdt = (ImageButton) findViewById(R.id.imgBtn_hbdt);
+			imgBtn_wpt = (ImageButton) findViewById(R.id.imgBtn_wpt);
+			imgBtn_sxy = (ImageButton) findViewById(R.id.imgBtn_sxy);
+			imgBtn_fxgl = (ImageButton) findViewById(R.id.imgBtn_fxgl);
+			imgBtn_khgl = (ImageButton) findViewById(R.id.imgBtn_khgl);
+			imgBtn_zhgl = (ImageButton) findViewById(R.id.imgBtn_zhgl);
+			imgBtn_ddgl = (ImageButton) findViewById(R.id.imgBtn_ddgl);
+			imgBtn_wd = (ImageButton) findViewById(R.id.imgBtn_wd);
+			imgBtn_gnjp.setOnClickListener(btnClickListner);
+			imgBtn_gjjp.setOnClickListener(btnClickListner);
+			imgBtn_jdyd.setOnClickListener(btnClickListner);
+			imgBtn_hcp.setOnClickListener(btnClickListner);
+			imgBtn_jdmp.setOnClickListener(btnClickListner);
+			imgBtn_hfcz.setOnClickListener(btnClickListner);
+			imgBtn_hbdt.setOnClickListener(btnClickListner);
+			imgBtn_wpt.setOnClickListener(btnClickListner);
+			imgBtn_sxy.setOnClickListener(btnClickListner);
+			imgBtn_fxgl.setOnClickListener(btnClickListner);
+			imgBtn_khgl.setOnClickListener(btnClickListner);
+			imgBtn_zhgl.setOnClickListener(btnClickListner);
+			imgBtn_ddgl.setOnClickListener(btnClickListner);
+			imgBtn_wd.setOnClickListener(btnClickListner);
+			gnjp_ll = (LinearLayout) findViewById(R.id.gnjp_ll);
+			gjjp_ll = (LinearLayout) findViewById(R.id.gjjp_ll);
+			jdyd_ll = (LinearLayout) findViewById(R.id.jdyd_ll);
+			hcp_ll = (LinearLayout) findViewById(R.id.hcp_ll);
+			jdmp_ll = (LinearLayout) findViewById(R.id.jdmp_ll);
+			hfcz_ll = (LinearLayout) findViewById(R.id.hfcz_ll);
+			hbdt_ll = (LinearLayout) findViewById(R.id.hbdt_ll);
+			wpt_ll = (LinearLayout) findViewById(R.id.wpt_ll);
+			sxy_ll = (LinearLayout) findViewById(R.id.sxy_ll);
+			fxgl_ll = (LinearLayout) findViewById(R.id.fxgl_ll);
+			khgl_ll = (LinearLayout) findViewById(R.id.khgl_ll);
+			zhgl_ll = (LinearLayout) findViewById(R.id.zhgl_ll);
+			ddgl_ll = (LinearLayout) findViewById(R.id.ddgl_ll);
+			wd_ll = (LinearLayout) findViewById(R.id.wd_ll);
+			ll05 = (LinearLayout) findViewById(R.id.ll05);
+			fuzhu_ll1 = (LinearLayout) findViewById(R.id.fuzhu_ll1);
+			gnjp_ll.setOnClickListener(btnClickListner);
+			gjjp_ll.setOnClickListener(btnClickListner);
+			jdyd_ll.setOnClickListener(btnClickListner);
+			hcp_ll.setOnClickListener(btnClickListner);
+			jdmp_ll.setOnClickListener(btnClickListner);
+			hfcz_ll.setOnClickListener(btnClickListner);
+			hbdt_ll.setOnClickListener(btnClickListner);
+			wpt_ll.setOnClickListener(btnClickListner);
+			sxy_ll.setOnClickListener(btnClickListner);
+			fxgl_ll.setOnClickListener(btnClickListner);
+			khgl_ll.setOnClickListener(btnClickListner);
+			zhgl_ll.setOnClickListener(btnClickListner);
+			ddgl_ll.setOnClickListener(btnClickListner);
+			wd_ll.setOnClickListener(btnClickListner);
+			queryUserInfo();
+			showFX_KH();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-
-		imgBtn_gnjp = (ImageButton) findViewById(R.id.imgBtn_gnjp);
-		imgBtn_gjjp = (ImageButton) findViewById(R.id.imgBtn_gjjp);
-		imgBtn_jdyd = (ImageButton) findViewById(R.id.imgBtn_jdyd);
-		imgBtn_hcp = (ImageButton) findViewById(R.id.imgBtn_hcp);
-		imgBtn_jdmp = (ImageButton) findViewById(R.id.imgBtn_jdmp);
-		imgBtn_hfcz = (ImageButton) findViewById(R.id.imgBtn_hfcz);
-		imgBtn_hbdt = (ImageButton) findViewById(R.id.imgBtn_hbdt);
-		imgBtn_wpt = (ImageButton) findViewById(R.id.imgBtn_wpt);
-		imgBtn_sxy = (ImageButton) findViewById(R.id.imgBtn_sxy);
-		imgBtn_fxgl = (ImageButton) findViewById(R.id.imgBtn_fxgl);
-		imgBtn_khgl = (ImageButton) findViewById(R.id.imgBtn_khgl);
-		imgBtn_zhgl = (ImageButton) findViewById(R.id.imgBtn_zhgl);
-		imgBtn_ddgl = (ImageButton) findViewById(R.id.imgBtn_ddgl);
-		imgBtn_wd = (ImageButton) findViewById(R.id.imgBtn_wd);
-		imgBtn_gnjp.setOnClickListener(btnClickListner);
-		imgBtn_gjjp.setOnClickListener(btnClickListner);
-		imgBtn_jdyd.setOnClickListener(btnClickListner);
-		imgBtn_hcp.setOnClickListener(btnClickListner);
-		imgBtn_jdmp.setOnClickListener(btnClickListner);
-		imgBtn_hfcz.setOnClickListener(btnClickListner);
-		imgBtn_hbdt.setOnClickListener(btnClickListner);
-		imgBtn_wpt.setOnClickListener(btnClickListner);
-		imgBtn_sxy.setOnClickListener(btnClickListner);
-		imgBtn_fxgl.setOnClickListener(btnClickListner);
-		imgBtn_khgl.setOnClickListener(btnClickListner);
-		imgBtn_zhgl.setOnClickListener(btnClickListner);
-		imgBtn_ddgl.setOnClickListener(btnClickListner);
-		imgBtn_wd.setOnClickListener(btnClickListner);
-		gnjp_ll = (LinearLayout) findViewById(R.id.gnjp_ll);
-		gjjp_ll = (LinearLayout) findViewById(R.id.gjjp_ll);
-		jdyd_ll = (LinearLayout) findViewById(R.id.jdyd_ll);
-		hcp_ll = (LinearLayout) findViewById(R.id.hcp_ll);
-		jdmp_ll = (LinearLayout) findViewById(R.id.jdmp_ll);
-		hfcz_ll = (LinearLayout) findViewById(R.id.hfcz_ll);
-		hbdt_ll = (LinearLayout) findViewById(R.id.hbdt_ll);
-		wpt_ll = (LinearLayout) findViewById(R.id.wpt_ll);
-		sxy_ll = (LinearLayout) findViewById(R.id.sxy_ll);
-		fxgl_ll = (LinearLayout) findViewById(R.id.fxgl_ll);
-		khgl_ll = (LinearLayout) findViewById(R.id.khgl_ll);
-		zhgl_ll = (LinearLayout) findViewById(R.id.zhgl_ll);
-		ddgl_ll = (LinearLayout) findViewById(R.id.ddgl_ll);
-		wd_ll = (LinearLayout) findViewById(R.id.wd_ll);
-		ll05 = (LinearLayout) findViewById(R.id.ll05);
-		fuzhu_ll1=(LinearLayout) findViewById(R.id.fuzhu_ll1);
-		gnjp_ll.setOnClickListener(btnClickListner);
-		gjjp_ll.setOnClickListener(btnClickListner);
-		jdyd_ll.setOnClickListener(btnClickListner);
-		hcp_ll.setOnClickListener(btnClickListner);
-		jdmp_ll.setOnClickListener(btnClickListner);
-		hfcz_ll.setOnClickListener(btnClickListner);
-		hbdt_ll.setOnClickListener(btnClickListner);
-		wpt_ll.setOnClickListener(btnClickListner);
-		sxy_ll.setOnClickListener(btnClickListner);
-		fxgl_ll.setOnClickListener(btnClickListner);
-		khgl_ll.setOnClickListener(btnClickListner);
-		zhgl_ll.setOnClickListener(btnClickListner);
-		ddgl_ll.setOnClickListener(btnClickListner);
-		wd_ll.setOnClickListener(btnClickListner);
-		queryUserInfo();
-		showFX_KH();
 	}
-	
-	//根据用户权限显示客户管理、分销管理
-	private void showFX_KH(){
+
+	// 根据用户权限显示客户管理、分销管理
+	private void showFX_KH() {
 		if (!sp.getBoolean(SPkeys.loginState.getString(), false)) {
 			ll05.setVisibility(View.GONE);
 		} else {
 			ll05.setVisibility(View.VISIBLE);
 			if (sp.getString(SPkeys.showCustomer.getString(), "0").equals("1")) {
 				khgl_ll.setVisibility(View.VISIBLE);
-			} else {//为了保持一致也
+			} else {// 为了保持一致也
 				khgl_ll.setVisibility(View.GONE);
 				fuzhu_ll1.setVisibility(View.VISIBLE);
 			}
@@ -146,18 +149,18 @@ public class ActivityBMenu extends Activity {
 			}
 		}
 	}
-	
+
 	@Override
 	protected void onRestoreInstanceState(Bundle savedInstanceState) {
 		super.onRestoreInstanceState(savedInstanceState);
 		showFX_KH();
 	}
 
-//	@Override
-//	protected void onResume() {
-//		// TODO Auto-generated method stub
-//		super.onResume();
-//	}
+	// @Override
+	// protected void onResume() {
+	// // TODO Auto-generated method stub
+	// super.onResume();
+	// }
 
 	@Override
 	protected void onStart() {
@@ -165,94 +168,104 @@ public class ActivityBMenu extends Activity {
 	}
 
 	View.OnClickListener btnClickListner = new View.OnClickListener() {
-
 		@Override
 		public void onClick(View v) {
-			switch (v.getId()) {
-			case R.id.imgBtn_gnjp:
-			case R.id.gnjp_ll:
-				startActivity(new Intent(context,
-						ActivityInlandAirlineticket.class));
-				break;
-			case R.id.imgBtn_gjjp:
-			case R.id.gjjp_ll:
-				startActivity(new Intent(context,
-						ActivityInternationalAirlineticket.class));
-				break;
-			case R.id.imgBtn_hbdt:
-			case R.id.hbdt_ll:
-				startActivity(new Intent(context, ActivityHangbandongtai.class));
-				break;
-			case R.id.imgBtn_jdyd:
-			case R.id.jdyd_ll:
-				startActivity(new Intent(context, ActivityHotel.class));
-				break;
-			case R.id.imgBtn_wpt:
-			case R.id.wpt_ll:
-				Intent intent = new Intent(context, Activity_Web_Frame.class);
-				intent.putExtra(Activity_Web_Frame.TITLE, "微平台");
-				intent.putExtra(Activity_Web_Frame.URL, getResources()
-						.getString(R.string.weipingtai_url));
-				startActivity(intent);
-				break;
-			case R.id.imgBtn_hfcz:
-			case R.id.hfcz_ll:
-				startActivity(new Intent(context, ActivityHuafeichongzhi.class));
-				break;
-			case R.id.imgBtn_jdmp:
-			case R.id.jdmp_ll:
-			    startActivity(new Intent(context, Activity_Scenery.class));
-				break;
-			case R.id.imgBtn_sxy:
-			case R.id.sxy_ll:
-				Intent intent3 = new Intent(context, Activity_Web_Frame.class);
-				intent3.putExtra(Activity_Web_Frame.TITLE, "商学院");
-				intent3.putExtra(Activity_Web_Frame.URL, getResources()
-						.getString(R.string.shangxueyuan_url));
-				startActivity(intent3);
-				break;
-			case R.id.imgBtn_hcp:
-			case R.id.hcp_ll:
-				startActivity(new Intent(context, ActivityTrain.class));
-				break;
-			case R.id.imgBtn_fxgl:
-			case R.id.fxgl_ll:
-				if (!sp.getBoolean(SPkeys.loginState.getString(), false)) {
-					startActivity(new Intent(context, Activity_Login.class));
+			try {
+				switch (v.getId()) {
+				case R.id.imgBtn_gnjp:
+				case R.id.gnjp_ll:
+					startActivity(new Intent(context,
+							ActivityInlandAirlineticket.class));
+					break;
+				case R.id.imgBtn_gjjp:
+				case R.id.gjjp_ll:
+					startActivity(new Intent(context,
+							ActivityInternationalAirlineticket.class));
+					break;
+				case R.id.imgBtn_hbdt:
+				case R.id.hbdt_ll:
+					startActivity(new Intent(context,
+							ActivityHangbandongtai.class));
+					break;
+				case R.id.imgBtn_jdyd:
+				case R.id.jdyd_ll:
+					startActivity(new Intent(context, ActivityHotel.class));
+					break;
+				case R.id.imgBtn_wpt:
+				case R.id.wpt_ll:
+					Intent intent = new Intent(context,
+							Activity_Web_Frame.class);
+					intent.putExtra(Activity_Web_Frame.TITLE, "微平台");
+					intent.putExtra(Activity_Web_Frame.URL, getResources()
+							.getString(R.string.weipingtai_url));
+					startActivity(intent);
+					break;
+				case R.id.imgBtn_hfcz:
+				case R.id.hfcz_ll:
+					startActivity(new Intent(context,
+							ActivityHuafeichongzhi.class));
+					break;
+				case R.id.imgBtn_jdmp:
+				case R.id.jdmp_ll:
+					startActivity(new Intent(context, Activity_Scenery.class));
+					break;
+				case R.id.imgBtn_sxy:
+				case R.id.sxy_ll:
+					Intent intent3 = new Intent(context,
+							Activity_Web_Frame.class);
+					intent3.putExtra(Activity_Web_Frame.TITLE, "商学院");
+					intent3.putExtra(Activity_Web_Frame.URL, getResources()
+							.getString(R.string.shangxueyuan_url));
+					startActivity(intent3);
+					break;
+				case R.id.imgBtn_hcp:
+				case R.id.hcp_ll:
+					startActivity(new Intent(context, ActivityTrain.class));
+					break;
+				case R.id.imgBtn_fxgl:
+				case R.id.fxgl_ll:
+					if (!sp.getBoolean(SPkeys.loginState.getString(), false)) {
+						startActivity(new Intent(context, Activity_Login.class));
+						break;
+					}
+					Intent intent1 = new Intent(context,
+							ActivityClientManage.class);
+					intent1.putExtra(
+							ActivityClientManageSetGrad.DISPLAY_TYPENAME_STRING,
+							ActivityClientManageSetGrad.DEALER_DISPLAYNAME);
+					startActivity(intent1);
+					break;
+				case R.id.imgBtn_khgl:
+				case R.id.khgl_ll:
+					if (!sp.getBoolean(SPkeys.loginState.getString(), false)) {
+						startActivity(new Intent(context, Activity_Login.class));
+						break;
+					}
+					Intent intent2 = new Intent(context,
+							ActivityClientManage.class);
+					intent2.putExtra(
+							ActivityClientManageSetGrad.DISPLAY_TYPENAME_STRING,
+							ActivityClientManageSetGrad.CUSTOMER_DISPLAYNAME);
+					startActivity(intent2);
+					break;
+				case R.id.imgBtn_zhgl:
+				case R.id.zhgl_ll:
+					startActivity(new Intent(context,
+							ActivityZhanghuchongzhi.class));
+					break;
+				case R.id.imgBtn_ddgl:
+				case R.id.ddgl_ll:
+					startActivity(new Intent(context, OrderActivity.class));
+					break;
+				case R.id.imgBtn_wd:
+				case R.id.wd_ll:
+					startActivity(new Intent(context, MineActivity.class));
+					break;
+				default:
 					break;
 				}
-				Intent intent1 = new Intent(context, ActivityClientManage.class);
-				intent1.putExtra(
-						ActivityClientManageSetGrad.DISPLAY_TYPENAME_STRING,
-						ActivityClientManageSetGrad.DEALER_DISPLAYNAME);
-				startActivity(intent1);
-				break;
-			case R.id.imgBtn_khgl:
-			case R.id.khgl_ll:
-				if (!sp.getBoolean(SPkeys.loginState.getString(), false)) {
-					startActivity(new Intent(context, Activity_Login.class));
-					break;
-				}
-				Intent intent2 = new Intent(context, ActivityClientManage.class);
-				intent2.putExtra(
-						ActivityClientManageSetGrad.DISPLAY_TYPENAME_STRING,
-						ActivityClientManageSetGrad.CUSTOMER_DISPLAYNAME);
-				startActivity(intent2);
-				break;
-			case R.id.imgBtn_zhgl:
-			case R.id.zhgl_ll:
-				startActivity(new Intent(context, ActivityZhanghuchongzhi.class));
-				break;
-			case R.id.imgBtn_ddgl:
-			case R.id.ddgl_ll:
-				startActivity(new Intent(context, OrderActivity.class));
-				break;
-			case R.id.imgBtn_wd:
-			case R.id.wd_ll:
-				startActivity(new Intent(context, MineActivity.class));
-				break;
-			default:
-				break;
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 	};
@@ -342,9 +355,9 @@ public class ActivityBMenu extends Activity {
 						sp.edit()
 								.putString(SPkeys.showCustomer.getString(),
 										user.getShowCustomer()).commit();
-						
+
 						showFX_KH();
-						
+
 					} else if (state.equals("1003")) {
 						sp.edit().putString(SPkeys.userid.getString(), "")
 								.commit();

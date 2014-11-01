@@ -89,12 +89,12 @@ public class ActivityClientManageAddoredit extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_clientmanage_addoredit_client);
 		try {
+			super.onCreate(savedInstanceState);
+			setContentView(R.layout.activity_clientmanage_addoredit_client);
 			initView();
 		} catch (Exception e) {
-			// TODO: handle exception
+			e.printStackTrace();
 		}
 	}
 
@@ -170,7 +170,7 @@ public class ActivityClientManageAddoredit extends Activity {
 					e.printStackTrace();
 				}
 				default_grad_tv.setText(editCustomerUser.getDealerLevel());
-				levelId=editCustomerUser.getLevelID();
+				levelId = editCustomerUser.getLevelID();
 				// username_et.setText(!editCustomerUser.getUserName().equals("null")?editCustomerUser.getUserName():"");
 				username_et.setText(editCustomerUser.getUserName());
 				username_et.setEnabled(false);
@@ -209,7 +209,6 @@ public class ActivityClientManageAddoredit extends Activity {
 		@Override
 		public void onClick(View arg0) {
 			try {
-
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
 				Date date = null;
 				switch (arg0.getId()) {
@@ -287,7 +286,7 @@ public class ActivityClientManageAddoredit extends Activity {
 					break;
 				}
 			} catch (Exception e) {
-				// TODO: handle exception
+				e.printStackTrace();
 			}
 		}
 	};
@@ -524,7 +523,8 @@ public class ActivityClientManageAddoredit extends Activity {
 							}
 						});
 					}
-				} catch (Exception ex) {
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
 				break;
 			case MODIFY_CUSTOMER_MSG_CODE:
@@ -795,30 +795,34 @@ public class ActivityClientManageAddoredit extends Activity {
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			Holder myHolder;
-			if (convertView == null) {
-				myHolder = new Holder();
-				convertView = inflater.inflate(
-						R.layout.item_train_baoxian_list_single, null);
-				myHolder.title = (TextView) convertView
-						.findViewById(R.id.title);
-				myHolder.iv = (ImageView) convertView.findViewById(R.id.img);
-				convertView.setTag(myHolder);
-			} else {
-				myHolder = (Holder) convertView.getTag();
+			try {
+				Holder myHolder;
+				if (convertView == null) {
+					myHolder = new Holder();
+					convertView = inflater.inflate(
+							R.layout.item_train_baoxian_list_single, null);
+					myHolder.title = (TextView) convertView
+							.findViewById(R.id.title);
+					myHolder.iv = (ImageView) convertView
+							.findViewById(R.id.img);
+					convertView.setTag(myHolder);
+				} else {
+					myHolder = (Holder) convertView.getTag();
+				}
+				if (position == this.currentID)
+					myHolder.iv.setBackgroundDrawable(c.getResources()
+							.getDrawable(R.drawable.radio_clk));
+				else
+					myHolder.iv.setBackgroundDrawable(c.getResources()
+							.getDrawable(R.drawable.radio));
+				myHolder.title
+						.setText(list.get(position).get("title") != null ? list
+								.get(position).get("title").toString() : "");
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-			if (position == this.currentID)
-				myHolder.iv.setBackgroundDrawable(c.getResources().getDrawable(
-						R.drawable.radio_clk));
-			else
-				myHolder.iv.setBackgroundDrawable(c.getResources().getDrawable(
-						R.drawable.radio));
-			myHolder.title
-					.setText(list.get(position).get("title") != null ? list
-							.get(position).get("title").toString() : "");
 			return convertView;
 		}
-
 		class Holder {
 			ImageView iv;
 			TextView title;

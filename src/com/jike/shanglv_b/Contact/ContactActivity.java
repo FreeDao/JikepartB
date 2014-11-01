@@ -25,29 +25,33 @@ import com.jike.shanglv_b.MyApplication;
 import com.jike.shanglv_b.Common.DateUtil;
 
 public class ContactActivity extends Activity {
-	
+
 	private ImageButton back_imgbtn, home_imgbtn;
 	private ListView sortListView;
 	private SortAdapter adapter;
 	private ClearEditText mClearEditText;
 	private Context context;
-	
+
 	/**
 	 * 汉字转换成拼音的类
 	 */
 	private CharacterParser characterParser;
 	private List<ContactModel> SourceDateList;
-	
+
 	/**
 	 * 根据拼音来排列ListView里面的数据类
 	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.contact_select_activity);
-		context=this;
-		initViews();
-		((MyApplication)getApplication()).addActivity(this);
+		try {
+			super.onCreate(savedInstanceState);
+			setContentView(R.layout.contact_select_activity);
+			context = this;
+			initViews();
+			((MyApplication) getApplication()).addActivity(this);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void initViews() {
@@ -65,75 +69,84 @@ public class ContactActivity extends Activity {
 				startActivity(new Intent(context, MainActivity.class));
 			}
 		});
-		
-		//实例化汉字转拼音类
+
+		// 实例化汉字转拼音类
 		characterParser = CharacterParser.getInstance();
-		
-//		//设置右侧触摸监听
-//		sideBar.setOnTouchingLetterChangedListener(new OnTouchingLetterChangedListener() {
-//			
-//			@Override
-//			public void onTouchingLetterChanged(String s) {
-//				//该字母首次出现的位置
-//				int position = adapter.getPositionForSection(s.charAt(0));
-//				if(position != -1){
-//					sortListView.setSelection(position);
-//				}
-//			}
-//		});
-		
+
+		// //设置右侧触摸监听
+		// sideBar.setOnTouchingLetterChangedListener(new
+		// OnTouchingLetterChangedListener() {
+		//
+		// @Override
+		// public void onTouchingLetterChanged(String s) {
+		// //该字母首次出现的位置
+		// int position = adapter.getPositionForSection(s.charAt(0));
+		// if(position != -1){
+		// sortListView.setSelection(position);
+		// }
+		// }
+		// });
+
 		sortListView = (ListView) findViewById(R.id.country_lvcountry);
 		sortListView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				//这里要利用adapter.getItem(position)来获取当前position所对应的对象
+				// 这里要利用adapter.getItem(position)来获取当前position所对应的对象
 
-				//Toast.makeText(getApplication(), ((ContactModel)adapter.getItem(position)).getCityName(), Toast.LENGTH_SHORT).show();
-				
-				//返回城市联系人及电话
+				// Toast.makeText(getApplication(),
+				// ((ContactModel)adapter.getItem(position)).getCityName(),
+				// Toast.LENGTH_SHORT).show();
+
+				// 返回城市联系人及电话
 				setResult(
 						0,
-						getIntent().putExtra("pickedContact",
-								((ContactModel)adapter.getItem(position)).getName()+
-								"#"+
-								((ContactModel)adapter.getItem(position)).getPhoneNumber()));
+						getIntent().putExtra(
+								"pickedContact",
+								((ContactModel) adapter.getItem(position))
+										.getName()
+										+ "#"
+										+ ((ContactModel) adapter
+												.getItem(position))
+												.getPhoneNumber()));
 				finish();
 			}
 		});
-		
-		SourceDateList = getAllContacts() ;
-				//filledData(getResources().getStringArray(R.array.date));
-		
+
+		SourceDateList = getAllContacts();
+		// filledData(getResources().getStringArray(R.array.date));
+
 		// 根据a-z进行排序源数据
-		//Collections.sort(SourceDateList, pinyinComparator);
-//		sortCities();
+		// Collections.sort(SourceDateList, pinyinComparator);
+		// sortCities();
 		adapter = new SortAdapter(context, SourceDateList);
 		sortListView.setAdapter(adapter);
 		mClearEditText = (ClearEditText) findViewById(R.id.filter_edit);
-		
-		//根据输入框输入值的改变来过滤搜索
+
+		// 根据输入框输入值的改变来过滤搜索
 		mClearEditText.addTextChangedListener(new TextWatcher() {
-			
+
 			@Override
-			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				//当输入框里面的值为空，更新为原来的列表，否则为过滤数据列表
+			public void onTextChanged(CharSequence s, int start, int before,
+					int count) {
+				// 当输入框里面的值为空，更新为原来的列表，否则为过滤数据列表
 				filterData(s.toString());
 			}
-			
+
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count,
 					int after) {
 			}
+
 			@Override
 			public void afterTextChanged(Editable s) {
 			}
 		});
 	}
-	
+
 	/*
-	 *排序
+	 * 排序
 	 */
 	private void sortCities() {
 		Comparator<ContactModel> comparator = new Comparator<ContactModel>() {
@@ -148,106 +161,123 @@ public class ContactActivity extends Activity {
 		};
 		Collections.sort(SourceDateList, comparator);
 	}
-	
+
 	/*
 	 * 读取联系人的信息
 	 */
 	public ArrayList<ContactModel> getAllContacts() {
 		ArrayList<ContactModel> names = new ArrayList<ContactModel>();
-		Cursor cursor = context.getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, 
-				 null, null, null, null);
-		int contactIdIndex = 0;
-		int nameIndex = 0;
-		
-		if(cursor.getCount() > 0) {
-			contactIdIndex = cursor.getColumnIndex(BaseColumns._ID);
-			nameIndex = cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME);
-		}
-		while(cursor.moveToNext()) {
-			ContactModel acm = new ContactModel();
-			String contactId = cursor.getString(contactIdIndex);
-			String name = cursor.getString(nameIndex);
-			acm.setContactId(contactId);
-			acm.setName(name);
+		try {
+			Cursor cursor = context.getContentResolver().query(
+					ContactsContract.Contacts.CONTENT_URI, null, null, null,
+					null);
+			int contactIdIndex = 0;
+			int nameIndex = 0;
 
-			/*
-			 * 查找该联系人的phone信息
-			 */
-			Cursor phones = context.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, 
-					null, 
-					ContactsContract.CommonDataKinds.Phone.CONTACT_ID + "=" + contactId, 
-					null, null);
-			int phoneIndex = 0;
-			if(phones.getCount() > 0) {
-				phoneIndex = phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
+			if (cursor.getCount() > 0) {
+				contactIdIndex = cursor.getColumnIndex(BaseColumns._ID);
+				nameIndex = cursor
+						.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME);
 			}
-			while(phones.moveToNext()) {
-		    	String phoneNumber = phones.getString(phoneIndex);
-		    	acm.setPhoneNumber(phoneNumber);
+			while (cursor.moveToNext()) {
+				ContactModel acm = new ContactModel();
+				String contactId = cursor.getString(contactIdIndex);
+				String name = cursor.getString(nameIndex);
+				acm.setContactId(contactId);
+				acm.setName(name);
+
+				/*
+				 * 查找该联系人的phone信息
+				 */
+				Cursor phones = context.getContentResolver().query(
+						ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+						null,
+						ContactsContract.CommonDataKinds.Phone.CONTACT_ID + "="
+								+ contactId, null, null);
+				int phoneIndex = 0;
+				if (phones.getCount() > 0) {
+					phoneIndex = phones
+							.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
+				}
+				while (phones.moveToNext()) {
+					String phoneNumber = phones.getString(phoneIndex);
+					acm.setPhoneNumber(phoneNumber);
+				}
+				names.add(acm);
+				phones.close();
 			}
-			names.add(acm);
-			phones.close();
+			cursor.close();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		cursor.close();
 		return names;
 	}
 
-
 	/**
 	 * 为ListView填充数据
+	 * 
 	 * @param date
 	 * @return
 	 */
-	private List<ContactModel> filledData(String [] date){
+	private List<ContactModel> filledData(String[] date) {
 		List<ContactModel> mSortList = new ArrayList<ContactModel>();
-		
-		for(int i=0; i<date.length; i++){
+
+		for (int i = 0; i < date.length; i++) {
 			ContactModel ContactModel = new ContactModel();
 			ContactModel.setName(date[i]);
-			//汉字转换成拼音
+			// 汉字转换成拼音
 			String pinyin = characterParser.getSelling(date[i]);
 			String sortString = pinyin.substring(0, 1).toUpperCase();
-			
+
 			// 正则表达式，判断首字母是否是英文字母
-			if(sortString.matches("[A-Z]")){
+			if (sortString.matches("[A-Z]")) {
 				ContactModel.setNameSort(sortString.toUpperCase());
-			}else{
+			} else {
 				ContactModel.setNameSort("#");
 			}
 			mSortList.add(ContactModel);
 		}
 		return mSortList;
 	}
-	
+
 	/**
 	 * 根据输入框中的值来过滤数据并更新ListView
+	 * 
 	 * @param filterStr
 	 */
-	private void filterData(String filterStr){
+	private void filterData(String filterStr) {
 		List<ContactModel> filterDateList = new ArrayList<ContactModel>();
-		
-		if(TextUtils.isEmpty(filterStr)){
+
+		if (TextUtils.isEmpty(filterStr)) {
 			filterDateList = SourceDateList;
-		}else{
+		} else {
 			filterDateList.clear();
-			for(ContactModel ContactModel : SourceDateList){
+			for (ContactModel ContactModel : SourceDateList) {
 				String name = ContactModel.getName();
-				if(name.indexOf(filterStr.toString()) != -1 || characterParser.getSelling(name).startsWith(filterStr.toString())){
+				if (name.indexOf(filterStr.toString()) != -1
+						|| characterParser.getSelling(name).startsWith(
+								filterStr.toString())) {
 					filterDateList.add(ContactModel);
 				}
-				
-				if(name.indexOf(filterStr.toString()) != -1 || ContactModel.getName().startsWith(filterStr.toString())){
+
+				if (name.indexOf(filterStr.toString()) != -1
+						|| ContactModel.getName().startsWith(
+								filterStr.toString())) {
 					filterDateList.add(ContactModel);
 				}
-				if(name.indexOf(filterStr.toString()) != -1 || ContactModel.getPhoneNumber().startsWith(filterStr.toString())){
+				if (name.indexOf(filterStr.toString()) != -1
+						|| ContactModel.getPhoneNumber().startsWith(
+								filterStr.toString())) {
 					filterDateList.add(ContactModel);
 				}
-				if(name.indexOf(filterStr.toString()) != -1 || ContactModel.getNameSort().startsWith(filterStr.toString())){
+				if (name.indexOf(filterStr.toString()) != -1
+						|| ContactModel.getNameSort().startsWith(
+								filterStr.toString())) {
 					filterDateList.add(ContactModel);
 				}
 			}
 		}
-		filterDateList=DateUtil.removeDuplicateWithOrder(filterDateList);
+		filterDateList = DateUtil.removeDuplicateWithOrder(filterDateList);
 		// 根据a-z进行排序
 		sortCities();
 		adapter.updateListView(filterDateList);
