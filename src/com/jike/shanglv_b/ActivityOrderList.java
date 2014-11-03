@@ -266,48 +266,54 @@ public class ActivityOrderList extends Activity implements
 		}
 		new Thread(new Runnable() {
 			@Override
-			public void run() {// type=1:查航班号 type=2:查航段， air 航空公司
-				// action=flist&str={'s':'sha','e':hfe,'sd':'2014-01-28','userid':'649','siteid':'65'}
-				MyApp ma = new MyApp(context);
-				String str = "{\"orderID\":\"" + orderID + "\",\"tm1\":\""
-						+ startDate + "\",\"tm2\":\"" + endDate
-						+ "\",\"userID\":\""
-						+ sp.getString(SPkeys.userid.getString(), "")
-						+ "\",\"pageSize\":\"" + pageSize
-						+ "\",\"pageIndex\":\"" + pageIndex + "\"}";
-				String signString = CommonFunc.MD5(ma.getHm()
-						.get(PackageKeys.USERKEY.getString()).toString()
-						+ actionName + str);
-				try {// 解决获取数据时的400错误
-					str = URLEncoder.encode(str, "utf-8");
-				} catch (UnsupportedEncodingException e) {
+			public void run() {
+				try {
+					// type=1:查航班号 type=2:查航段， air 航空公司
+					// action=flist&str={'s':'sha','e':hfe,'sd':'2014-01-28','userid':'649','siteid':'65'}
+					MyApp ma = new MyApp(context);
+					String str = "{\"orderID\":\"" + orderID + "\",\"tm1\":\""
+							+ startDate + "\",\"tm2\":\"" + endDate
+							+ "\",\"userID\":\""
+							+ sp.getString(SPkeys.userid.getString(), "")
+							+ "\",\"pageSize\":\"" + pageSize
+							+ "\",\"pageIndex\":\"" + pageIndex + "\"}";
+					String signString = CommonFunc.MD5(ma.getHm()
+							.get(PackageKeys.USERKEY.getString()).toString()
+							+ actionName + str);
+					try {// 解决获取数据时的400错误
+						str = URLEncoder.encode(str, "utf-8");
+					} catch (UnsupportedEncodingException e) {
+						e.printStackTrace();
+					}
+					String param = "action="
+							+ actionName
+							+ "&str="
+							+ str
+							+ "&userkey="
+							+ ma.getHm().get(PackageKeys.USERKEY.getString())
+									.toString() + "&sitekey=" + MyApp.sitekey
+							+ "&sign=" + signString;
+
+					orderlistReturnJson = HttpUtils.getJsonContent(
+							ma.getServeUrl(), param);
+					// String param = "?action=" + actionName
+					// + "&userkey=" +
+					// ma.getHm().get(PackageKeys.USERKEY.getString()).toString()
+					// +
+					// "&sitekey="
+					// + MyApp.sitekey + "&sign="
+					// +
+					// CommonFunc.MD5(ma.getHm().get(PackageKeys.USERKEY.getString()).toString()
+					// + actionName + str);
+					// orderlistReturnJson = HttpUtils.myPost(ma.getServeUrl() +
+					// param,
+					// "&str=" + str);
+					Message msg = new Message();
+					msg.what = 1;
+					handler.sendMessage(msg);
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				String param = "action="
-						+ actionName
-						+ "&str="
-						+ str
-						+ "&userkey="
-						+ ma.getHm().get(PackageKeys.USERKEY.getString())
-								.toString() + "&sitekey=" + MyApp.sitekey
-						+ "&sign=" + signString;
-
-				orderlistReturnJson = HttpUtils.getJsonContent(
-						ma.getServeUrl(), param);
-				// String param = "?action=" + actionName
-				// + "&userkey=" +
-				// ma.getHm().get(PackageKeys.USERKEY.getString()).toString() +
-				// "&sitekey="
-				// + MyApp.sitekey + "&sign="
-				// +
-				// CommonFunc.MD5(ma.getHm().get(PackageKeys.USERKEY.getString()).toString()
-				// + actionName + str);
-				// orderlistReturnJson = HttpUtils.myPost(ma.getServeUrl() +
-				// param,
-				// "&str=" + str);
-				Message msg = new Message();
-				msg.what = 1;
-				handler.sendMessage(msg);
 			}
 		}).start();
 		progressdialog = CustomProgressDialog.createDialog(context);
@@ -510,6 +516,7 @@ public class ActivityOrderList extends Activity implements
 
 	/**
 	 * 构建list对象
+	 * 
 	 * @param flist_list
 	 */
 	private void createList(JSONArray flist_list) {
@@ -576,6 +583,7 @@ public class ActivityOrderList extends Activity implements
 		}
 		removeDuplicteOrders();
 	}
+
 	Comparator<OrderList_AirlineTicket> comparator_airline = new Comparator<OrderList_AirlineTicket>() {
 		@SuppressWarnings("deprecation")
 		@Override
@@ -600,6 +608,7 @@ public class ActivityOrderList extends Activity implements
 					: -1;
 		}
 	};
+
 	@SuppressLint("ResourceAsColor")
 	private class AirlineTicketListAdapter extends BaseAdapter {
 		private LayoutInflater inflater;
@@ -639,49 +648,55 @@ public class ActivityOrderList extends Activity implements
 		@SuppressLint("ResourceAsColor")
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			if (convertView == null) {
-				convertView = inflater.inflate(
-						R.layout.item_orderlist_airlineticket, null);
-			}
-			TextView orderId_tv = (TextView) convertView
-					.findViewById(R.id.orderId_tv);
-			TextView startCity_tv = (TextView) convertView
-					.findViewById(R.id.startCity_tv);
-			TextView endCity_tv = (TextView) convertView
-					.findViewById(R.id.endCity_tv);
-			TextView price_tv = (TextView) convertView
-					.findViewById(R.id.price_tv);
-			TextView startoff_date_tv = (TextView) convertView
-					.findViewById(R.id.startoff_date_tv);
-			TextView state_tv = (TextView) convertView
-					.findViewById(R.id.state_tv);
-
-			orderId_tv.setText(str.get(position).getOrderID());
 			try {
-				startoff_date_tv.setText(DateUtil.getDate(str.get(position)
-						.getStartOffDate()));
+				if (convertView == null) {
+					convertView = inflater.inflate(
+							R.layout.item_orderlist_airlineticket, null);
+				}
+				TextView orderId_tv = (TextView) convertView
+						.findViewById(R.id.orderId_tv);
+				TextView startCity_tv = (TextView) convertView
+						.findViewById(R.id.startCity_tv);
+				TextView endCity_tv = (TextView) convertView
+						.findViewById(R.id.endCity_tv);
+				TextView price_tv = (TextView) convertView
+						.findViewById(R.id.price_tv);
+				TextView startoff_date_tv = (TextView) convertView
+						.findViewById(R.id.startoff_date_tv);
+				TextView state_tv = (TextView) convertView
+						.findViewById(R.id.state_tv);
+
+				orderId_tv.setText(str.get(position).getOrderID());
+				try {
+					startoff_date_tv.setText(DateUtil.getDate(str.get(position)
+							.getStartOffDate()));
+				} catch (Exception e) {
+					e.printStackTrace();
+					startoff_date_tv.setText(str.get(position)
+							.getStartOffDate());// 国内机票直接返回2014-09-18的格式
+				}
+				startCity_tv.setText(str.get(position).getStartCity());
+				endCity_tv.setText(str.get(position).getEndCity());
+				price_tv.setText("￥" + str.get(position).getAmount());
+				state_tv.setText(str.get(position).getOrderStatus());
+
+				String red = "需补款  暂不能出票 不能出票  改签  不能出票(退款中) 不能出票(已退款) 不能取消 充值失败 未付款", green = "确认提交 后续支付 新订单  出票成功  退款成功 已受理  已入住  已确认 待入住 待出票 草稿单 充值成功 部分成功", blue = "出票中 退款中 取消中 已离店 待处理 待处理 已撤单 充值中", gray = "已取消 退票  已退款";
+				if (red.contains(str.get(position).getOrderStatus())) {
+					state_tv.setTextColor(getResources().getColor(R.color.red));
+				} else if (green.contains(str.get(position).getOrderStatus())) {
+					state_tv.setTextColor(getResources()
+							.getColor(R.color.green));
+				} else if (blue.contains(str.get(position).getOrderStatus())) {
+					state_tv.setTextColor(getResources().getColor(
+							R.color.state_blue));
+				} else if (gray.contains(str.get(position).getOrderStatus())) {
+					state_tv.setTextColor(getResources().getColor(R.color.gray));
+				} else {
+					state_tv.setTextColor(getResources().getColor(
+							R.color.state_blue));
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
-				startoff_date_tv.setText(str.get(position).getStartOffDate());// 国内机票直接返回2014-09-18的格式
-			}
-			startCity_tv.setText(str.get(position).getStartCity());
-			endCity_tv.setText(str.get(position).getEndCity());
-			price_tv.setText("￥" + str.get(position).getAmount());
-			state_tv.setText(str.get(position).getOrderStatus());
-
-			String red = "需补款  暂不能出票 不能出票  改签  不能出票(退款中) 不能出票(已退款) 不能取消 充值失败 未付款", green = "确认提交 后续支付 新订单  出票成功  退款成功 已受理  已入住  已确认 待入住 待出票 草稿单 充值成功 部分成功", blue = "出票中 退款中 取消中 已离店 待处理 待处理 已撤单 充值中", gray = "已取消 退票  已退款";
-			if (red.contains(str.get(position).getOrderStatus())) {
-				state_tv.setTextColor(getResources().getColor(R.color.red));
-			} else if (green.contains(str.get(position).getOrderStatus())) {
-				state_tv.setTextColor(getResources().getColor(R.color.green));
-			} else if (blue.contains(str.get(position).getOrderStatus())) {
-				state_tv.setTextColor(getResources().getColor(
-						R.color.state_blue));
-			} else if (gray.contains(str.get(position).getOrderStatus())) {
-				state_tv.setTextColor(getResources().getColor(R.color.gray));
-			} else {
-				state_tv.setTextColor(getResources().getColor(
-						R.color.state_blue));
 			}
 			return convertView;
 		}
@@ -724,47 +739,53 @@ public class ActivityOrderList extends Activity implements
 		@SuppressLint("ResourceAsColor")
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			if (convertView == null) {
-				convertView = inflater.inflate(R.layout.item_orderlist_hotel,
-						null);
-			}
-			TextView orderId_tv = (TextView) convertView
-					.findViewById(R.id.orderId_tv);
-			TextView hotel_name_tv = (TextView) convertView
-					.findViewById(R.id.hotel_name_tv);
-			TextView bed_tv = (TextView) convertView.findViewById(R.id.bed_tv);
-			TextView price_tv = (TextView) convertView
-					.findViewById(R.id.price_tv);
-			TextView ruzhu_date_tv = (TextView) convertView
-					.findViewById(R.id.ruzhu_date_tv);
-			TextView state_tv = (TextView) convertView
-					.findViewById(R.id.state_tv);
-
-			orderId_tv.setText(str.get(position).getOrderID());
 			try {
-				ruzhu_date_tv.setText(DateUtil.getDate(str.get(position)
-						.getInDate()));
-			} catch (Exception e) {
-				ruzhu_date_tv.setText(str.get(position).getInDate());
-			}
-			hotel_name_tv.setText(str.get(position).getHotelName());
-			bed_tv.setText(str.get(position).getRoomName());
-			price_tv.setText("￥" + str.get(position).getOrderAmount());
-			state_tv.setText(str.get(position).getOrderStatus());
+				if (convertView == null) {
+					convertView = inflater.inflate(
+							R.layout.item_orderlist_hotel, null);
+				}
+				TextView orderId_tv = (TextView) convertView
+						.findViewById(R.id.orderId_tv);
+				TextView hotel_name_tv = (TextView) convertView
+						.findViewById(R.id.hotel_name_tv);
+				TextView bed_tv = (TextView) convertView
+						.findViewById(R.id.bed_tv);
+				TextView price_tv = (TextView) convertView
+						.findViewById(R.id.price_tv);
+				TextView ruzhu_date_tv = (TextView) convertView
+						.findViewById(R.id.ruzhu_date_tv);
+				TextView state_tv = (TextView) convertView
+						.findViewById(R.id.state_tv);
 
-			String red = "需补款  暂不能出票 不能出票  改签  不能出票(退款中) 不能出票(已退款) 不能取消 充值失败 未付款", green = "确认提交 后续支付 新订单  出票成功  退款成功 已受理  已入住  已确认 待入住 待出票 草稿单 充值成功 部分成功", blue = "出票中 退款中 取消中 已离店 待处理 待处理 已撤单 充值中", gray = "已取消 退票  已退款";
-			if (red.contains(str.get(position).getOrderStatus())) {
-				state_tv.setTextColor(getResources().getColor(R.color.red));
-			} else if (green.contains(str.get(position).getOrderStatus())) {
-				state_tv.setTextColor(getResources().getColor(R.color.green));
-			} else if (blue.contains(str.get(position).getOrderStatus())) {
-				state_tv.setTextColor(getResources().getColor(
-						R.color.state_blue));
-			} else if (gray.contains(str.get(position).getOrderStatus())) {
-				state_tv.setTextColor(getResources().getColor(R.color.gray));
-			} else {
-				state_tv.setTextColor(getResources().getColor(
-						R.color.state_blue));
+				orderId_tv.setText(str.get(position).getOrderID());
+				try {
+					ruzhu_date_tv.setText(DateUtil.getDate(str.get(position)
+							.getInDate()));
+				} catch (Exception e) {
+					ruzhu_date_tv.setText(str.get(position).getInDate());
+				}
+				hotel_name_tv.setText(str.get(position).getHotelName());
+				bed_tv.setText(str.get(position).getRoomName());
+				price_tv.setText("￥" + str.get(position).getOrderAmount());
+				state_tv.setText(str.get(position).getOrderStatus());
+
+				String red = "需补款  暂不能出票 不能出票  改签  不能出票(退款中) 不能出票(已退款) 不能取消 充值失败 未付款", green = "确认提交 后续支付 新订单  出票成功  退款成功 已受理  已入住  已确认 待入住 待出票 草稿单 充值成功 部分成功", blue = "出票中 退款中 取消中 已离店 待处理 待处理 已撤单 充值中", gray = "已取消 退票  已退款";
+				if (red.contains(str.get(position).getOrderStatus())) {
+					state_tv.setTextColor(getResources().getColor(R.color.red));
+				} else if (green.contains(str.get(position).getOrderStatus())) {
+					state_tv.setTextColor(getResources()
+							.getColor(R.color.green));
+				} else if (blue.contains(str.get(position).getOrderStatus())) {
+					state_tv.setTextColor(getResources().getColor(
+							R.color.state_blue));
+				} else if (gray.contains(str.get(position).getOrderStatus())) {
+					state_tv.setTextColor(getResources().getColor(R.color.gray));
+				} else {
+					state_tv.setTextColor(getResources().getColor(
+							R.color.state_blue));
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 			return convertView;
 		}
@@ -807,37 +828,42 @@ public class ActivityOrderList extends Activity implements
 		@SuppressLint("ResourceAsColor")
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			if (convertView == null) {
-				convertView = inflater.inflate(R.layout.item_orderlist_phone,
-						null);
-			}
-			TextView phone_num_tv = (TextView) convertView
-					.findViewById(R.id.phone_num_tv);
-			TextView price_tv = (TextView) convertView
-					.findViewById(R.id.price_tv);
-			TextView chongzhi_time_tv = (TextView) convertView
-					.findViewById(R.id.chongzhi_time_tv);
-			TextView state_tv = (TextView) convertView
-					.findViewById(R.id.state_tv);
+			try {
+				if (convertView == null) {
+					convertView = inflater.inflate(
+							R.layout.item_orderlist_phone, null);
+				}
+				TextView phone_num_tv = (TextView) convertView
+						.findViewById(R.id.phone_num_tv);
+				TextView price_tv = (TextView) convertView
+						.findViewById(R.id.price_tv);
+				TextView chongzhi_time_tv = (TextView) convertView
+						.findViewById(R.id.chongzhi_time_tv);
+				TextView state_tv = (TextView) convertView
+						.findViewById(R.id.state_tv);
 
-			phone_num_tv.setText(str.get(position).getPhone());
-			chongzhi_time_tv.setText(str.get(position).getAddtime());
-			price_tv.setText("￥" + str.get(position).getAmount());
-			state_tv.setText(str.get(position).getStatus());
+				phone_num_tv.setText(str.get(position).getPhone());
+				chongzhi_time_tv.setText(str.get(position).getAddtime());
+				price_tv.setText("￥" + str.get(position).getAmount());
+				state_tv.setText(str.get(position).getStatus());
 
-			String red = "需补款  暂不能出票 不能出票  改签  不能出票(退款中) 不能出票(已退款) 不能取消 充值失败 未付款", green = "确认提交 后续支付 新订单  出票成功  退款成功 已受理  已入住  已确认 待入住 待出票 草稿单 充值成功 部分成功", blue = "出票中 退款中 取消中 已离店 待处理 待处理 已撤单 充值中", gray = "已取消 退票  已退款";
-			if (red.contains(str.get(position).getStatus())) {
-				state_tv.setTextColor(getResources().getColor(R.color.red));
-			} else if (green.contains(str.get(position).getStatus())) {
-				state_tv.setTextColor(getResources().getColor(R.color.green));
-			} else if (blue.contains(str.get(position).getStatus())) {
-				state_tv.setTextColor(getResources().getColor(
-						R.color.state_blue));
-			} else if (gray.contains(str.get(position).getStatus())) {
-				state_tv.setTextColor(getResources().getColor(R.color.gray));
-			} else {
-				state_tv.setTextColor(getResources().getColor(
-						R.color.state_blue));
+				String red = "需补款  暂不能出票 不能出票  改签  不能出票(退款中) 不能出票(已退款) 不能取消 充值失败 未付款", green = "确认提交 后续支付 新订单  出票成功  退款成功 已受理  已入住  已确认 待入住 待出票 草稿单 充值成功 部分成功", blue = "出票中 退款中 取消中 已离店 待处理 待处理 已撤单 充值中", gray = "已取消 退票  已退款";
+				if (red.contains(str.get(position).getStatus())) {
+					state_tv.setTextColor(getResources().getColor(R.color.red));
+				} else if (green.contains(str.get(position).getStatus())) {
+					state_tv.setTextColor(getResources()
+							.getColor(R.color.green));
+				} else if (blue.contains(str.get(position).getStatus())) {
+					state_tv.setTextColor(getResources().getColor(
+							R.color.state_blue));
+				} else if (gray.contains(str.get(position).getStatus())) {
+					state_tv.setTextColor(getResources().getColor(R.color.gray));
+				} else {
+					state_tv.setTextColor(getResources().getColor(
+							R.color.state_blue));
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 			return convertView;
 		}
@@ -902,30 +928,35 @@ public class ActivityOrderList extends Activity implements
 
 		@Override
 		protected void onPostExecute(Void result) {
-			if (actionName.equals(FLIGHT_ORDERLIST)
-					|| actionName.equals(DEMAND_ORDERLIST)
-					|| actionName.equals(TRAIN_ORDERLIST)) {
-				((AirlineTicketListAdapter) adapter)
-						.refreshData(order_List_airlineticket);
-				if (order_List_airlineticket.size() == Integer.valueOf(count)) {
-					listview.onLoadMoreComplete(true);
-				} else {
-					listview.onLoadMoreComplete(false);
+			try {
+				if (actionName.equals(FLIGHT_ORDERLIST)
+						|| actionName.equals(DEMAND_ORDERLIST)
+						|| actionName.equals(TRAIN_ORDERLIST)) {
+					((AirlineTicketListAdapter) adapter)
+							.refreshData(order_List_airlineticket);
+					if (order_List_airlineticket.size() == Integer
+							.valueOf(count)) {
+						listview.onLoadMoreComplete(true);
+					} else {
+						listview.onLoadMoreComplete(false);
+					}
+				} else if (actionName.equals(HOTEL_ORDERLIST)) {
+					((HotelListAdapter) adapter).refreshData(order_List_hotel);
+					if (order_List_hotel.size() == Integer.valueOf(count)) {
+						listview.onLoadMoreComplete(true);
+					} else {
+						listview.onLoadMoreComplete(false);
+					}
+				} else if (actionName.equals(PHONE_ORDERLIST)) {
+					((PhoneListAdapter) adapter).refreshData(order_List_phone);
+					if (order_List_phone.size() == Integer.valueOf(count)) {
+						listview.onLoadMoreComplete(true);
+					} else {
+						listview.onLoadMoreComplete(false);
+					}
 				}
-			} else if (actionName.equals(HOTEL_ORDERLIST)) {
-				((HotelListAdapter) adapter).refreshData(order_List_hotel);
-				if (order_List_hotel.size() == Integer.valueOf(count)) {
-					listview.onLoadMoreComplete(true);
-				} else {
-					listview.onLoadMoreComplete(false);
-				}
-			} else if (actionName.equals(PHONE_ORDERLIST)) {
-				((PhoneListAdapter) adapter).refreshData(order_List_phone);
-				if (order_List_phone.size() == Integer.valueOf(count)) {
-					listview.onLoadMoreComplete(true);
-				} else {
-					listview.onLoadMoreComplete(false);
-				}
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 	}

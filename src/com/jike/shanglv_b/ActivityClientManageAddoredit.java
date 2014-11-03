@@ -294,8 +294,12 @@ public class ActivityClientManageAddoredit extends Activity {
 	public class MyBroadcastReceiver extends BroadcastReceiver {
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			String content = intent.getStringExtra("msgContent");
-			province_city_tv.setText(content);
+			try {
+				String content = intent.getStringExtra("msgContent");
+				province_city_tv.setText(content);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -306,28 +310,33 @@ public class ActivityClientManageAddoredit extends Activity {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				MyApp ma = new MyApp(context);
-				String str = "{\"userID\":\""
-						+ sp.getString(SPkeys.userid.getString(), "") + "\"}";
-				String param = "action="
-						+ levellistActionName
-						+ "&str="
-						+ str
-						+ "&userkey="
-						+ ma.getHm().get(PackageKeys.USERKEY.getString())
-								.toString()
-						+ "&sitekey="
-						+ MyApp.sitekey
-						+ "&sign="
-						+ CommonFunc.MD5(ma.getHm()
-								.get(PackageKeys.USERKEY.getString())
-								.toString()
-								+ levellistActionName + str);
-				dealerlevallistReturnJson = HttpUtils.getJsonContent(
-						ma.getServeUrl(), param);
-				Message msg = new Message();
-				msg.what = DEALERLEVELMSGCODE;
-				handler.sendMessage(msg);
+				try {
+					MyApp ma = new MyApp(context);
+					String str = "{\"userID\":\""
+							+ sp.getString(SPkeys.userid.getString(), "")
+							+ "\"}";
+					String param = "action="
+							+ levellistActionName
+							+ "&str="
+							+ str
+							+ "&userkey="
+							+ ma.getHm().get(PackageKeys.USERKEY.getString())
+									.toString()
+							+ "&sitekey="
+							+ MyApp.sitekey
+							+ "&sign="
+							+ CommonFunc.MD5(ma.getHm()
+									.get(PackageKeys.USERKEY.getString())
+									.toString()
+									+ levellistActionName + str);
+					dealerlevallistReturnJson = HttpUtils.getJsonContent(
+							ma.getServeUrl(), param);
+					Message msg = new Message();
+					msg.what = DEALERLEVELMSGCODE;
+					handler.sendMessage(msg);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}).start();
 	}
@@ -336,75 +345,80 @@ public class ActivityClientManageAddoredit extends Activity {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				MyApp ma = new MyApp(context);
-				String provinceCityString = province_city_tv.getText()
-						.toString().trim();
-				String city = "", province = "";
-				if (provinceCityString.length() > 0
-						&& provinceCityString.contains("-")) {
-					city = provinceCityString.substring(0,
-							provinceCityString.indexOf("-"));
-					province = provinceCityString.substring(provinceCityString
-							.indexOf("-") + 1);
-				}
-				String str = "";
-				if (addAction.equals("addcustomeruser"))
-					str = "{\"userID\":\""
-							+ sp.getString(SPkeys.userid.getString(), "")
-							+ "\",\"userName\":\""
-							+ username_et.getText().toString().trim()
-							+ "\",\"userPass\":\""
-							+ password_et.getText().toString().trim()
-							+ "\",\"contactName\":\""
-							+ contactPerson_et.getText().toString().trim()
-							+ "\",\"contactPhone\":\""
-							+ contactPhone_et.getText().toString().trim()
-							+ "\",\"dealerLevel\":\"" + levelId
-							+ "\",\"province\":\"" + province
-							+ "\",\"city\":\"" + city + "\"}";
-				else if (addAction.equals("adddealeruser")) {
-					str = "{\"userID\":\""
-							+ sp.getString(SPkeys.userid.getString(), "")
-							+ "\",\"userName\":\""
-							+ username_et.getText().toString().trim()
-							+ "\",\"userPass\":\""
-							+ password_et.getText().toString().trim()
-							+ "\",\"contactName\":\""
-							+ contactPerson_et.getText().toString().trim()
-							+ "\",\"contactPhone\":\""
-							+ contactPhone_et.getText().toString().trim()
-							+ "\",\"dealerLevel\":\"" + levelId
-							+ "\",\"startDate\":\"" + startValidDay
-							+ "\",\"endDate\":\"" + endValidDay
-							+ "\",\"companyName\":\""
-							+ companyName_et.getText().toString().trim()
-							+ "\",\"province\":\"" + province
-							+ "\",\"city\":\"" + city + "\"}";
-				}
-				String param = "action="
-						+ addAction
-						+ "&sitekey="
-						+ MyApp.sitekey
-						+ "&userkey="
-						+ ma.getHm().get(PackageKeys.USERKEY.getString())
-								.toString()
-						+ "&sign="
-						+ CommonFunc.MD5(ma.getHm()
-								.get(PackageKeys.USERKEY.getString())
-								.toString()
-								+ addAction + str);
 				try {
-					str = URLEncoder.encode(str, "utf-8");
-				} catch (UnsupportedEncodingException e) {
+					MyApp ma = new MyApp(context);
+					String provinceCityString = province_city_tv.getText()
+							.toString().trim();
+					String city = "", province = "";
+					if (provinceCityString.length() > 0
+							&& provinceCityString.contains("-")) {
+						city = provinceCityString.substring(0,
+								provinceCityString.indexOf("-"));
+						province = provinceCityString
+								.substring(provinceCityString.indexOf("-") + 1);
+					}
+					String str = "";
+					if (addAction.equals("addcustomeruser"))
+						str = "{\"userID\":\""
+								+ sp.getString(SPkeys.userid.getString(), "")
+								+ "\",\"userName\":\""
+								+ username_et.getText().toString().trim()
+								+ "\",\"userPass\":\""
+								+ password_et.getText().toString().trim()
+								+ "\",\"contactName\":\""
+								+ contactPerson_et.getText().toString().trim()
+								+ "\",\"contactPhone\":\""
+								+ contactPhone_et.getText().toString().trim()
+								+ "\",\"dealerLevel\":\"" + levelId
+								+ "\",\"province\":\"" + province
+								+ "\",\"city\":\"" + city + "\"}";
+					else if (addAction.equals("adddealeruser")) {
+						str = "{\"userID\":\""
+								+ sp.getString(SPkeys.userid.getString(), "")
+								+ "\",\"userName\":\""
+								+ username_et.getText().toString().trim()
+								+ "\",\"userPass\":\""
+								+ password_et.getText().toString().trim()
+								+ "\",\"contactName\":\""
+								+ contactPerson_et.getText().toString().trim()
+								+ "\",\"contactPhone\":\""
+								+ contactPhone_et.getText().toString().trim()
+								+ "\",\"dealerLevel\":\"" + levelId
+								+ "\",\"startDate\":\"" + startValidDay
+								+ "\",\"endDate\":\"" + endValidDay
+								+ "\",\"companyName\":\""
+								+ companyName_et.getText().toString().trim()
+								+ "\",\"province\":\"" + province
+								+ "\",\"city\":\"" + city + "\"}";
+					}
+					String param = "action="
+							+ addAction
+							+ "&sitekey="
+							+ MyApp.sitekey
+							+ "&userkey="
+							+ ma.getHm().get(PackageKeys.USERKEY.getString())
+									.toString()
+							+ "&sign="
+							+ CommonFunc.MD5(ma.getHm()
+									.get(PackageKeys.USERKEY.getString())
+									.toString()
+									+ addAction + str);
+					try {
+						str = URLEncoder.encode(str, "utf-8");
+					} catch (UnsupportedEncodingException e) {
+						e.printStackTrace();
+					}
+					// addReturnJson = HttpUtils.myPost(ma.getServeUrl() +
+					// param,
+					// "&str=" + str);
+					addReturnJson = HttpUtils.getJsonContent(ma.getServeUrl(),
+							param + "&str=" + str);
+					Message msg = new Message();
+					msg.what = ADD_CUSTOMER_MSG_CODE;
+					handler.sendMessage(msg);
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				// addReturnJson = HttpUtils.myPost(ma.getServeUrl() + param,
-				// "&str=" + str);
-				addReturnJson = HttpUtils.getJsonContent(ma.getServeUrl(),
-						param + "&str=" + str);
-				Message msg = new Message();
-				msg.what = ADD_CUSTOMER_MSG_CODE;
-				handler.sendMessage(msg);
 			}
 		}).start();
 		progressdialog = CustomProgressDialog.createDialog(context);
@@ -422,61 +436,65 @@ public class ActivityClientManageAddoredit extends Activity {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				MyApp ma = new MyApp(context);
-				String provinceCityString = province_city_tv.getText()
-						.toString().trim();
-				String city = "", province = "";
-				if (provinceCityString.length() > 0
-						&& provinceCityString.contains("-")) {
-					city = provinceCityString.substring(0,
-							provinceCityString.indexOf("-"));
-					province = provinceCityString.substring(provinceCityString
-							.indexOf("-") + 1);
-				}
-				String str = "";
-				if (addAction.equals("addcustomeruser"))
-					str = "{\"userID\":\""
-							+ sp.getString(SPkeys.userid.getString(), "")
-							+ "\",\"userName\":\""
-							+ username_et.getText().toString().trim()
-							+ "\",\"dealerLevel\":\"" + levelId
-							+ "\",\"provinceName\":\"" + province
-							+ "\",\"cityName\":\"" + city + "\"}";
-				else if (addAction.equals("adddealeruser")) {
-					str = "{\"userID\":\""
-							+ sp.getString(SPkeys.userid.getString(), "")
-							+ "\",\"userName\":\""
-							+ username_et.getText().toString().trim()
-							+ "\",\"dealerLevel\":\"" + levelId
-							+ "\",\"startDate\":\"" + startValidDay
-							+ "\",\"endDate\":\"" + endValidDay
-							+ "\",\"companyName\":\""
-							+ companyName_et.getText().toString().trim()
-							+ "\",\"provinceName\":\"" + province
-							+ "\",\"cityName\":\"" + city + "\"}";
-				}
-				String param = "action="
-						+ modifyAction
-						+ "&sitekey="
-						+ MyApp.sitekey
-						+ "&userkey="
-						+ ma.getHm().get(PackageKeys.USERKEY.getString())
-								.toString()
-						+ "&sign="
-						+ CommonFunc.MD5(ma.getHm()
-								.get(PackageKeys.USERKEY.getString())
-								.toString()
-								+ modifyAction + str);
 				try {
-					str = URLEncoder.encode(str, "utf-8");
-				} catch (UnsupportedEncodingException e) {
+					MyApp ma = new MyApp(context);
+					String provinceCityString = province_city_tv.getText()
+							.toString().trim();
+					String city = "", province = "";
+					if (provinceCityString.length() > 0
+							&& provinceCityString.contains("-")) {
+						city = provinceCityString.substring(0,
+								provinceCityString.indexOf("-"));
+						province = provinceCityString
+								.substring(provinceCityString.indexOf("-") + 1);
+					}
+					String str = "";
+					if (addAction.equals("addcustomeruser"))
+						str = "{\"userID\":\""
+								+ sp.getString(SPkeys.userid.getString(), "")
+								+ "\",\"userName\":\""
+								+ username_et.getText().toString().trim()
+								+ "\",\"dealerLevel\":\"" + levelId
+								+ "\",\"provinceName\":\"" + province
+								+ "\",\"cityName\":\"" + city + "\"}";
+					else if (addAction.equals("adddealeruser")) {
+						str = "{\"userID\":\""
+								+ sp.getString(SPkeys.userid.getString(), "")
+								+ "\",\"userName\":\""
+								+ username_et.getText().toString().trim()
+								+ "\",\"dealerLevel\":\"" + levelId
+								+ "\",\"startDate\":\"" + startValidDay
+								+ "\",\"endDate\":\"" + endValidDay
+								+ "\",\"companyName\":\""
+								+ companyName_et.getText().toString().trim()
+								+ "\",\"provinceName\":\"" + province
+								+ "\",\"cityName\":\"" + city + "\"}";
+					}
+					String param = "action="
+							+ modifyAction
+							+ "&sitekey="
+							+ MyApp.sitekey
+							+ "&userkey="
+							+ ma.getHm().get(PackageKeys.USERKEY.getString())
+									.toString()
+							+ "&sign="
+							+ CommonFunc.MD5(ma.getHm()
+									.get(PackageKeys.USERKEY.getString())
+									.toString()
+									+ modifyAction + str);
+					try {
+						str = URLEncoder.encode(str, "utf-8");
+					} catch (UnsupportedEncodingException e) {
+						e.printStackTrace();
+					}
+					addReturnJson = HttpUtils.getJsonContent(ma.getServeUrl(),
+							param + "&str=" + str);
+					Message msg = new Message();
+					msg.what = MODIFY_CUSTOMER_MSG_CODE;
+					handler.sendMessage(msg);
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				addReturnJson = HttpUtils.getJsonContent(ma.getServeUrl(),
-						param + "&str=" + str);
-				Message msg = new Message();
-				msg.what = MODIFY_CUSTOMER_MSG_CODE;
-				handler.sendMessage(msg);
 			}
 		}).start();
 		progressdialog = CustomProgressDialog.createDialog(context);
@@ -682,7 +700,6 @@ public class ActivityClientManageAddoredit extends Activity {
 			return false;
 		}
 		cad.dismiss();
-
 		return true;
 	}
 
@@ -733,14 +750,18 @@ public class ActivityClientManageAddoredit extends Activity {
 		layout.setOnTouchListener(new OnTouchListener() {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
-				View layout = inflater.inflate(
-						R.layout.popupwindow_list_select, null);
-				int height = lvPopupList.getTop();
-				int y = (int) event.getY();
-				if (event.getAction() == MotionEvent.ACTION_UP) {
-					if (y < height) {
-						pwMyPopWindow.dismiss();
+				try {
+					View layout = inflater.inflate(
+							R.layout.popupwindow_list_select, null);
+					int height = lvPopupList.getTop();
+					int y = (int) event.getY();
+					if (event.getAction() == MotionEvent.ACTION_UP) {
+						if (y < height) {
+							pwMyPopWindow.dismiss();
+						}
 					}
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
 				return true;
 			}
@@ -823,6 +844,7 @@ public class ActivityClientManageAddoredit extends Activity {
 			}
 			return convertView;
 		}
+
 		class Holder {
 			ImageView iv;
 			TextView title;

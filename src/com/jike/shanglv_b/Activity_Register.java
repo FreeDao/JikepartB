@@ -169,36 +169,41 @@ public class Activity_Register extends Activity {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				MyApp ma = new MyApp(context);
-				String str = "{\"regCode\":\""
-						+ recommend_input_et.getText().toString().trim()
-						+ "\",\"loginName\":\""
-						+ uername_input_et.getText().toString().trim()
-						+ "\",\"phone\":\""
-						+ mobile_input_et.getText().toString().trim()
-						+ "\",\"loginPass\":\""
-						+ password_input_et.getText().toString().trim()
-						+ "\",\"realName\":\""
-						+ realname_input_et.getText().toString().trim()
-						+ "\",\"email\":\""
-						+ email_input_et.getText().toString().trim() + "\"}";
+				try {
+					MyApp ma = new MyApp(context);
+					String str = "{\"regCode\":\""
+							+ recommend_input_et.getText().toString().trim()
+							+ "\",\"loginName\":\""
+							+ uername_input_et.getText().toString().trim()
+							+ "\",\"phone\":\""
+							+ mobile_input_et.getText().toString().trim()
+							+ "\",\"loginPass\":\""
+							+ password_input_et.getText().toString().trim()
+							+ "\",\"realName\":\""
+							+ realname_input_et.getText().toString().trim()
+							+ "\",\"email\":\""
+							+ email_input_et.getText().toString().trim()
+							+ "\"}";
 
-				String param = "action=userreg&str="
-						+ str
-						+ "&userkey="
-						+ ma.getHm().get(PackageKeys.USERKEY.getString())
-								.toString()
-						+ "&sign="
-						+ CommonFunc.MD5(ma.getHm()
-								.get(PackageKeys.USERKEY.getString())
-								.toString()
-								+ "userreg" + str);
-				;
-				registerReturnJson = HttpUtils.getJsonContent(ma.getServeUrl(),
-						param);
-				Message msg = new Message();
-				msg.what = 1;
-				handler.sendMessage(msg);
+					String param = "action=userreg&str="
+							+ str
+							+ "&userkey="
+							+ ma.getHm().get(PackageKeys.USERKEY.getString())
+									.toString()
+							+ "&sign="
+							+ CommonFunc.MD5(ma.getHm()
+									.get(PackageKeys.USERKEY.getString())
+									.toString()
+									+ "userreg" + str);
+					;
+					registerReturnJson = HttpUtils.getJsonContent(
+							ma.getServeUrl(), param);
+					Message msg = new Message();
+					msg.what = 1;
+					handler.sendMessage(msg);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}).start();
 		progressdialog = CustomProgressDialog.createDialog(context);

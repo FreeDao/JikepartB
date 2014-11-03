@@ -98,12 +98,16 @@ public class Activity_Web_Pay extends Activity {
 
 	@Override
 	public void onWindowFocusChanged(boolean hasFocus) {
-		loading_ll.setVisibility(View.VISIBLE);
-		frame_ani_iv.setBackgroundResource(R.anim.frame_rotate_ani);
-		AnimationDrawable anim = (AnimationDrawable) frame_ani_iv
-				.getBackground();
-		anim.setOneShot(false);
-		anim.start();
+		try {
+			loading_ll.setVisibility(View.VISIBLE);
+			frame_ani_iv.setBackgroundResource(R.anim.frame_rotate_ani);
+			AnimationDrawable anim = (AnimationDrawable) frame_ani_iv
+					.getBackground();
+			anim.setOneShot(false);
+			anim.start();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	// http://gatewayv3.51jp.cn/PayMent/BeginPay.aspx?
@@ -112,11 +116,9 @@ public class Activity_Web_Pay extends Activity {
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
 			finish();
 		}
-
 		return super.onKeyDown(keyCode, event);
 	}
 

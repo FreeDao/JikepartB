@@ -2,11 +2,11 @@ package com.jike.shanglv_b;
 
 import org.json.JSONObject;
 import org.json.JSONTokener;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -18,8 +18,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
-
-import com.jike.shanglv_b.R;
 import com.jike.shanglv_b.Common.CommonFunc;
 import com.jike.shanglv_b.Enums.PackageKeys;
 import com.jike.shanglv_b.Enums.Platform;
@@ -55,15 +53,17 @@ public class ActivityBMenu extends Activity {
 			((ImageView) findViewById(R.id.menu_logo))
 					.setBackgroundResource((Integer) mApp.getHm().get(
 							PackageKeys.MENU_LOGO_DRAWABLE.getString()));
-
-			if (!((MyApplication) getApplication()).getHasCheckedUpdate()) {
-				MyApp ma = new MyApp(context);
-				UpdateManager manager = new UpdateManager(context, ma.getHm()
-						.get(PackageKeys.UPDATE_NOTE.getString()).toString());
-				manager.checkForUpdates(false);
-				((MyApplication) getApplication()).setHasCheckedUpdate(true);
+			if (!HttpUtils.showNetCannotUse(context)) {
+				if (!((MyApplication) getApplication()).getHasCheckedUpdate()) {
+					MyApp ma = new MyApp(context);
+					UpdateManager manager = new UpdateManager(context, ma
+							.getHm().get(PackageKeys.UPDATE_NOTE.getString())
+							.toString());
+					manager.checkForUpdates(false);
+					((MyApplication) getApplication())
+							.setHasCheckedUpdate(true);
+				}
 			}
-
 			imgBtn_gnjp = (ImageButton) findViewById(R.id.imgBtn_gnjp);
 			imgBtn_gjjp = (ImageButton) findViewById(R.id.imgBtn_gjjp);
 			imgBtn_jdyd = (ImageButton) findViewById(R.id.imgBtn_jdyd);
@@ -131,22 +131,27 @@ public class ActivityBMenu extends Activity {
 
 	// 根据用户权限显示客户管理、分销管理
 	private void showFX_KH() {
-		if (!sp.getBoolean(SPkeys.loginState.getString(), false)) {
-			ll05.setVisibility(View.GONE);
-		} else {
-			ll05.setVisibility(View.VISIBLE);
-			if (sp.getString(SPkeys.showCustomer.getString(), "0").equals("1")) {
-				khgl_ll.setVisibility(View.VISIBLE);
-			} else {// 为了保持一致也
-				khgl_ll.setVisibility(View.GONE);
-				fuzhu_ll1.setVisibility(View.VISIBLE);
-			}
-			if (sp.getString(SPkeys.showDealer.toString(), "0").equals("1")) {
-				fxgl_ll.setVisibility(View.VISIBLE);
+		try {
+			if (!sp.getBoolean(SPkeys.loginState.getString(), false)) {
+				ll05.setVisibility(View.GONE);
 			} else {
-				fxgl_ll.setVisibility(View.GONE);
-				fuzhu_ll1.setVisibility(View.VISIBLE);
+				ll05.setVisibility(View.VISIBLE);
+				if (sp.getString(SPkeys.showCustomer.getString(), "0").equals(
+						"1")) {
+					khgl_ll.setVisibility(View.VISIBLE);
+				} else {// 为了保持一致也
+					khgl_ll.setVisibility(View.GONE);
+					fuzhu_ll1.setVisibility(View.VISIBLE);
+				}
+				if (sp.getString(SPkeys.showDealer.toString(), "0").equals("1")) {
+					fxgl_ll.setVisibility(View.VISIBLE);
+				} else {
+					fxgl_ll.setVisibility(View.GONE);
+					fuzhu_ll1.setVisibility(View.VISIBLE);
+				}
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -274,35 +279,46 @@ public class ActivityBMenu extends Activity {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				int utype = 0;
-				MyApp ma = new MyApp(context);
-				Platform pf = (Platform) ma.getHm().get(
-						PackageKeys.PLATFORM.getString());
-				if (pf == Platform.B2B)
-					utype = 1;
-				else if (pf == Platform.B2C)
-					utype = 2;
-				String str = "{\"uname\":\""
-						+ sp.getString(SPkeys.lastUsername.getString(), "")
-						+ "\",\"upwd\":\""
-						+ sp.getString(SPkeys.lastPassword.getString(), "")
-						+ "\",\"utype\":\"" + utype + "\"}";
-				String param = "action=userlogin&sitekey=&userkey="
-						+ ma.getHm().get(PackageKeys.USERKEY.getString())
-								.toString()
-						+ "&str="
-						+ str
-						+ "&sign="
-						+ CommonFunc.MD5(ma.getHm()
-								.get(PackageKeys.USERKEY.getString())
-								.toString()
-								+ "userlogin" + str);
-				loginReturnJson = HttpUtils.getJsonContent(ma.getServeUrl(),
-						param);
-				Log.v("loginReturnJson", loginReturnJson);
-				Message msg = new Message();
-				msg.what = 1;
-				handler.sendMessage(msg);
+				try {
+					int utype = 0;
+					MyApp ma = new MyApp(context);
+					Platform pf = (Platform) ma.getHm().get(
+							PackageKeys.PLATFORM.getString());
+					String version = "";
+					try {
+						version = context.getPackageManager().getPackageInfo(
+								context.getPackageName(), 0).versionName;
+					} catch (NameNotFoundException e) {
+						e.printStackTrace();
+					}
+					if (pf == Platform.B2B)
+						utype = 1;
+					else if (pf == Platform.B2C)
+						utype = 2;
+					String str = "{\"uname\":\""
+							+ sp.getString(SPkeys.lastUsername.getString(), "")
+							+ "\",\"upwd\":\""
+							+ sp.getString(SPkeys.lastPassword.getString(), "")
+							+ "\",\"utype\":\"" + utype + "\",\"version\":\""
+							+ version + "\"}";
+					String param = "action=userlogin&sitekey=&userkey="
+							+ ma.getHm().get(PackageKeys.USERKEY.getString())
+									.toString()
+							+ "&str="
+							+ str
+							+ "&sign="
+							+ CommonFunc.MD5(ma.getHm()
+									.get(PackageKeys.USERKEY.getString())
+									.toString()
+									+ "userlogin" + str);
+					loginReturnJson = HttpUtils.getJsonContent(
+							ma.getServeUrl(), param);
+					Log.v("loginReturnJson", loginReturnJson);
+					Message msg = new Message();
+					msg.what = 1;
+					handler.sendMessage(msg);
+				} catch (Exception exception) {
+				}
 			}
 		}).start();
 	}
@@ -349,23 +365,44 @@ public class ActivityBMenu extends Activity {
 						sp.edit()
 								.putBoolean(SPkeys.loginState.getString(), true)
 								.commit();
-						sp.edit()
-								.putString(SPkeys.showDealer.getString(),
-										user.getShowDealer()).commit();
-						sp.edit()
-								.putString(SPkeys.showCustomer.getString(),
-										user.getShowCustomer()).commit();
-
-						showFX_KH();
-
-					} else if (state.equals("1003")) {
-						sp.edit().putString(SPkeys.userid.getString(), "")
+					} else {
+						sp.edit().remove(SPkeys.loginState.getString())
+						.commit();
+						sp.edit().remove(SPkeys.UserInfoJson.getString())
 								.commit();
-						sp.edit().putString(SPkeys.username.getString(), "")
+						sp.edit().remove(SPkeys.lastUsername.getString())
 								.commit();
-						sp.edit()
-								.putBoolean(SPkeys.loginState.getString(),
-										false).commit();
+						sp.edit().remove(SPkeys.lastPassword.getString())
+								.commit();
+						sp.edit().remove(SPkeys.autoLogin.getString()).commit();
+						sp.edit().remove(SPkeys.userid.getString()).commit();
+						sp.edit().remove(SPkeys.username.getString()).commit();
+						sp.edit().remove(SPkeys.siteid.getString()).commit();
+						sp.edit().remove(SPkeys.amount.getString()).commit();
+						sp.edit().remove(SPkeys.userphone.getString()).commit();
+						sp.edit().remove(SPkeys.useremail.getString()).commit();
+						if (state.equals("9999")) {// 需要做强制更新
+							MyApp ma = new MyApp(context);
+							UpdateManager manager = new UpdateManager(context,
+									ma.getHm()
+											.get(PackageKeys.UPDATE_NOTE
+													.getString()).toString());
+							manager.checkForUpdates(false);
+						}
+						if (state.equals("1003")) {// 用户名密码错误
+							sp.edit().putString(SPkeys.userid.getString(), "")
+									.commit();
+							sp.edit()
+									.putString(SPkeys.username.getString(), "")
+									.commit();
+							sp.edit()
+									.putBoolean(SPkeys.loginState.getString(),
+											false).commit();
+						}
+						if (state.equals("1919")) {
+							startActivity(new Intent(context,
+									Activity_Login.class));
+						}
 					}
 				} catch (Exception e) {
 					e.printStackTrace();

@@ -271,10 +271,10 @@ public class ActivityInlandAirlineticketAddoreditPassengers extends Activity {
 							.toString().trim());
 					passenger.setIdentificationType(identificationType_tv
 							.getText().toString().trim());
-//					passenger.setNation(nation);
-//					passenger.setGender(gender);
-//					passenger.setBirthDay(birthDay);
-//					passenger.setIDdeadline(IDdeadline);
+					// passenger.setNation(nation);
+					// passenger.setGender(gender);
+					// passenger.setBirthDay(birthDay);
+					// passenger.setIDdeadline(IDdeadline);
 					passenger.setNation(nation_et.getText().toString());
 					passenger.setGender(gender_et.getText().toString());
 					passenger.setBirthDay(birthDay_et.getText().toString());
@@ -677,14 +677,18 @@ public class ActivityInlandAirlineticketAddoreditPassengers extends Activity {
 		layout.setOnTouchListener(new OnTouchListener() {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
-				View layout = inflater.inflate(
-						R.layout.popupwindow_list_select, null);
-				int height = lvPopupList.getTop();
-				int y = (int) event.getY();
-				if (event.getAction() == MotionEvent.ACTION_UP) {
-					if (y < height) {
-						pwMyPopWindow.dismiss();
+				try {
+					View layout = inflater.inflate(
+							R.layout.popupwindow_list_select, null);
+					int height = lvPopupList.getTop();
+					int y = (int) event.getY();
+					if (event.getAction() == MotionEvent.ACTION_UP) {
+						if (y < height) {
+							pwMyPopWindow.dismiss();
+						}
 					}
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
 				return true;
 			}

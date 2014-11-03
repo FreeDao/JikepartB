@@ -37,11 +37,11 @@ import com.jike.shanglv_b.Enums.SPkeys;
 
 public class ActivityHotelFilter extends Activity {
 
-	protected static final int FITER_RESULT_CODE=0;
+	protected static final int FITER_RESULT_CODE = 0;
 	private ImageButton back_imgbtn;
-	private TextView  xingji_tv,jiage_tv,reset_tv;
+	private TextView xingji_tv, jiage_tv, reset_tv;
 	private com.jike.shanglv_b.Common.ClearEditText keywords_et;
-	private LinearLayout  xingji_ll, jiage_ll;
+	private LinearLayout xingji_ll, jiage_ll;
 	private Button ok_button;
 	private Context context;
 	InputMethodManager imm;
@@ -49,12 +49,15 @@ public class ActivityHotelFilter extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_hotel_filter);
-		initView();
-		((MyApplication)getApplication()).addActivity(this);
+		try {
+			super.onCreate(savedInstanceState);
+			setContentView(R.layout.activity_hotel_filter);
+			initView();
+			((MyApplication) getApplication()).addActivity(this);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
-
 
 	private void initView() {
 		context = this;
@@ -67,7 +70,7 @@ public class ActivityHotelFilter extends Activity {
 		keywords_et = (ClearEditText) findViewById(R.id.keywords_et);
 		xingji_ll = (LinearLayout) findViewById(R.id.xingji_ll);
 		jiage_ll = (LinearLayout) findViewById(R.id.jiage_ll);
-		reset_tv=(TextView) findViewById(R.id.reset_tv);
+		reset_tv = (TextView) findViewById(R.id.reset_tv);
 		back_imgbtn.setOnClickListener(clickListener);
 		xingji_ll.setOnClickListener(clickListener);
 		jiage_ll.setOnClickListener(clickListener);
@@ -79,79 +82,89 @@ public class ActivityHotelFilter extends Activity {
 	View.OnClickListener clickListener = new View.OnClickListener() {
 		@Override
 		public void onClick(View v) {
-			switch (v.getId()) {
-			case R.id.back_imgbtn:
-				finish();
-				break;
-			case R.id.home_imgbtn:
-				startActivity(new Intent(context, MainActivity.class));
-				break;
-			case R.id.xingji_ll:
-				imm.hideSoftInputFromWindow(((Activity) context)
-						.getCurrentFocus().getWindowToken(),
-						InputMethodManager.HIDE_NOT_ALWAYS);
-				iniPopupWindow(0, initXingjiData());
-				pwMyPopWindow.showAtLocation(ok_button, Gravity.BOTTOM, 0,
-						0);
-				break;
-			case R.id.reset_tv:
-				 xingji_tv.setText("不限");
-				 jiage_tv.setText("不限");
-				 keywords_et.setText("");
-				break;
-			case R.id.jiage_ll:
-				imm.hideSoftInputFromWindow(((Activity) context)
-						.getCurrentFocus().getWindowToken(),
-						InputMethodManager.HIDE_NOT_ALWAYS);
-				iniPopupWindow(1, initJiageData());
-				pwMyPopWindow.showAtLocation(ok_button, Gravity.BOTTOM, 0,
-						0);
-				break;
-			case R.id.ok_button:
-//				Intent intents = new Intent(context,
-//						ActivityHotelSearchlist.class);
-//				intents.putExtra("starlevel", xingji_tv.getText().toString());
-//				intents.putExtra("price", jiage_tv.getText().toString());
-//				intents.putExtra("keywords", keywords_et.getText().toString());
-//				startActivity(intents);
-				String keywords = keywords_et.getText().toString();
-				String star = StarLevel.StarlevelReverse.get(xingji_tv.getText().toString());
-				String price =jiage_tv.getText().toString();
-				String minprice = "",maxprice = "";
-				if (price.equals("￥150以下")) {
-					minprice = "";
-					maxprice = "150";
-				} else if (price.equals("￥150-￥300")) {
-					minprice = "150";
-					maxprice = "300";
-				} else if (price.equals("￥301-￥450")) {
-					minprice = "301";
-					maxprice = "450";
-				} else if (price.equals("￥451-￥600")) {
-					minprice = "451";
-					maxprice = "600";
-				} else if (price.equals("￥601-￥1000")) {
-					minprice = "601";
-					maxprice = "1000";
-				} else if (price.equals("￥1000以上")) {
-					minprice = "1000";
+			try {
+				switch (v.getId()) {
+				case R.id.back_imgbtn:
+					finish();
+					break;
+				case R.id.home_imgbtn:
+					startActivity(new Intent(context, MainActivity.class));
+					break;
+				case R.id.xingji_ll:
+					imm.hideSoftInputFromWindow(((Activity) context)
+							.getCurrentFocus().getWindowToken(),
+							InputMethodManager.HIDE_NOT_ALWAYS);
+					iniPopupWindow(0, initXingjiData());
+					pwMyPopWindow.showAtLocation(ok_button, Gravity.BOTTOM, 0,
+							0);
+					break;
+				case R.id.reset_tv:
+					xingji_tv.setText("不限");
+					jiage_tv.setText("不限");
+					keywords_et.setText("");
+					break;
+				case R.id.jiage_ll:
+					imm.hideSoftInputFromWindow(((Activity) context)
+							.getCurrentFocus().getWindowToken(),
+							InputMethodManager.HIDE_NOT_ALWAYS);
+					iniPopupWindow(1, initJiageData());
+					pwMyPopWindow.showAtLocation(ok_button, Gravity.BOTTOM, 0,
+							0);
+					break;
+				case R.id.ok_button:
+					// Intent intents = new Intent(context,
+					// ActivityHotelSearchlist.class);
+					// intents.putExtra("starlevel",
+					// xingji_tv.getText().toString());
+					// intents.putExtra("price", jiage_tv.getText().toString());
+					// intents.putExtra("keywords",
+					// keywords_et.getText().toString());
+					// startActivity(intents);
+					String keywords = keywords_et.getText().toString();
+					String star = StarLevel.StarlevelReverse.get(xingji_tv
+							.getText().toString());
+					String price = jiage_tv.getText().toString();
+					String minprice = "",
 					maxprice = "";
+					if (price.equals("￥150以下")) {
+						minprice = "";
+						maxprice = "150";
+					} else if (price.equals("￥150-￥300")) {
+						minprice = "150";
+						maxprice = "300";
+					} else if (price.equals("￥301-￥450")) {
+						minprice = "301";
+						maxprice = "450";
+					} else if (price.equals("￥451-￥600")) {
+						minprice = "451";
+						maxprice = "600";
+					} else if (price.equals("￥601-￥1000")) {
+						minprice = "601";
+						maxprice = "1000";
+					} else if (price.equals("￥1000以上")) {
+						minprice = "1000";
+						maxprice = "";
+					}
+					Bundle bundle = new Bundle();// minprice = "", maxprice =
+													// "",
+													// star
+					bundle.putString("minprice", minprice);
+					bundle.putString("maxprice", maxprice);
+					bundle.putString("star", star);
+					bundle.putString("keywords", keywords_et.getText()
+							.toString());
+					setResult(0, getIntent().putExtra("filterdDate", bundle));
+					finish();
+					break;
+				default:
+					break;
 				}
-				Bundle bundle=new Bundle();//minprice = "", maxprice = "", star
-				bundle.putString("minprice", minprice);
-				bundle.putString("maxprice", maxprice);
-				bundle.putString("star", star);
-				bundle.putString("keywords", keywords_et.getText().toString());
-				setResult(0, getIntent().putExtra("filterdDate", bundle));
-				finish();
-				break;
-			default:
-				break;
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 	};
 
-	
 	private PopupWindow pwMyPopWindow;// popupwindow
 	private ListView lvPopupList;
 	private int currentID_XJ = 0;
@@ -177,16 +190,20 @@ public class ActivityHotelFilter extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				if (xjOrJg == 0) {// 0:星级
-					xingji_tv.setText(list1.get(position).get("title")
-							.toString());
-					currentID_XJ = position;
-					pwMyPopWindow.dismiss();
-				} else if (xjOrJg == 1) {// 1：价格
-					jiage_tv.setText(list1.get(position).get("title")
-							.toString());
-					currentID_JG = position;
-					pwMyPopWindow.dismiss();
+				try {
+					if (xjOrJg == 0) {// 0:星级
+						xingji_tv.setText(list1.get(position).get("title")
+								.toString());
+						currentID_XJ = position;
+						pwMyPopWindow.dismiss();
+					} else if (xjOrJg == 1) {// 1：价格
+						jiage_tv.setText(list1.get(position).get("title")
+								.toString());
+						currentID_JG = position;
+						pwMyPopWindow.dismiss();
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
 			}
 		});
@@ -208,14 +225,18 @@ public class ActivityHotelFilter extends Activity {
 		layout.setOnTouchListener(new OnTouchListener() {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
-				View layout = inflater.inflate(
-						R.layout.popupwindow_list_select, null);
-				int height = lvPopupList.getTop();
-				int y = (int) event.getY();
-				if (event.getAction() == MotionEvent.ACTION_UP) {
-					if (y < height) {
-						pwMyPopWindow.dismiss();
+				try {
+					View layout = inflater.inflate(
+							R.layout.popupwindow_list_select, null);
+					int height = lvPopupList.getTop();
+					int y = (int) event.getY();
+					if (event.getAction() == MotionEvent.ACTION_UP) {
+						if (y < height) {
+							pwMyPopWindow.dismiss();
+						}
 					}
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
 				return true;
 			}
@@ -307,25 +328,31 @@ public class ActivityHotelFilter extends Activity {
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			Holder myHolder;
-			if (convertView == null) {
-				myHolder = new Holder();
-				convertView = inflater.inflate(
-						R.layout.item_train_baoxian_list_single, null);
-				myHolder.title = (TextView) convertView
-						.findViewById(R.id.title);
-				myHolder.iv = (ImageView) convertView.findViewById(R.id.img);
-				convertView.setTag(myHolder);
-			} else {
-				myHolder = (Holder) convertView.getTag();
+			try {
+				Holder myHolder;
+				if (convertView == null) {
+					myHolder = new Holder();
+					convertView = inflater.inflate(
+							R.layout.item_train_baoxian_list_single, null);
+					myHolder.title = (TextView) convertView
+							.findViewById(R.id.title);
+					myHolder.iv = (ImageView) convertView
+							.findViewById(R.id.img);
+					convertView.setTag(myHolder);
+				} else {
+					myHolder = (Holder) convertView.getTag();
+				}
+				if (position == this.currentID)
+					myHolder.iv.setBackgroundDrawable(c.getResources()
+							.getDrawable(R.drawable.radio_clk));
+				else
+					myHolder.iv.setBackgroundDrawable(c.getResources()
+							.getDrawable(R.drawable.radio));
+				myHolder.title.setText(list.get(position).get("title")
+						.toString());
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-			if (position == this.currentID)
-				myHolder.iv.setBackgroundDrawable(c.getResources().getDrawable(
-						R.drawable.radio_clk));
-			else
-				myHolder.iv.setBackgroundDrawable(c.getResources().getDrawable(
-						R.drawable.radio));
-			myHolder.title.setText(list.get(position).get("title").toString());
 			return convertView;
 		}
 

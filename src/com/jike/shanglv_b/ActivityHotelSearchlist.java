@@ -97,16 +97,16 @@ public class ActivityHotelSearchlist extends Activity implements
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		SDKInitializer.initialize(getApplicationContext());
-		setContentView(R.layout.activity_hotel_searchlist);
 		try {
+			super.onCreate(savedInstanceState);
+			SDKInitializer.initialize(getApplicationContext());
+			setContentView(R.layout.activity_hotel_searchlist);
 			initView();
 			startQuery();
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
-		((MyApplication)getApplication()).addActivity(this);
+		((MyApplication) getApplication()).addActivity(this);
 	}
 
 	private void initView() {
@@ -382,7 +382,6 @@ public class ActivityHotelSearchlist extends Activity implements
 
 	/**
 	 * 构建list对象
-	 * 
 	 * @param reqdata
 	 */
 	private void createList(JSONArray reqdata) {
@@ -485,25 +484,48 @@ public class ActivityHotelSearchlist extends Activity implements
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				// action=hlist&sign=c12b01b80e4b2674229dd71a48b5af36&userkey=2bfc0c48923cf89de19f6113c127ce81&sitekey=defage
-				// &str={'city':'上海','pgsize':'10','pgindex':'1','hn':'','key':'','yufu':'','esdid':'','minprice':'','maxprice':'','lsid':'','areid':'','star':'','fw':''}
-				String strEm = "";
-				MyApp ma = new MyApp(context);
-				Message msg = new Message();
-				String str1 = "";
-				// URLEncoder.encode(city, "utf-8")
-				str1 = "{\"city\":\"" + city + "\",\"pgsize\":\"" + pgsize
-						+ "\",\"pgindex\":\"" + pgindex + "\",\"hn\":\""
-						+ keywords + "\",\"key\":\"" + strEm + "\",\"yufu\":\""
-						+ strEm + "\",\"esdid\":\"" + strEm
-						+ "\",\"minprice\":\"" + minprice
-						+ "\",\"maxprice\":\"" + maxprice + "\",\"lsid\":\""
-						+ strEm + "\",\"areid\":\"" + strEm + "\",\"star\":\""
-						+ star + "\",\"fw\":\"\"}";
-				String param1 = "";
 				try {
-					param1 = "action=hlist&str="
-							+ URLEncoder.encode(str1, "utf-8")
+					// action=hlist&sign=c12b01b80e4b2674229dd71a48b5af36&userkey=2bfc0c48923cf89de19f6113c127ce81&sitekey=defage
+					// &str={'city':'上海','pgsize':'10','pgindex':'1','hn':'','key':'','yufu':'','esdid':'','minprice':'','maxprice':'','lsid':'','areid':'','star':'','fw':''}
+					String strEm = "";
+					MyApp ma = new MyApp(context);
+					Message msg = new Message();
+					String str1 = "";
+					// URLEncoder.encode(city, "utf-8")
+					str1 = "{\"city\":\"" + city + "\",\"pgsize\":\"" + pgsize
+							+ "\",\"pgindex\":\"" + pgindex + "\",\"hn\":\""
+							+ keywords + "\",\"key\":\"" + strEm
+							+ "\",\"yufu\":\"" + strEm + "\",\"esdid\":\""
+							+ strEm + "\",\"minprice\":\"" + minprice
+							+ "\",\"maxprice\":\"" + maxprice
+							+ "\",\"lsid\":\"" + strEm + "\",\"areid\":\""
+							+ strEm + "\",\"star\":\"" + star
+							+ "\",\"fw\":\"\"}";
+					String param1 = "";
+					try {
+						param1 = "action=hlist&str="
+								+ URLEncoder.encode(str1, "utf-8")
+								+ "&userkey="
+								+ ma.getHm()
+										.get(PackageKeys.USERKEY.getString())
+										.toString()
+								+ "&sitekey="
+								+ MyApp.sitekey
+								+ "&sign="
+								+ CommonFunc.MD5(ma.getHm()
+										.get(PackageKeys.USERKEY.getString())
+										.toString()
+										+ "hlist" + str1);
+					} catch (UnsupportedEncodingException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					String str2 = "";
+					str2 = "{\"lng\":\"" + longtitude + "\",\"pagesize\":\""
+							+ pgsize + "\",\"pg\":\"" + pgindex
+							+ "\",\"lat\":\"" + latitude + "\"}";
+					String param2 = "action=nearby&str="
+							+ str2
 							+ "&userkey="
 							+ ma.getHm().get(PackageKeys.USERKEY.getString())
 									.toString()
@@ -513,37 +535,20 @@ public class ActivityHotelSearchlist extends Activity implements
 							+ CommonFunc.MD5(ma.getHm()
 									.get(PackageKeys.USERKEY.getString())
 									.toString()
-									+ "hlist" + str1);
-				} catch (UnsupportedEncodingException e) {
-					// TODO Auto-generated catch block
+									+ "nearby" + str2);
+					if (!isNearby) {
+						hotelsReturnJson = HttpUtils.getJsonContent(
+								ma.getServeUrl(), param1);
+						msg.what = 1;
+					} else {
+						nearbyReturnJson = HttpUtils.getJsonContent(
+								ma.getServeUrl(), param2);
+						msg.what = 2;
+					}
+					handler.sendMessage(msg);
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				String str2 = "";
-				str2 = "{\"lng\":\"" + longtitude + "\",\"pagesize\":\""
-						+ pgsize + "\",\"pg\":\"" + pgindex + "\",\"lat\":\""
-						+ latitude + "\"}";
-				String param2 = "action=nearby&str="
-						+ str2
-						+ "&userkey="
-						+ ma.getHm().get(PackageKeys.USERKEY.getString())
-								.toString()
-						+ "&sitekey="
-						+ MyApp.sitekey
-						+ "&sign="
-						+ CommonFunc.MD5(ma.getHm()
-								.get(PackageKeys.USERKEY.getString())
-								.toString()
-								+ "nearby" + str2);
-				if (!isNearby) {
-					hotelsReturnJson = HttpUtils.getJsonContent(
-							ma.getServeUrl(), param1);
-					msg.what = 1;
-				} else {
-					nearbyReturnJson = HttpUtils.getJsonContent(
-							ma.getServeUrl(), param2);
-					msg.what = 2;
-				}
-				handler.sendMessage(msg);
 			}
 		}).start();
 		progressdialog = CustomProgressDialog.createDialog(context);
@@ -561,120 +566,130 @@ public class ActivityHotelSearchlist extends Activity implements
 		@SuppressLint("ResourceAsColor")
 		@Override
 		public void onClick(View v) {
-			switch (v.getId()) {
-			case R.id.byprice_LL:
-				sort_price_tv.setSelected(true);
-				sort_arrow_price_iv.setSelected(true);
-				sort_pingfen_tv.setSelected(false);
-				sort_arrow_pingfen_iv.setSelected(false);
-				sort_starlevel_tv.setSelected(false);
-				sort_arrow_starlevel_iv.setSelected(false);
-				byPriceAsc = !byPriceAsc;
-				if (byPriceAsc) {
-					sort_arrow_price_iv.setBackground(getResources()
-							.getDrawable(R.drawable.sort_arrow_up));
-					Collections.sort(reqdata_List, comparator_price_desc);
-					adapter.notifyDataSetChanged();
-				} else {
-					sort_arrow_price_iv.setBackground(getResources()
-							.getDrawable(R.drawable.sort_arrow_down));
-					Collections.sort(reqdata_List, comparator_price_asc);
-					adapter.notifyDataSetChanged();
+			try {
+				switch (v.getId()) {
+				case R.id.byprice_LL:
+					sort_price_tv.setSelected(true);
+					sort_arrow_price_iv.setSelected(true);
+					sort_pingfen_tv.setSelected(false);
+					sort_arrow_pingfen_iv.setSelected(false);
+					sort_starlevel_tv.setSelected(false);
+					sort_arrow_starlevel_iv.setSelected(false);
+					byPriceAsc = !byPriceAsc;
+					if (byPriceAsc) {
+						sort_arrow_price_iv.setBackground(getResources()
+								.getDrawable(R.drawable.sort_arrow_up));
+						Collections.sort(reqdata_List, comparator_price_desc);
+						adapter.notifyDataSetChanged();
+					} else {
+						sort_arrow_price_iv.setBackground(getResources()
+								.getDrawable(R.drawable.sort_arrow_down));
+						Collections.sort(reqdata_List, comparator_price_asc);
+						adapter.notifyDataSetChanged();
+					}
+					break;
+				case R.id.pingfen_LL:
+					sort_price_tv.setSelected(false);
+					sort_arrow_price_iv.setSelected(false);
+					sort_pingfen_tv.setSelected(true);
+					sort_arrow_pingfen_iv.setSelected(true);
+					sort_starlevel_tv.setSelected(false);
+					sort_arrow_starlevel_iv.setSelected(false);
+					byPingfenAsc = !byPingfenAsc;
+					if (byPingfenAsc) {
+						sort_arrow_pingfen_iv.setBackground(getResources()
+								.getDrawable(R.drawable.sort_arrow_up));
+						Collections.sort(reqdata_List, comparator_pingfen_desc);
+						adapter.notifyDataSetChanged();
+					} else {
+						sort_arrow_pingfen_iv.setBackground(getResources()
+								.getDrawable(R.drawable.sort_arrow_down));
+						Collections.sort(reqdata_List, comparator_pingfen_asc);
+						adapter.notifyDataSetChanged();
+					}
+					break;
+				case R.id.bystarlevel_ll:
+					sort_price_tv.setSelected(false);
+					sort_arrow_price_iv.setSelected(false);
+					sort_pingfen_tv.setSelected(false);
+					sort_arrow_pingfen_iv.setSelected(false);
+					sort_starlevel_tv.setSelected(true);
+					sort_arrow_starlevel_iv.setSelected(true);
+					bystar = !bystar;
+					if (bystar) {
+						sort_arrow_starlevel_iv.setBackground(getResources()
+								.getDrawable(R.drawable.sort_arrow_up));
+						Collections.sort(reqdata_List,
+								comparator_starlevel_desc);
+						adapter.notifyDataSetChanged();
+					} else {
+						sort_arrow_starlevel_iv.setBackground(getResources()
+								.getDrawable(R.drawable.sort_arrow_down));
+						Collections
+								.sort(reqdata_List, comparator_starlevel_asc);
+						adapter.notifyDataSetChanged();
+					}
+					break;
+				case R.id.back_imgbtn:
+					if (list_map_tv.getText().toString().equals("列表")) {
+						mMapView.setVisibility(View.GONE);
+						list_map_tv.setText("地图");
+					} else if (list_map_tv.getText().toString().equals("地图")) {
+						finish();
+					}
+					break;
+				case R.id.list_map_tv:
+					if (list_map_tv.getText().toString().equals("地图")) {
+						mMapView.setVisibility(View.VISIBLE);
+						list_map_tv.setText("列表");
+					} else if (list_map_tv.getText().toString().equals("列表")) {
+						mMapView.setVisibility(View.GONE);
+						list_map_tv.setText("地图");
+					}
+					break;
+				case R.id.shaixuan_LL:
+					startActivityForResult(new Intent(context,
+							ActivityHotelFilter.class), FILTER_REQUEST_CODE);
+					break;
+				default:
+					break;
 				}
-				break;
-			case R.id.pingfen_LL:
-				sort_price_tv.setSelected(false);
-				sort_arrow_price_iv.setSelected(false);
-				sort_pingfen_tv.setSelected(true);
-				sort_arrow_pingfen_iv.setSelected(true);
-				sort_starlevel_tv.setSelected(false);
-				sort_arrow_starlevel_iv.setSelected(false);
-				byPingfenAsc = !byPingfenAsc;
-				if (byPingfenAsc) {
-					sort_arrow_pingfen_iv.setBackground(getResources()
-							.getDrawable(R.drawable.sort_arrow_up));
-					Collections.sort(reqdata_List, comparator_pingfen_desc);
-					adapter.notifyDataSetChanged();
-				} else {
-					sort_arrow_pingfen_iv.setBackground(getResources()
-							.getDrawable(R.drawable.sort_arrow_down));
-					Collections.sort(reqdata_List, comparator_pingfen_asc);
-					adapter.notifyDataSetChanged();
-				}
-				break;
-			case R.id.bystarlevel_ll:
-				sort_price_tv.setSelected(false);
-				sort_arrow_price_iv.setSelected(false);
-				sort_pingfen_tv.setSelected(false);
-				sort_arrow_pingfen_iv.setSelected(false);
-				sort_starlevel_tv.setSelected(true);
-				sort_arrow_starlevel_iv.setSelected(true);
-				bystar = !bystar;
-				if (bystar) {
-					sort_arrow_starlevel_iv.setBackground(getResources()
-							.getDrawable(R.drawable.sort_arrow_up));
-					Collections.sort(reqdata_List, comparator_starlevel_desc);
-					adapter.notifyDataSetChanged();
-				} else {
-					sort_arrow_starlevel_iv.setBackground(getResources()
-							.getDrawable(R.drawable.sort_arrow_down));
-					Collections.sort(reqdata_List, comparator_starlevel_asc);
-					adapter.notifyDataSetChanged();
-				}
-				break;
-			case R.id.back_imgbtn:
-				if (list_map_tv.getText().toString().equals("列表")) {
-					mMapView.setVisibility(View.GONE);
-					list_map_tv.setText("地图");
-				} else if (list_map_tv.getText().toString().equals("地图")) {
-					finish();
-				}
-				break;
-			case R.id.list_map_tv:
-				if (list_map_tv.getText().toString().equals("地图")) {
-					mMapView.setVisibility(View.VISIBLE);
-					list_map_tv.setText("列表");
-				} else if (list_map_tv.getText().toString().equals("列表")) {
-					mMapView.setVisibility(View.GONE);
-					list_map_tv.setText("地图");
-				}
-				break;
-			case R.id.shaixuan_LL:
-				startActivityForResult(new Intent(context,
-						ActivityHotelFilter.class), FILTER_REQUEST_CODE);
-				break;
-			default:
-				break;
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 	};
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
-		if (requestCode == FILTER_REQUEST_CODE) {// 筛选结果返回
-			if (data == null) {
-				return;
+		try {
+			super.onActivityResult(requestCode, resultCode, data);
+			if (requestCode == FILTER_REQUEST_CODE) {// 筛选结果返回
+				if (data == null) {
+					return;
+				}
+				Bundle b = data.getExtras();
+				if (b == null || !b.containsKey("filterdDate")) {
+					return;
+				} else {
+					b = b.getBundle("filterdDate");
+				}
+				if (b != null && b.containsKey("minprice")) {
+					minprice = b.getString("minprice");
+				}
+				if (b != null && b.containsKey("maxprice")) {
+					maxprice = b.getString("maxprice");
+				}
+				if (b != null && b.containsKey("star")) {
+					star = b.getString("star");
+				}
+				if (b != null && b.containsKey("keywords")) {
+					keywords = b.getString("keywords");
+				}
+				// adapter.updateListView(filterData(reqdata_List));
 			}
-			Bundle b = data.getExtras();
-			if (b == null || !b.containsKey("filterdDate")) {
-				return;
-			} else {
-				b = b.getBundle("filterdDate");
-			}
-			if (b != null && b.containsKey("minprice")) {
-				minprice = b.getString("minprice");
-			}
-			if (b != null && b.containsKey("maxprice")) {
-				maxprice = b.getString("maxprice");
-			}
-			if (b != null && b.containsKey("star")) {
-				star = b.getString("star");
-			}
-			if (b != null && b.containsKey("keywords")) {
-				keywords = b.getString("keywords");
-			}
-			// adapter.updateListView(filterData(reqdata_List));
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -851,43 +866,48 @@ public class ActivityHotelSearchlist extends Activity implements
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			if (convertView == null) {
-				convertView = inflater.inflate(R.layout.item_hotel_searchlist,
-						null);
-			}
-			TextView hotel_name_tv = (TextView) convertView
-					.findViewById(R.id.hotel_name_tv);
-			TextView score_tv = (TextView) convertView
-					.findViewById(R.id.score_tv);
-			TextView starlevel_tv = (TextView) convertView
-					.findViewById(R.id.starlevel_tv);
-			TextView area_tv = (TextView) convertView
-					.findViewById(R.id.area_tv);
-			TextView price_tv = (TextView) convertView
-					.findViewById(R.id.price_tv);
-			TextView juli_tv = (TextView) convertView
-					.findViewById(R.id.juli_tv);
-			ImageView hotel_pic_iv = (ImageView) convertView
-					.findViewById(R.id.hotel_pic_iv);
+			try {
+				if (convertView == null) {
+					convertView = inflater.inflate(
+							R.layout.item_hotel_searchlist, null);
+				}
+				TextView hotel_name_tv = (TextView) convertView
+						.findViewById(R.id.hotel_name_tv);
+				TextView score_tv = (TextView) convertView
+						.findViewById(R.id.score_tv);
+				TextView starlevel_tv = (TextView) convertView
+						.findViewById(R.id.starlevel_tv);
+				TextView area_tv = (TextView) convertView
+						.findViewById(R.id.area_tv);
+				TextView price_tv = (TextView) convertView
+						.findViewById(R.id.price_tv);
+				TextView juli_tv = (TextView) convertView
+						.findViewById(R.id.juli_tv);
+				ImageView hotel_pic_iv = (ImageView) convertView
+						.findViewById(R.id.hotel_pic_iv);
 
-			String juli = str.get(position).getJuli();
-			if (juli != null && juli.length() > 0) {
-				juli_tv.setText(getJuli(juli));
-				area_tv.setText(str.get(position).getCBD());
-			} else {
-				juli_tv.setVisibility(View.GONE);
-				area_tv.setText(str.get(position).getCBD().replace("区域", "")
-						.replace(":", "").replace("：", "").replace(" ", ""));
+				String juli = str.get(position).getJuli();
+				if (juli != null && juli.length() > 0) {
+					juli_tv.setText(getJuli(juli));
+					area_tv.setText(str.get(position).getCBD());
+				} else {
+					juli_tv.setVisibility(View.GONE);
+					area_tv.setText(str.get(position).getCBD()
+							.replace("区域", "").replace(":", "")
+							.replace("：", "").replace(" ", ""));
+				}
+				hotel_name_tv.setText(str.get(position).getName());
+				score_tv.setText(Float.valueOf(str.get(position).getHaoping()) == -1f ? "暂无"
+						: (str.get(position).getHaoping() + "分"));
+				starlevel_tv.setText(StarLevel.Starlevel.get(str.get(position)
+						.getStar()));
+				price_tv.setText("￥" + str.get(position).getPrice());
+				// imageLoader.DisplayImage(data.get(position), hotel_pic_iv);
+				imageLoader.DisplayImage(str.get(position).getPicture(),
+						hotel_pic_iv);
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-			hotel_name_tv.setText(str.get(position).getName());
-			score_tv.setText(Float.valueOf(str.get(position).getHaoping()) == -1f ? "暂无"
-					: (str.get(position).getHaoping() + "分"));
-			starlevel_tv.setText(StarLevel.Starlevel.get(str.get(position)
-					.getStar()));
-			price_tv.setText("￥" + str.get(position).getPrice());
-			// imageLoader.DisplayImage(data.get(position), hotel_pic_iv);
-			imageLoader.DisplayImage(str.get(position).getPicture(),
-					hotel_pic_iv);
 			return convertView;
 		}
 

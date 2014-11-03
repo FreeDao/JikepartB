@@ -58,7 +58,7 @@ public class ActivityInlandAirlineticketOrderDetail extends Activity {
 	private Button pay_now_btn;
 	private SharedPreferences sp;
 	private ArrayList<Passenger> passengerList;// 乘机人列表
-	private String orderID = "", pnr = "", amount = "",PayLimit, stateString ;// amount为订单金额
+	private String orderID = "", pnr = "", amount = "", PayLimit, stateString;// amount为订单金额
 	private String orderDetailReturnJson;
 	private JSONObject orderDetailObject;// 返回的订单详情对象
 
@@ -74,17 +74,21 @@ public class ActivityInlandAirlineticketOrderDetail extends Activity {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		((MyApplication)getApplication()).addActivity(this);
+		((MyApplication) getApplication()).addActivity(this);
 	}
-	
+
 	@Override
 	public void onWindowFocusChanged(boolean hasFocus) {
-		super.onWindowFocusChanged(hasFocus);
-		frame_ani_iv.setBackgroundResource(R.anim.frame_rotate_ani);
-		AnimationDrawable anim = (AnimationDrawable) frame_ani_iv
-				.getBackground();
-		anim.setOneShot(false);
-		anim.start();
+		try {
+			super.onWindowFocusChanged(hasFocus);
+			frame_ani_iv.setBackgroundResource(R.anim.frame_rotate_ani);
+			AnimationDrawable anim = (AnimationDrawable) frame_ani_iv
+					.getBackground();
+			anim.setOneShot(false);
+			anim.start();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void initView() {
@@ -98,9 +102,9 @@ public class ActivityInlandAirlineticketOrderDetail extends Activity {
 		home_imgbtn.setOnClickListener(btnClickListner);
 		pay_now_btn = (Button) findViewById(R.id.pay_now_btn);
 		pay_now_btn.setOnClickListener(btnClickListner);
-		frame_ani_iv=(ImageView) findViewById(R.id.frame_ani_iv);
-		loading_ll=(RelativeLayout) findViewById(R.id.loading_ll);
-		scrollview=(ScrollView) findViewById(R.id.scrollview);
+		frame_ani_iv = (ImageView) findViewById(R.id.frame_ani_iv);
+		loading_ll = (RelativeLayout) findViewById(R.id.loading_ll);
+		scrollview = (ScrollView) findViewById(R.id.scrollview);
 
 		order_state_tv = (TextView) findViewById(R.id.order_state_tv);
 		order_no_tv = (TextView) findViewById(R.id.order_no_tv);
@@ -131,29 +135,33 @@ public class ActivityInlandAirlineticketOrderDetail extends Activity {
 		@SuppressLint("ResourceAsColor")
 		@Override
 		public void onClick(View v) {
-			switch (v.getId()) {
-			case R.id.back_imgbtn:
-				finish();
-				break;
-			case R.id.home_imgbtn:
-				startActivity(new Intent(context, MainActivity.class));
-				break;
-			case R.id.pay_now_btn:
-				String userid = sp.getString(SPkeys.userid.getString(), "");
-				int paysystype = 1;
-				String siteid = sp.getString(SPkeys.siteid.getString(), "");
-				String sign = CommonFunc.MD5(orderID + amount + userid
-						+ paysystype + siteid);
-				MyApp ma = new MyApp(context);
-				String url = String.format(ma.getPayServeUrl(), orderID,
-						amount, userid, paysystype, siteid, sign);
-				Intent intent = new Intent(context, Activity_Web_Pay.class);
-				intent.putExtra(Activity_Web_Pay.URL, url);
-				intent.putExtra(Activity_Web_Pay.TITLE, "机票订单支付");
-				startActivity(intent);
-				break;
-			default:
-				break;
+			try {
+				switch (v.getId()) {
+				case R.id.back_imgbtn:
+					finish();
+					break;
+				case R.id.home_imgbtn:
+					startActivity(new Intent(context, MainActivity.class));
+					break;
+				case R.id.pay_now_btn:
+					String userid = sp.getString(SPkeys.userid.getString(), "");
+					int paysystype = 1;
+					String siteid = sp.getString(SPkeys.siteid.getString(), "");
+					String sign = CommonFunc.MD5(orderID + amount + userid
+							+ paysystype + siteid);
+					MyApp ma = new MyApp(context);
+					String url = String.format(ma.getPayServeUrl(), orderID,
+							amount, userid, paysystype, siteid, sign);
+					Intent intent = new Intent(context, Activity_Web_Pay.class);
+					intent.putExtra(Activity_Web_Pay.URL, url);
+					intent.putExtra(Activity_Web_Pay.TITLE, "机票订单支付");
+					startActivity(intent);
+					break;
+				default:
+					break;
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 	};
@@ -187,46 +195,63 @@ public class ActivityInlandAirlineticketOrderDetail extends Activity {
 					if (state.equals("0000")) {
 						orderDetailObject = jsonObject.getJSONObject("d");
 						assignment();// 获取数据后对页面上的内容进行赋值
-						if(true){ //(MyApp.RELEASE) {// 测试版可以支付，只有正式发布才做此判断
-							if(PayLimit!=null&&!PayLimit.isEmpty()&&DateUtil.isOverThirtyMinite(PayLimit)&&pnr.trim().equals("")&&(stateString.equals("新订单")||stateString.equals("已受理"))){
-								pay_now_btn
-								.setBackgroundDrawable(getResources()
-										.getDrawable(R.drawable.btn_3_d));
-								pay_now_btn.setEnabled(false);
-								final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
-								cad.setTitle("已超过支付时限，无法支付支付！");
-								cad.setPositiveButton("确定", new OnClickListener(){
-									@Override
-									public void onClick(View arg0) {
-										cad.dismiss();
-									}});
-							}else if (pnr.trim().equals("")&&(stateString.equals("新订单")||stateString.equals("已受理"))) {
+						if (true) { // (MyApp.RELEASE) {// 测试版可以支付，只有正式发布才做此判断
+							if (PayLimit != null
+									&& !PayLimit.isEmpty()
+									&& DateUtil.isOverThirtyMinite(PayLimit)
+									&& pnr.trim().equals("")
+									&& (stateString.equals("新订单") || stateString
+											.equals("已受理"))) {
 								pay_now_btn
 										.setBackgroundDrawable(getResources()
 												.getDrawable(R.drawable.btn_3_d));
 								pay_now_btn.setEnabled(false);
-//								new AlertDialog.Builder(context)
-//										.setTitle("定位失败")
-//										.setMessage("定位失败，暂不能支付！")
-//										.setPositiveButton("确定", null).show();
-								final CustomerAlertDialog cad=new CustomerAlertDialog(context,true);
-								cad.setTitle("定位失败，暂不能支付！");
-								cad.setPositiveButton("确定", new OnClickListener(){
-									@Override
-									public void onClick(View arg0) {
-										cad.dismiss();
-									}});
-								((RelativeLayout)findViewById(R.id.bottom_rl)).setVisibility(View.GONE);
-							}else if(stateString.equals("新订单")||stateString.equals("已受理")){
+								final CustomerAlertDialog cad = new CustomerAlertDialog(
+										context, true);
+								cad.setTitle("已超过支付时限，无法支付支付！");
+								cad.setPositiveButton("确定",
+										new OnClickListener() {
+											@Override
+											public void onClick(View arg0) {
+												cad.dismiss();
+											}
+										});
+							} else if (pnr.trim().equals("")
+									&& (stateString.equals("新订单") || stateString
+											.equals("已受理"))) {
 								pay_now_btn
-								.setBackgroundDrawable(getResources()
-										.getDrawable(R.drawable.btn_3));
+										.setBackgroundDrawable(getResources()
+												.getDrawable(R.drawable.btn_3_d));
+								pay_now_btn.setEnabled(false);
+								// new AlertDialog.Builder(context)
+								// .setTitle("定位失败")
+								// .setMessage("定位失败，暂不能支付！")
+								// .setPositiveButton("确定", null).show();
+								final CustomerAlertDialog cad = new CustomerAlertDialog(
+										context, true);
+								cad.setTitle("定位失败，暂不能支付！");
+								cad.setPositiveButton("确定",
+										new OnClickListener() {
+											@Override
+											public void onClick(View arg0) {
+												cad.dismiss();
+											}
+										});
+								((RelativeLayout) findViewById(R.id.bottom_rl))
+										.setVisibility(View.GONE);
+							} else if (stateString.equals("新订单")
+									|| stateString.equals("已受理")) {
+								pay_now_btn
+										.setBackgroundDrawable(getResources()
+												.getDrawable(R.drawable.btn_3));
 								pay_now_btn.setEnabled(true);
-								((RelativeLayout)findViewById(R.id.bottom_rl)).setVisibility(View.VISIBLE);
-							}else {
-								((RelativeLayout)findViewById(R.id.bottom_rl)).setVisibility(View.GONE);
+								((RelativeLayout) findViewById(R.id.bottom_rl))
+										.setVisibility(View.VISIBLE);
+							} else {
+								((RelativeLayout) findViewById(R.id.bottom_rl))
+										.setVisibility(View.GONE);
 							}
-								
+
 						}
 					} else {
 						Toast.makeText(context, "网络异常！", 0).show();
@@ -244,8 +269,8 @@ public class ActivityInlandAirlineticketOrderDetail extends Activity {
 						"Amount");
 				pnr = orderDetailObject.getJSONObject("orders")
 						.getString("PNR");
-				PayLimit=orderDetailObject.getJSONObject("orders")
-						.getString("PayLimit");
+				PayLimit = orderDetailObject.getJSONObject("orders").getString(
+						"PayLimit");
 				JSONArray passengersArray = orderDetailObject
 						.getJSONArray("psginfo");
 				for (int i = 0; i < passengersArray.length(); i++) {
@@ -268,7 +293,7 @@ public class ActivityInlandAirlineticketOrderDetail extends Activity {
 				stateString = orderDetailObject.getJSONObject("orders")
 						.getString("Status");
 				order_state_tv.setText(stateString);
-				
+
 				order_no_tv.setText(orderDetailObject.getJSONObject("orders")
 						.getString("OrderID"));
 				order_date_tv.setText(orderDetailObject.getJSONObject("orders")
@@ -345,21 +370,30 @@ public class ActivityInlandAirlineticketOrderDetail extends Activity {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				MyApp ma = new MyApp(context);
-				String str = "{\"orderID\":\"" + orderID
-						+ "\",\"siteid\":\""+sp.getString(SPkeys.siteid.getString(), "65")+"\"}";
-				String param = "action=flightorderdetail&str="
-						+ str
-						+ "&userkey="
-						+ ma.getHm().get(PackageKeys.USERKEY.getString()).toString()
-						+ "&sign="
-						+ CommonFunc.MD5(ma.getHm().get(PackageKeys.USERKEY.getString()).toString() + "flightorderdetail"
-								+ str);
-				orderDetailReturnJson = HttpUtils.getJsonContent(
-						ma.getServeUrl(), param);
-				Message msg = new Message();
-				msg.what = ORDERDETAIL_MSG_CODE;
-				handler.sendMessage(msg);
+				try {
+					MyApp ma = new MyApp(context);
+					String str = "{\"orderID\":\"" + orderID
+							+ "\",\"siteid\":\""
+							+ sp.getString(SPkeys.siteid.getString(), "65")
+							+ "\"}";
+					String param = "action=flightorderdetail&str="
+							+ str
+							+ "&userkey="
+							+ ma.getHm().get(PackageKeys.USERKEY.getString())
+									.toString()
+							+ "&sign="
+							+ CommonFunc.MD5(ma.getHm()
+									.get(PackageKeys.USERKEY.getString())
+									.toString()
+									+ "flightorderdetail" + str);
+					orderDetailReturnJson = HttpUtils.getJsonContent(
+							ma.getServeUrl(), param);
+					Message msg = new Message();
+					msg.what = ORDERDETAIL_MSG_CODE;
+					handler.sendMessage(msg);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}).start();
 	}

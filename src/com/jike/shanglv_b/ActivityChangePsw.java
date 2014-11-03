@@ -2,11 +2,11 @@ package com.jike.shanglv_b;
 
 import org.json.JSONObject;
 import org.json.JSONTokener;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
-//import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -17,7 +17,6 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageButton;
 
-import com.jike.shanglv_b.R;
 import com.jike.shanglv_b.Common.ClearEditText;
 import com.jike.shanglv_b.Common.CommonFunc;
 import com.jike.shanglv_b.Common.CustomProgressDialog;
@@ -25,6 +24,8 @@ import com.jike.shanglv_b.Common.CustomerAlertDialog;
 import com.jike.shanglv_b.Enums.PackageKeys;
 import com.jike.shanglv_b.Enums.SPkeys;
 import com.jike.shanglv_b.NetAndJson.HttpUtils;
+
+//import android.content.DialogInterface.OnClickListener;
 
 public class ActivityChangePsw extends Activity {
 
@@ -115,31 +116,36 @@ public class ActivityChangePsw extends Activity {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				// uid:ÓÃ»§ID sid:ÍøÕ¾ID oldpass:ÀÏµÇÂ¼ÃÜÂë newpass:ÐÂµÇÂ¼ÃÜÂë
-				MyApp ma = new MyApp(getApplicationContext());
-				String str = "{\"uid\":\""
-						+ sp.getString(SPkeys.userid.getString(), "")
-						+ "\",\"sid\":\""
-						+ sp.getString(SPkeys.siteid.getString(), "")
-						+ "\",\"oldpass\":\"" + oldpsw_cet.getText().toString()
-						+ "\",\"newpass\":\"" + newpsw_cet.getText().toString()
-						+ "\"}";
-				String param = "action=updatepass&str="
-						+ str
-						+ "&userkey="
-						+ ma.getHm().get(PackageKeys.USERKEY.getString())
-								.toString()
-						+ "&sign="
-						+ CommonFunc.MD5(ma.getHm()
-								.get(PackageKeys.USERKEY.getString())
-								.toString()
-								+ "updatepass" + str) + "&sitekey="
-						+ MyApp.sitekey;
-				changePswReturnJson = HttpUtils.getJsonContent(
-						ma.getServeUrl(), param);
-				Message msg = new Message();
-				msg.what = 1;
-				handler.sendMessage(msg);
+				try {
+					// uid:ÓÃ»§ID sid:ÍøÕ¾ID oldpass:ÀÏµÇÂ¼ÃÜÂë newpass:ÐÂµÇÂ¼ÃÜÂë
+					MyApp ma = new MyApp(getApplicationContext());
+					String str = "{\"uid\":\""
+							+ sp.getString(SPkeys.userid.getString(), "")
+							+ "\",\"sid\":\""
+							+ sp.getString(SPkeys.siteid.getString(), "")
+							+ "\",\"oldpass\":\""
+							+ oldpsw_cet.getText().toString()
+							+ "\",\"newpass\":\""
+							+ newpsw_cet.getText().toString() + "\"}";
+					String param = "action=updatepass&str="
+							+ str
+							+ "&userkey="
+							+ ma.getHm().get(PackageKeys.USERKEY.getString())
+									.toString()
+							+ "&sign="
+							+ CommonFunc.MD5(ma.getHm()
+									.get(PackageKeys.USERKEY.getString())
+									.toString()
+									+ "updatepass" + str) + "&sitekey="
+							+ MyApp.sitekey;
+					changePswReturnJson = HttpUtils.getJsonContent(
+							ma.getServeUrl(), param);
+					Message msg = new Message();
+					msg.what = 1;
+					handler.sendMessage(msg);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}).start();
 		progressdialog = CustomProgressDialog.createDialog(context);

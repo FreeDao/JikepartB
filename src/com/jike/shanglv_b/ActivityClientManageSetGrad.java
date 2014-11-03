@@ -192,28 +192,33 @@ public class ActivityClientManageSetGrad extends Activity {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				MyApp ma = new MyApp(context);
-				String str = "{\"userID\":\""
-						+ sp.getString(SPkeys.userid.getString(), "") + "\"}";
-				String param = "action="
-						+ levellistActionName
-						+ "&str="
-						+ str
-						+ "&userkey="
-						+ ma.getHm().get(PackageKeys.USERKEY.getString())
-								.toString()
-						+ "&sitekey="
-						+ MyApp.sitekey
-						+ "&sign="
-						+ CommonFunc.MD5(ma.getHm()
-								.get(PackageKeys.USERKEY.getString())
-								.toString()
-								+ levellistActionName + str);
-				dealerlevallistReturnJson = HttpUtils.getJsonContent(
-						ma.getServeUrl(), param);
-				Message msg = new Message();
-				msg.what = DEALERLEVELMSGCODE;
-				handler.sendMessage(msg);
+				try {
+					MyApp ma = new MyApp(context);
+					String str = "{\"userID\":\""
+							+ sp.getString(SPkeys.userid.getString(), "")
+							+ "\"}";
+					String param = "action="
+							+ levellistActionName
+							+ "&str="
+							+ str
+							+ "&userkey="
+							+ ma.getHm().get(PackageKeys.USERKEY.getString())
+									.toString()
+							+ "&sitekey="
+							+ MyApp.sitekey
+							+ "&sign="
+							+ CommonFunc.MD5(ma.getHm()
+									.get(PackageKeys.USERKEY.getString())
+									.toString()
+									+ levellistActionName + str);
+					dealerlevallistReturnJson = HttpUtils.getJsonContent(
+							ma.getServeUrl(), param);
+					Message msg = new Message();
+					msg.what = DEALERLEVELMSGCODE;
+					handler.sendMessage(msg);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}).start();
 	}
@@ -226,35 +231,40 @@ public class ActivityClientManageSetGrad extends Activity {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				MyApp ma = new MyApp(context);
-				String str = "";
-				str = "{\"userID\":\""
-						+ sp.getString(SPkeys.userid.getString(), "")
-						+ "\",\"lname\":\"" + newName + "\"}";
-				String param = "";
 				try {
-					param = "action="
-							+ addlevelActionName
-							+ "&str="
-							+ URLEncoder.encode(str, "utf-8")
-							+ "&userkey="
-							+ ma.getHm().get(PackageKeys.USERKEY.getString())
-									.toString()
-							+ "&sitekey="
-							+ MyApp.sitekey
-							+ "&sign="
-							+ CommonFunc.MD5(ma.getHm()
-									.get(PackageKeys.USERKEY.getString())
-									.toString()
-									+ addlevelActionName + str);
-				} catch (UnsupportedEncodingException e) {
+					MyApp ma = new MyApp(context);
+					String str = "";
+					str = "{\"userID\":\""
+							+ sp.getString(SPkeys.userid.getString(), "")
+							+ "\",\"lname\":\"" + newName + "\"}";
+					String param = "";
+					try {
+						param = "action="
+								+ addlevelActionName
+								+ "&str="
+								+ URLEncoder.encode(str, "utf-8")
+								+ "&userkey="
+								+ ma.getHm()
+										.get(PackageKeys.USERKEY.getString())
+										.toString()
+								+ "&sitekey="
+								+ MyApp.sitekey
+								+ "&sign="
+								+ CommonFunc.MD5(ma.getHm()
+										.get(PackageKeys.USERKEY.getString())
+										.toString()
+										+ addlevelActionName + str);
+					} catch (UnsupportedEncodingException e) {
+						e.printStackTrace();
+					}
+					addcustomerlevalReturnJson = HttpUtils.getJsonContent(
+							ma.getServeUrl(), param);
+					Message msg = new Message();
+					msg.what = ADDLEVELMSGCODE;
+					handler.sendMessage(msg);
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				addcustomerlevalReturnJson = HttpUtils.getJsonContent(
-						ma.getServeUrl(), param);
-				Message msg = new Message();
-				msg.what = ADDLEVELMSGCODE;
-				handler.sendMessage(msg);
 			}
 		}).start();
 	}
@@ -267,35 +277,40 @@ public class ActivityClientManageSetGrad extends Activity {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				MyApp ma = new MyApp(context);
-				String str = "";
-				str = "{\"userID\":\""
-						+ sp.getString(SPkeys.userid.getString(), "")
-						+ "\",\"lID\":\"" + id + "\"}";
-				String param = "";
 				try {
-					param = "action="
-							+ setdefaultlevalActionName
-							+ "&str="
-							+ URLEncoder.encode(str, "utf-8")
-							+ "&userkey="
-							+ ma.getHm().get(PackageKeys.USERKEY.getString())
-									.toString()
-							+ "&sitekey="
-							+ MyApp.sitekey
-							+ "&sign="
-							+ CommonFunc.MD5(ma.getHm()
-									.get(PackageKeys.USERKEY.getString())
-									.toString()
-									+ setdefaultlevalActionName + str);
-				} catch (UnsupportedEncodingException e) {
+					MyApp ma = new MyApp(context);
+					String str = "";
+					str = "{\"userID\":\""
+							+ sp.getString(SPkeys.userid.getString(), "")
+							+ "\",\"lID\":\"" + id + "\"}";
+					String param = "";
+					try {
+						param = "action="
+								+ setdefaultlevalActionName
+								+ "&str="
+								+ URLEncoder.encode(str, "utf-8")
+								+ "&userkey="
+								+ ma.getHm()
+										.get(PackageKeys.USERKEY.getString())
+										.toString()
+								+ "&sitekey="
+								+ MyApp.sitekey
+								+ "&sign="
+								+ CommonFunc.MD5(ma.getHm()
+										.get(PackageKeys.USERKEY.getString())
+										.toString()
+										+ setdefaultlevalActionName + str);
+					} catch (UnsupportedEncodingException e) {
+						e.printStackTrace();
+					}
+					setdefaultlevalReturnJson = HttpUtils.getJsonContent(
+							ma.getServeUrl(), param);
+					Message msg = new Message();
+					msg.what = SETDEFAULTLEVELMSGCODE;
+					handler.sendMessage(msg);
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				setdefaultlevalReturnJson = HttpUtils.getJsonContent(
-						ma.getServeUrl(), param);
-				Message msg = new Message();
-				msg.what = SETDEFAULTLEVELMSGCODE;
-				handler.sendMessage(msg);
 			}
 		}).start();
 	}
@@ -308,33 +323,38 @@ public class ActivityClientManageSetGrad extends Activity {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				MyApp ma = new MyApp(context);
-				String str = "";
-				str = "{\"userID\":\""
-						+ sp.getString(SPkeys.userid.getString(), "")
-						+ "\",\"lID\":\"" + id + "\"}";
-				String param = "";
 				try {
-					param = "action=deletelevel&str="
-							+ URLEncoder.encode(str, "utf-8")
-							+ "&userkey="
-							+ ma.getHm().get(PackageKeys.USERKEY.getString())
-									.toString()
-							+ "&sitekey="
-							+ MyApp.sitekey
-							+ "&sign="
-							+ CommonFunc.MD5(ma.getHm()
-									.get(PackageKeys.USERKEY.getString())
-									.toString()
-									+ "deletelevel" + str);
-				} catch (UnsupportedEncodingException e) {
+					MyApp ma = new MyApp(context);
+					String str = "";
+					str = "{\"userID\":\""
+							+ sp.getString(SPkeys.userid.getString(), "")
+							+ "\",\"lID\":\"" + id + "\"}";
+					String param = "";
+					try {
+						param = "action=deletelevel&str="
+								+ URLEncoder.encode(str, "utf-8")
+								+ "&userkey="
+								+ ma.getHm()
+										.get(PackageKeys.USERKEY.getString())
+										.toString()
+								+ "&sitekey="
+								+ MyApp.sitekey
+								+ "&sign="
+								+ CommonFunc.MD5(ma.getHm()
+										.get(PackageKeys.USERKEY.getString())
+										.toString()
+										+ "deletelevel" + str);
+					} catch (UnsupportedEncodingException e) {
+						e.printStackTrace();
+					}
+					setdefaultlevalReturnJson = HttpUtils.getJsonContent(
+							ma.getServeUrl(), param);
+					Message msg = new Message();
+					msg.what = DELETELEVELMSGCODE;
+					handler.sendMessage(msg);
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				setdefaultlevalReturnJson = HttpUtils.getJsonContent(
-						ma.getServeUrl(), param);
-				Message msg = new Message();
-				msg.what = DELETELEVELMSGCODE;
-				handler.sendMessage(msg);
 			}
 		}).start();
 	}
@@ -347,34 +367,39 @@ public class ActivityClientManageSetGrad extends Activity {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				MyApp ma = new MyApp(context);
-				String str = "";
-				str = "{\"userID\":\""
-						+ sp.getString(SPkeys.userid.getString(), "")
-						+ "\",\"lname\":\"" + name + "\",\"lID\":\"" + id
-						+ "\"}";
-				String param = "";
 				try {
-					param = "action=modifylevel&str="
-							+ URLEncoder.encode(str, "utf-8")
-							+ "&userkey="
-							+ ma.getHm().get(PackageKeys.USERKEY.getString())
-									.toString()
-							+ "&sitekey="
-							+ MyApp.sitekey
-							+ "&sign="
-							+ CommonFunc.MD5(ma.getHm()
-									.get(PackageKeys.USERKEY.getString())
-									.toString()
-									+ "modifylevel" + str);
-				} catch (UnsupportedEncodingException e) {
+					MyApp ma = new MyApp(context);
+					String str = "";
+					str = "{\"userID\":\""
+							+ sp.getString(SPkeys.userid.getString(), "")
+							+ "\",\"lname\":\"" + name + "\",\"lID\":\"" + id
+							+ "\"}";
+					String param = "";
+					try {
+						param = "action=modifylevel&str="
+								+ URLEncoder.encode(str, "utf-8")
+								+ "&userkey="
+								+ ma.getHm()
+										.get(PackageKeys.USERKEY.getString())
+										.toString()
+								+ "&sitekey="
+								+ MyApp.sitekey
+								+ "&sign="
+								+ CommonFunc.MD5(ma.getHm()
+										.get(PackageKeys.USERKEY.getString())
+										.toString()
+										+ "modifylevel" + str);
+					} catch (UnsupportedEncodingException e) {
+						e.printStackTrace();
+					}
+					setdefaultlevalReturnJson = HttpUtils.getJsonContent(
+							ma.getServeUrl(), param);
+					Message msg = new Message();
+					msg.what = MODIFYLEVELMSGCODE;
+					handler.sendMessage(msg);
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				setdefaultlevalReturnJson = HttpUtils.getJsonContent(
-						ma.getServeUrl(), param);
-				Message msg = new Message();
-				msg.what = MODIFYLEVELMSGCODE;
-				handler.sendMessage(msg);
 			}
 		}).start();
 	}
@@ -597,14 +622,18 @@ public class ActivityClientManageSetGrad extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				default_grad_tv
-						.setText(list1.get(position).get("title") != null ? list1
-								.get(position).get("title").toString()
-								: "");
-				currentID_XJ = position;
-				startSetDefaultGrad(customerlever_List.get(position)
-						.getLevalID());
-				pwMyPopWindow.dismiss();
+				try {
+					default_grad_tv
+							.setText(list1.get(position).get("title") != null ? list1
+									.get(position).get("title").toString()
+									: "");
+					currentID_XJ = position;
+					startSetDefaultGrad(customerlever_List.get(position)
+							.getLevalID());
+					pwMyPopWindow.dismiss();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		});
 		// 控制popupwindow的宽度和高度自适应
@@ -624,14 +653,18 @@ public class ActivityClientManageSetGrad extends Activity {
 		layout.setOnTouchListener(new OnTouchListener() {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
-				View layout = inflater.inflate(
-						R.layout.popupwindow_list_select, null);
-				int height = lvPopupList.getTop();
-				int y = (int) event.getY();
-				if (event.getAction() == MotionEvent.ACTION_UP) {
-					if (y < height) {
-						pwMyPopWindow.dismiss();
+				try {
+					View layout = inflater.inflate(
+							R.layout.popupwindow_list_select, null);
+					int height = lvPopupList.getTop();
+					int y = (int) event.getY();
+					if (event.getAction() == MotionEvent.ACTION_UP) {
+						if (y < height) {
+							pwMyPopWindow.dismiss();
+						}
 					}
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
 				return true;
 			}

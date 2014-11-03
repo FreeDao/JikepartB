@@ -137,7 +137,6 @@ public class ActivityClientManage extends Activity implements
 	}
 
 	View.OnClickListener clickListener = new View.OnClickListener() {
-
 		@Override
 		public void onClick(View arg0) {
 			try {
@@ -261,13 +260,17 @@ public class ActivityClientManage extends Activity implements
 
 	@Override
 	public void onWindowFocusChanged(boolean hasFocus) {
-		super.onWindowFocusChanged(hasFocus);
-		frame_ani_iv.setBackgroundResource(R.anim.frame_rotate_ani);
-		AnimationDrawable anim = (AnimationDrawable) frame_ani_iv
-				.getBackground();
-		anim.setOneShot(false);
-		anim.start();
-		startQueryCustomer();
+		try {
+			super.onWindowFocusChanged(hasFocus);
+			frame_ani_iv.setBackgroundResource(R.anim.frame_rotate_ani);
+			AnimationDrawable anim = (AnimationDrawable) frame_ani_iv
+					.getBackground();
+			anim.setOneShot(false);
+			anim.start();
+			startQueryCustomer();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void startQueryCustomer() {
@@ -282,31 +285,36 @@ public class ActivityClientManage extends Activity implements
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				MyApp ma = new MyApp(context);
-				String str = "{\"pageSize\":\"" + 20 + "\",\"userID\":\""
-						+ sp.getString(SPkeys.userid.getString(), "")
-						+ "\",\"pageIndex\":\"" + index + "\",\"userName\":\""
-						+ "" + "\",\"status\":\"" + "" + "\",\"tm1\":\"" + ""
-						+ "\",\"tm2\":\"" + "" + "\"}";
-				String param = "action="
-						+ ActionName
-						+ "&str="
-						+ str
-						+ "&userkey="
-						+ ma.getHm().get(PackageKeys.USERKEY.getString())
-								.toString()
-						+ "&sitekey="
-						+ MyApp.sitekey
-						+ "&sign="
-						+ CommonFunc.MD5(ma.getHm()
-								.get(PackageKeys.USERKEY.getString())
-								.toString()
-								+ ActionName + str);
-				customerReturnJson = HttpUtils.getJsonContent(ma.getServeUrl(),
-						param);
-				Message msg = new Message();
-				msg.what = 1;
-				handler.sendMessage(msg);
+				try {
+					MyApp ma = new MyApp(context);
+					String str = "{\"pageSize\":\"" + 20 + "\",\"userID\":\""
+							+ sp.getString(SPkeys.userid.getString(), "")
+							+ "\",\"pageIndex\":\"" + index
+							+ "\",\"userName\":\"" + "" + "\",\"status\":\""
+							+ "" + "\",\"tm1\":\"" + "" + "\",\"tm2\":\"" + ""
+							+ "\"}";
+					String param = "action="
+							+ ActionName
+							+ "&str="
+							+ str
+							+ "&userkey="
+							+ ma.getHm().get(PackageKeys.USERKEY.getString())
+									.toString()
+							+ "&sitekey="
+							+ MyApp.sitekey
+							+ "&sign="
+							+ CommonFunc.MD5(ma.getHm()
+									.get(PackageKeys.USERKEY.getString())
+									.toString()
+									+ ActionName + str);
+					customerReturnJson = HttpUtils.getJsonContent(
+							ma.getServeUrl(), param);
+					Message msg = new Message();
+					msg.what = 1;
+					handler.sendMessage(msg);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}).start();
 	}

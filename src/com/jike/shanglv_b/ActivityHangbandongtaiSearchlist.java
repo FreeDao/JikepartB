@@ -219,30 +219,35 @@ public class ActivityHangbandongtaiSearchlist extends Activity implements
 	private void startQueryViaCity() {
 		new Thread(new Runnable() {
 			@Override
-			public void run() {// type=1:查航班号 type=2:查航段， air 航空公司
-				// action=flist&str={'s':'sha','e':hfe,'sd':'2014-01-28','userid':'649','siteid':'65'}
-				MyApp ma = new MyApp(context);
-				String str = "{\"s\":\"" + startcity_code + "\",\"e\":\""
-						+ arrivecity_code + "\",\"index\":\"" + index
-						+ "\",\"air\":\"" + "" + "\",\"flightno\":\""
-						+ flightNo + "\",\"type\":\"" + 2 + "\"}";
-				String param = "action=flighttime&str="
-						+ str
-						+ "&userkey="
-						+ ma.getHm().get(PackageKeys.USERKEY.getString())
-								.toString()
-						+ "&sitekey="
-						+ MyApp.sitekey
-						+ "&sign="
-						+ CommonFunc.MD5(ma.getHm()
-								.get(PackageKeys.USERKEY.getString())
-								.toString()
-								+ "flighttime" + str);
-				flistReturnJson = HttpUtils.getJsonContent(ma.getServeUrl(),
-						param);
-				Message msg = new Message();
-				msg.what = 1;
-				handler.sendMessage(msg);
+			public void run() {
+				try {
+					// type=1:查航班号 type=2:查航段， air 航空公司
+					// action=flist&str={'s':'sha','e':hfe,'sd':'2014-01-28','userid':'649','siteid':'65'}
+					MyApp ma = new MyApp(context);
+					String str = "{\"s\":\"" + startcity_code + "\",\"e\":\""
+							+ arrivecity_code + "\",\"index\":\"" + index
+							+ "\",\"air\":\"" + "" + "\",\"flightno\":\""
+							+ flightNo + "\",\"type\":\"" + 2 + "\"}";
+					String param = "action=flighttime&str="
+							+ str
+							+ "&userkey="
+							+ ma.getHm().get(PackageKeys.USERKEY.getString())
+									.toString()
+							+ "&sitekey="
+							+ MyApp.sitekey
+							+ "&sign="
+							+ CommonFunc.MD5(ma.getHm()
+									.get(PackageKeys.USERKEY.getString())
+									.toString()
+									+ "flighttime" + str);
+					flistReturnJson = HttpUtils.getJsonContent(
+							ma.getServeUrl(), param);
+					Message msg = new Message();
+					msg.what = 1;
+					handler.sendMessage(msg);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}).start();
 		progressdialog = CustomProgressDialog.createDialog(context);
@@ -260,29 +265,33 @@ public class ActivityHangbandongtaiSearchlist extends Activity implements
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				// action=flist&str={'s':'sha','e':hfe,'sd':'2014-01-28','userid':'649','siteid':'65'}
-				MyApp ma = new MyApp(context);
-				String str = "{\"s\":\"" + startcity_code + "\",\"e\":\""
-						+ arrivecity_code + "\",\"index\":\"" + index
-						+ "\",\"air\":\"" + "" + "\",\"flightno\":\""
-						+ flightNo + "\",\"type\":\"" + 1 + "\"}";
-				String param = "action=flighttime&str="
-						+ str
-						+ "&userkey="
-						+ ma.getHm().get(PackageKeys.USERKEY.getString())
-								.toString()
-						+ "&sitekey="
-						+ MyApp.sitekey
-						+ "&sign="
-						+ CommonFunc.MD5(ma.getHm()
-								.get(PackageKeys.USERKEY.getString())
-								.toString()
-								+ "flighttime" + str);
-				flistReturnJson = HttpUtils.getJsonContent(ma.getServeUrl(),
-						param);
-				Message msg = new Message();
-				msg.what = 1;
-				handler.sendMessage(msg);
+				try {
+					// action=flist&str={'s':'sha','e':hfe,'sd':'2014-01-28','userid':'649','siteid':'65'}
+					MyApp ma = new MyApp(context);
+					String str = "{\"s\":\"" + startcity_code + "\",\"e\":\""
+							+ arrivecity_code + "\",\"index\":\"" + index
+							+ "\",\"air\":\"" + "" + "\",\"flightno\":\""
+							+ flightNo + "\",\"type\":\"" + 1 + "\"}";
+					String param = "action=flighttime&str="
+							+ str
+							+ "&userkey="
+							+ ma.getHm().get(PackageKeys.USERKEY.getString())
+									.toString()
+							+ "&sitekey="
+							+ MyApp.sitekey
+							+ "&sign="
+							+ CommonFunc.MD5(ma.getHm()
+									.get(PackageKeys.USERKEY.getString())
+									.toString()
+									+ "flighttime" + str);
+					flistReturnJson = HttpUtils.getJsonContent(
+							ma.getServeUrl(), param);
+					Message msg = new Message();
+					msg.what = 1;
+					handler.sendMessage(msg);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}).start();
 		listview.removeFootView();// 按航班号查询只有一个航班，移除查看更多
