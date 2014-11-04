@@ -99,6 +99,9 @@ public class MyApp {
 		self_hm.put(PackageKeys.UPDATE_NOTE.getString(), "jike");
 		self_hm.put(PackageKeys.PLATFORM.getString(), Platform.B2C);
 		self_hm.put(PackageKeys.USERKEY.getString(),RELEASE?"ffdd14d2e6c26b70749c8b2c08067c69":"5b13658a9fc945e34893f806027d467a");
+		self_hm.put(PackageKeys.ORGIN.getString(),0);//该参数加于20141104，用于区分订单、请求的来源
+		/*Android商旅管家0 Android商旅助手1 IOS商旅管家2 IOS商旅助手3  梦航 管家4  梦航 助手5*/
+		
 		//商旅助手
 		self_b_hm.put(PackageKeys.WELCOME_DRAWABLE.getString(), R.drawable.welcome_b);
 		self_b_hm.put(PackageKeys.APP_NAME.getString(), R.string.app_name_b);
@@ -106,6 +109,8 @@ public class MyApp {
 		self_b_hm.put(PackageKeys.UPDATE_NOTE.getString(), "jike_b");
 		self_b_hm.put(PackageKeys.PLATFORM.getString(), Platform.B2B);
 		self_b_hm.put(PackageKeys.USERKEY.getString(),RELEASE?"ffdd14d2e6c26b70749c8b2c08067c69":"5b13658a9fc945e34893f806027d467a");
+		self_hm.put(PackageKeys.ORGIN.getString(),1);
+		
 		//梦航商旅
 		menghang_hm.put(PackageKeys.WELCOME_DRAWABLE.getString(), R.drawable.welcome_menghang);
 		menghang_hm.put(PackageKeys.APP_NAME.getString(), R.string.app_name_menghang);
@@ -113,5 +118,6 @@ public class MyApp {
 		menghang_hm.put(PackageKeys.UPDATE_NOTE.getString(), "menghangshanglv");
 		menghang_hm.put(PackageKeys.PLATFORM.getString(), Platform.B2C);
 		menghang_hm.put(PackageKeys.USERKEY.getString(),RELEASE?"fc5865a78e9cb8b3d63c5428d4d32a4c":"5b13658a9fc945e34893f806027d467a");
+		self_hm.put(PackageKeys.ORGIN.getString(),4);
 	}
 }

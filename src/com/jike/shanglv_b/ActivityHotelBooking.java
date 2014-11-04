@@ -475,6 +475,8 @@ public class ActivityHotelBooking extends Activity {
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
+					String orgin=ma.getHm().get(PackageKeys.ORGIN.getString())
+							.toString();
 					String param = "?action=hotelorder&userkey="
 							+ ma.getHm().get(PackageKeys.USERKEY.getString())
 									.toString()
@@ -484,7 +486,7 @@ public class ActivityHotelBooking extends Activity {
 							+ CommonFunc.MD5(ma.getHm()
 									.get(PackageKeys.USERKEY.getString())
 									.toString()
-									+ "hotelorder" + str);
+									+ "hotelorder" + str)+"&orgin="+orgin;
 					// orderReturnJson =
 					// HttpUtils.getJsonContent(ma.getServeUrl(),
 					// param);
