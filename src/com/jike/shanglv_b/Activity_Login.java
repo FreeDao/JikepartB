@@ -30,7 +30,6 @@ import com.jike.shanglv_b.Activity_RetrievePassword;
 import com.jike.shanglv_b.MyApp;
 import com.jike.shanglv_b.MyApplication;
 import com.jike.shanglv_b.Update.UpdateManager;
-import com.jike.shanglv_b.R;
 import com.jike.shanglv_b.Common.CommonFunc;
 import com.jike.shanglv_b.Common.CustomProgressDialog;
 import com.jike.shanglv_b.Common.CustomerAlertDialog;

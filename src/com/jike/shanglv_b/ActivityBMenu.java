@@ -27,6 +27,7 @@ import com.jike.shanglv_b.NetAndJson.JSONHelper;
 import com.jike.shanglv_b.NetAndJson.UserInfo;
 import com.jike.shanglv_b.Update.UpdateManager;
 
+
 public class ActivityBMenu extends Activity {
 
 	public static ActivityBMenu instance = null;
@@ -212,7 +213,18 @@ public class ActivityBMenu extends Activity {
 					break;
 				case R.id.imgBtn_jdmp:
 				case R.id.jdmp_ll:
-					startActivity(new Intent(context, Activity_Scenery.class));
+					//startActivity(new Intent(context, Activity_Scenery.class));
+//					startActivity(new Intent(context,com.jike.mpos.newversion.WelcomeActivity.class));
+
+//					Intent intent5 = new Intent();
+//					ComponentName componentName = new ComponentName("com.jike.mpos.newversion", "com.jike.mpos.newversion.WelcomeActivity");
+//					intent5.setComponent(componentName);
+//					startActivity(intent5);
+					
+					Intent intent5 = new Intent();
+					intent5.setClassName(getApplication(), "com.jike.mpos.newversion.MposWelcomeActivity");
+					startActivity(intent5);
+					
 					break;
 				case R.id.imgBtn_sxy:
 				case R.id.sxy_ll:

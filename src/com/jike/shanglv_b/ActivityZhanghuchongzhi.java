@@ -22,6 +22,7 @@ import com.jike.shanglv_b.Common.CustomProgressDialog;
 import com.jike.shanglv_b.Common.CustomerAlertDialog;
 import com.jike.shanglv_b.Common.DateUtil;
 import com.jike.shanglv_b.Enums.PackageKeys;
+import com.jike.shanglv_b.Enums.Platform;
 import com.jike.shanglv_b.Enums.SPkeys;
 import com.jike.shanglv_b.NetAndJson.HttpUtils;
 
@@ -102,9 +103,6 @@ public class ActivityZhanghuchongzhi extends Activity {
 					}
 					if (!CommonFunc.isNumber(chongzhijine_et.getText()
 							.toString().trim())) {
-						// new
-						// AlertDialog.Builder(context).setTitle("请输入合法的充值金额")
-						// .setPositiveButton("确认", null).show();
 						final CustomerAlertDialog cad = new CustomerAlertDialog(
 								context, true);
 						cad.setTitle("请输入正确的充值金额");
@@ -116,23 +114,31 @@ public class ActivityZhanghuchongzhi extends Activity {
 						});
 						break;
 					}
-
-					String userid = sp.getString(SPkeys.userid.getString(), "");
-					int paysystype = 15;
-					String siteid = sp.getString(SPkeys.siteid.getString(), "");
-					String sign = CommonFunc.MD5(chongzhijine_et.getText()
-							.toString().trim()
-							+ userid + paysystype + siteid);
-					MyApp ma = new MyApp(context);
-					// <string
-					// name="test_pay_server_url">http://gatewayceshi.51jp.cn/PayMent/BeginPay.aspx?orderID=%1$s&amp;amount=%2$s&amp;userid=%3$s&amp;paysystype=%4$s&amp;siteid=%5$s&amp;sign=%6$s</string>
-					String url = String.format(ma.getPayServeUrl(), "",
-							chongzhijine_et.getText().toString().trim(),
-							userid, paysystype, siteid, sign);
-					Intent intent = new Intent(context, Activity_Web_Pay.class);
-					intent.putExtra(Activity_Web_Pay.URL, url);
-					intent.putExtra(Activity_Web_Pay.TITLE, "账户充值支付");
-					startActivity(intent);
+					if (Integer.valueOf((new MyApp(context)).getHm().get(
+							PackageKeys.ORGIN.getString()).toString())==1) {
+						Intent intent = new Intent(context,
+								Activity_Payway.class);
+						intent.putExtra(Activity_Payway.CHONGZHI_AMOUNT, chongzhijine_et.getText().toString().trim());
+						startActivity(intent);
+					} else {
+						String userid = sp.getString(SPkeys.userid.getString(),
+								"");
+						int paysystype = 15;
+						String siteid = sp.getString(SPkeys.siteid.getString(),
+								"");
+						String sign = CommonFunc.MD5(chongzhijine_et.getText()
+								.toString().trim()
+								+ userid + paysystype + siteid);
+						MyApp ma = new MyApp(context);
+						String url = String.format(ma.getPayServeUrl(), "",
+								chongzhijine_et.getText().toString().trim(),
+								userid, paysystype, siteid, sign);
+						Intent intent = new Intent(context,
+								Activity_Web_Pay.class);
+						intent.putExtra(Activity_Web_Pay.URL, url);
+						intent.putExtra(Activity_Web_Pay.TITLE, "账户充值支付");
+						startActivity(intent);
+					}
 					break;
 				default:
 
