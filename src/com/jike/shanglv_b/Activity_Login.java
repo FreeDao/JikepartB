@@ -197,6 +197,12 @@ public class Activity_Login extends Activity {
 						sp.edit()
 								.putString(SPkeys.useremail.getString(),
 										user.getEmail()).commit();
+						sp.edit()
+							.putString(SPkeys.showDealer.getString(),
+								user.getShowDealer()).commit();
+						sp.edit()
+							.putString(SPkeys.showCustomer.getString(),
+								user.getShowCustomer()).commit();
 						// 其他信息以后用时再增加
 						// 登录后将登录状态置为true
 						sp.edit()
